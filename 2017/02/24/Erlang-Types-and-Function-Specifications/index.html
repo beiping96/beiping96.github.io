@@ -1,0 +1,775 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Erlang," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/B_favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="-opaque -type -export_type -spec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Erlang Types and Function Specifications">
+<meta property="og:url" content="http://blog.beiping96.com/2017/02/24/Erlang-Types-and-Function-Specifications/index.html">
+<meta property="og:site_name" content="Beiping96&#39;s Blog">
+<meta property="og:description" content="-opaque -type -export_type -spec">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-02-24T04:51:53.000Z">
+<meta property="article:modified_time" content="2020-03-06T05:08:09.602Z">
+<meta property="article:author" content="duxingrui">
+<meta property="article:tag" content="Erlang">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://blog.beiping96.com/2017/02/24/Erlang-Types-and-Function-Specifications/"/>
+
+
+  <title> Erlang Types and Function Specifications | Beiping96's Blog </title>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Beiping96's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Erlang Types and Function Specifications
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-02-24T12:51:53+08:00" content="2017-02-24">
+              2017-02-24
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/02/24/Erlang-Types-and-Function-Specifications/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/02/24/Erlang-Types-and-Function-Specifications/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>-opaque</code> <code>-type</code> <code>-export_type</code> <code>-spec</code></p>
+<a id="more"></a>
+<h3 id="Erlang-类型及函数约束规范"><a href="#Erlang-类型及函数约束规范" class="headerlink" title="Erlang 类型及函数约束规范"></a>Erlang 类型及函数约束规范</h3><p>Erlang是一种动态类型语言，不过可以通过一些特殊的语法声明一个由<code>Erlang term</code>组成的类型集合，这个集合可用于约束某字段类型或者某函数的参数类型和返回值类型。<br>类型及函数约束规范可用于：记录接口、使用代码静态类型分析工具(Dialyzer)、生成程序文档(EDoc)。</p>
+<h3 id="类型约束语法"><a href="#类型约束语法" class="headerlink" title="类型约束语法"></a>类型约束语法</h3><p>所有的类型约束都是由内置类型、自定义类型或者类型实例构建；<br>整数和原子类型，允许使用类型实例来定义；<br>当类型约束中既存在类型实例又存在预定义类型，类型实例将被预定义类型覆盖。</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">atom</span><span class="params">()</span> | <span class="title">'bar'</span> | <span class="title">integer</span><span class="params">()</span> | 56</span></span><br><span class="line"><span class="function">%% 等同于</span></span><br><span class="line"><span class="function"><span class="title">atom</span><span class="params">()</span> | <span class="title">integer</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+<p><code>any()</code>可覆盖任何类型<br><code>none()</code>可被任何类型覆盖</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line">        <span class="comment">%% 顶部类型，可覆盖任何类型</span></span><br><span class="line">Type :: any()</span><br><span class="line">        <span class="comment">%% 底部类型，空</span></span><br><span class="line">      | none()</span><br><span class="line"></span><br><span class="line">        <span class="comment">%% 进程标识符</span></span><br><span class="line">      | pid()</span><br><span class="line">        <span class="comment">%% 端口 like #Port&lt;0.638&gt;</span></span><br><span class="line">      | port()</span><br><span class="line">        <span class="comment">%% Unique values in Erlang runtime system</span></span><br><span class="line">      | reference()</span><br><span class="line"></span><br><span class="line">        <span class="comment">%% 原子类型</span></span><br><span class="line">      | atom()</span><br><span class="line">        <span class="comment">%% 原子值 'foo' 'bar'...</span></span><br><span class="line">      | 'atom'</span><br><span class="line"></span><br><span class="line">        <span class="comment">%% 二进制数据</span></span><br><span class="line">      | binary()</span><br><span class="line">        <span class="comment">%% 空二进制数据</span></span><br><span class="line">      | &lt;&lt;&gt;&gt;</span><br><span class="line">        <span class="comment">%% M is a positive integer</span></span><br><span class="line">      | &lt;&lt;_:M&gt;&gt;</span><br><span class="line">        <span class="comment">%% N is a positive integer</span></span><br><span class="line">      | &lt;&lt;_:_*N&gt;&gt;</span><br><span class="line">        <span class="comment">%% M N是正整数</span></span><br><span class="line">      | &lt;&lt;_:M, _:_*N&gt;&gt;</span><br><span class="line"></span><br><span class="line">        <span class="comment">%% 任何整数</span></span><br><span class="line">      | integer()</span><br><span class="line">        <span class="comment">%% 整数的实例</span></span><br><span class="line">      | <span class="number">38</span></span><br><span class="line">        <span class="comment">%% 整数范围 like 1..12</span></span><br><span class="line">      | N..M</span><br><span class="line">        <span class="comment">%% 大于等于0的整数 非负</span></span><br><span class="line">      | non_neg_integer()</span><br><span class="line">        <span class="comment">%% 大于0的整数</span></span><br><span class="line">      | pos_integer()</span><br><span class="line">        <span class="comment">%% 小于0的整数</span></span><br><span class="line">      | neg_integer()</span><br><span class="line"></span><br><span class="line">        <span class="comment">%% 任何浮点数</span></span><br><span class="line">      | float()</span><br><span class="line"></span><br><span class="line">        <span class="comment">%% 任何函数</span></span><br><span class="line">      | <span class="keyword">fun</span>()</span><br><span class="line">        <span class="comment">%% 任何没有参数、返回Type类型的函数 like fun(() -&gt; integer())</span></span><br><span class="line">      | <span class="keyword">fun</span>(() -&gt; Type)</span><br><span class="line">        <span class="comment">%% 任何有参数、返回Type类型的函数 like fun((...) -&gt; boolean())</span></span><br><span class="line">      | <span class="keyword">fun</span>((...) -&gt; Type)</span><br><span class="line">        <span class="comment">%% 给定 参数数量类型、返回值类型 的函数 like fun((atom(), float()) -&gt; any())</span></span><br><span class="line">      | <span class="keyword">fun</span>((Type1, Type2,..,TypeN) -&gt; Type)</span><br><span class="line"></span><br><span class="line">        <span class="comment">%% 任何tuple</span></span><br><span class="line">      | tuple()</span><br><span class="line">        <span class="comment">%% 空tuple</span></span><br><span class="line">      | &#123;&#125;</span><br><span class="line">        <span class="comment">%% 任何大小类型已知的tuple</span></span><br><span class="line">      | &#123;Type1, Type2, Type3&#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">%% nil 空列表</span></span><br><span class="line">      | []</span><br><span class="line">        <span class="comment">%% 由Type类型组成的列表，包含空列表 like [tuple()]</span></span><br><span class="line">      | [Type]</span><br><span class="line">        <span class="comment">%% 等同于 [Type]</span></span><br><span class="line">      | list(Type)</span><br><span class="line">        <span class="comment">%% [Type1, Type1,... | Type2] 包含空列表</span></span><br><span class="line">        <span class="comment">%% like improper_list(integer(), atom()) 可以匹配 [1, 2 | a]</span></span><br><span class="line">      | improper_list(Type1， Type2)</span><br><span class="line">        <span class="comment">%% 可以匹配 improper_list(Type1, Type2) 和 list(Type1)</span></span><br><span class="line">      | maybe_improper_list(Type1, Type2)</span><br><span class="line">        <span class="comment">%% [Type1, Type1,... | Type2] 不包含空列表</span></span><br><span class="line">      | nonempty_improper_list(Type1, Type2)</span><br><span class="line">        <span class="comment">%% [Type] 不可为空</span></span><br><span class="line">      | [Type, ...]</span><br><span class="line">        <span class="comment">%% 等同于 [Type, ...]</span></span><br><span class="line">      | nonempty_list(Type)</span><br><span class="line"></span><br><span class="line">        <span class="comment">%% 任意大小的map</span></span><br><span class="line">      | map()</span><br><span class="line">        <span class="comment">%% 空map</span></span><br><span class="line">      | #&#123;&#125;</span><br><span class="line">        <span class="comment">%% 非空map</span></span><br><span class="line">      | #&#123;PairList&#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">%% 类型集合</span></span><br><span class="line">      | Union</span><br><span class="line"></span><br><span class="line">        <span class="comment">%% 自定义类型</span></span><br><span class="line">      | UserDefined</span><br><span class="line"></span><br><span class="line">PairList :: Pair</span><br><span class="line">          | Pair, PairList</span><br><span class="line">Pair :: Type := Type</span><br><span class="line">      | Type =&gt; Type</span><br><span class="line"></span><br><span class="line">Union :: Type1 | Type2</span><br></pre></td></tr></table></figure>
+<h3 id="内置类型"><a href="#内置类型" class="headerlink" title="内置类型"></a>内置类型</h3><table>
+<thead>
+<tr>
+<th align="center">Build-in type</th>
+<th align="center">Defined as</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>term()</code></td>
+<td align="center"><code>any()</code></td>
+</tr>
+<tr>
+<td align="center"><code>binary()</code></td>
+<td align="center"><code>&lt;&lt;_:_*8&gt;&gt;</code></td>
+</tr>
+<tr>
+<td align="center"><code>bitstring()</code></td>
+<td align="center"><code>&lt;&lt;_:_*1&gt;&gt;</code></td>
+</tr>
+<tr>
+<td align="center"><code>boolean()</code></td>
+<td align="center"><code>'true' &#124; 'false'</code></td>
+</tr>
+<tr>
+<td align="center"><code>byte()</code></td>
+<td align="center"><code>0..255</code></td>
+</tr>
+<tr>
+<td align="center"><code>char()</code></td>
+<td align="center"><code>0..16#10ffff</code></td>
+</tr>
+<tr>
+<td align="center"><code>nil()</code></td>
+<td align="center"><code>[]</code></td>
+</tr>
+<tr>
+<td align="center"><code>number()</code></td>
+<td align="center"><code>integer() &#124; float()</code></td>
+</tr>
+<tr>
+<td align="center"><code>list()</code></td>
+<td align="center"><code>[any()]</code></td>
+</tr>
+<tr>
+<td align="center"><code>maybe_improper_list()</code></td>
+<td align="center"><code>maybe_improper_list(any(), any())</code></td>
+</tr>
+<tr>
+<td align="center"><code>nonempty_maybe_improper_list()</code></td>
+<td align="center"><code>nonempty_maybe_improper_list(any(), any())</code></td>
+</tr>
+<tr>
+<td align="center"><code>nonempty_list()</code></td>
+<td align="center"><code>nonempty_list(any())</code></td>
+</tr>
+<tr>
+<td align="center"><code>string()</code></td>
+<td align="center"><code>[char()]</code></td>
+</tr>
+<tr>
+<td align="center"><code>nonempty_string()</code></td>
+<td align="center"><code>[char(), ...]</code></td>
+</tr>
+<tr>
+<td align="center"><code>iodata()</code></td>
+<td align="center"><code>iolist() &#124; binary()</code></td>
+</tr>
+<tr>
+<td align="center"><code>iolist()</code></td>
+<td align="center"><code>maybe_improper_list(byte() &#124; binary() &#124; iolist(), binary() &#124; [])</code></td>
+</tr>
+<tr>
+<td align="center"><code>function()</code></td>
+<td align="center"><code>fun()</code></td>
+</tr>
+<tr>
+<td align="center"><code>module()</code></td>
+<td align="center"><code>atom()</code></td>
+</tr>
+<tr>
+<td align="center"><code>mfa()</code></td>
+<td align="center"><code>{module(), atom(), arity()}</code></td>
+</tr>
+<tr>
+<td align="center"><code>arity()</code></td>
+<td align="center"><code>0..255</code></td>
+</tr>
+<tr>
+<td align="center"><code>identifier()</code></td>
+<td align="center"><code>pid() &#124; port() &#124; reference()</code></td>
+</tr>
+<tr>
+<td align="center"><code>node()</code></td>
+<td align="center"><code>atom()</code></td>
+</tr>
+<tr>
+<td align="center"><code>timeout()</code></td>
+<td align="center"><code>'infinity' &#124; non_neg_integer()</code></td>
+</tr>
+<tr>
+<td align="center"><code>no_return()</code></td>
+<td align="center"><code>none()</code>一直循环不返回的函数</td>
+</tr>
+<tr>
+<td align="center">### 在record声明中声明field类型约束</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%% 没有类型约束的filed，其默认类型为 any()</span></span><br><span class="line"><span class="keyword">-record</span><span class="params">(RecordName, &#123;field1 :: Type1, field2, field3 :: Type3&#125;)</span></span><br><span class="line">%% 等同于</span><br><span class="line"><span class="keyword">-record</span><span class="params">(RecordName, &#123;field1 :: Type1, field2 :: any(), field3 :: Type3&#125;)</span></span><br><span class="line"></span><br><span class="line">%% 栗子</span><br><span class="line"><span class="keyword">-record</span><span class="params">(rec, &#123;</span></span><br><span class="line"><span class="params">     f1 = <span class="number">18</span> :: integer()</span></span><br><span class="line"><span class="params">    ,f2 :: [tuple()]</span></span><br><span class="line"><span class="params">    ,f3</span></span><br><span class="line"><span class="params">&#125;)</span>.</span><br><span class="line"></span><br><span class="line"><span class="comment">%% 在R19之前</span></span><br><span class="line"><span class="comment">%% 未初始化的field的'undefined'会被添加到类型约束中</span></span><br><span class="line"><span class="comment">%% 以下两种声明，在R19之前，是相同的</span></span><br><span class="line"><span class="keyword">-record</span><span class="params">(rec, &#123;</span></span><br><span class="line"><span class="params">     f1 = <span class="number">18</span> :: integer()</span></span><br><span class="line"><span class="params">    ,f2 :: float()</span></span><br><span class="line"><span class="params">    ,f3 :: 'a' | 'b'</span></span><br><span class="line"><span class="params">&#125;)</span>.</span><br><span class="line"><span class="keyword">-record</span><span class="params">(rec, &#123;</span></span><br><span class="line"><span class="params">     f1 = <span class="number">18</span> :: integer()</span></span><br><span class="line"><span class="params">    ,f2 :: 'undefined' | float()</span></span><br><span class="line"><span class="params">    ,f3 :: 'undefined' | 'a' | 'b'</span></span><br><span class="line"><span class="params">&#125;)</span>.</span><br></pre></td></tr></table></figure></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">无论record声明是否包含类型约束，record被声明后，就可以使用<code>#rec{}</code>作为约束类型</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">同样可以使用<code>#rec{f1 :: non_neg_integer()}</code>对field类型进行约束</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">### 声明自定义类型约束</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%% 自定义类型约束声明</span></span><br><span class="line">-type type1<span class="params">()</span> :: integer<span class="params">()</span> | float<span class="params">()</span>.</span><br><span class="line"><span class="comment">%% 不透明自定义类型约束声明</span></span><br><span class="line">-opaque type2<span class="params">()</span> :: float<span class="params">()</span> | char<span class="params">()</span>.</span><br><span class="line"></span><br><span class="line">-type orddict<span class="params">(Key, Val)</span> :: [&#123;Key, Val&#125;].</span><br><span class="line"></span><br><span class="line"><span class="comment">%% 将本模块内声明的自定义类型约束导出</span></span><br><span class="line">-export_type<span class="params">([type1/<span class="number">0</span>, orddict/<span class="number">2</span>])</span>.</span><br><span class="line"></span><br><span class="line"><span class="comment">%% 其它模块使用 xx模块中声明的orddict自定义类型约束</span></span><br><span class="line">xx:orddict(atom(), integer())</span><br></pre></td></tr></table></figure></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><code>无论是官方文档还是各类教程都不建议使用opaque声明自定义类型约束，用type就好:)</code></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">### 声明函数参数与返回值约束</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-spec</span> Module:Function<span class="params">(ArgType1, ArgType2, .., ArgTypeN)</span> -&gt; ReturnType.</span><br><span class="line"><span class="keyword">-spec</span> Function<span class="params">(ArgType1, ArgType2, .., ArgTypeN)</span> -&gt; ReturnType.</span><br><span class="line"><span class="keyword">-spec</span> Function<span class="params">(ArgType1 :: Type1, .., ArgTypeN :: TypeN)</span> -&gt; ReturnType.</span><br><span class="line"></span><br><span class="line"><span class="comment">%% ; 分号放在下一行仅仅是为了代码的可读性</span></span><br><span class="line"><span class="keyword">-spec</span> foo<span class="params">(T1, T2)</span> -&gt; T3</span><br><span class="line">       ; <span class="params">(T4, T5)</span> -&gt; T6.</span><br><span class="line"></span><br><span class="line"><span class="comment">%% 这个编译器会警告</span></span><br><span class="line"><span class="comment">%% 因为 pos_integer() 和 integer() 覆盖域有重叠</span></span><br><span class="line"><span class="keyword">-spec</span> foo<span class="params">(pos_integer())</span> -&gt; pos_integer<span class="params">()</span></span><br><span class="line">       ; <span class="params">(integer())</span> -&gt; integer<span class="params">()</span>.</span><br><span class="line"></span><br><span class="line"><span class="comment">%% 这个约束了ArgType和ReturnType要保持一致</span></span><br><span class="line"><span class="keyword">-spec</span> id<span class="params">(X)</span> -&gt; X.</span><br><span class="line"></span><br><span class="line"><span class="keyword">-spec</span> id<span class="params">(tuple())</span> -&gt; tuple<span class="params">()</span></span><br><span class="line"><span class="keyword">-spec</span> id<span class="params">(X)</span> -&gt; X when X :: tuple<span class="params">()</span>.</span><br><span class="line"></span><br><span class="line"><span class="comment">%% Arg :: &#123;atom(), integer()&#125; | [number()]</span></span><br><span class="line"><span class="keyword">-spec</span> foo<span class="params">(&#123;X, integer()&#125;)</span> -&gt; X when X :: atom<span class="params">()</span></span><br><span class="line">       ; <span class="params">([Y])</span> -&gt; Y when Y :: number<span class="params">()</span>.</span><br><span class="line"></span><br><span class="line"><span class="comment">%% Record类型约束</span></span><br><span class="line"><span class="keyword">-record</span><span class="params">(rec, &#123;key = <span class="number">0</span> :: integer()&#125;)</span>.</span><br><span class="line"><span class="keyword">-spec</span> foo<span class="params">(#rec&#123;key :: non_neg_integer()&#125;)</span> -&gt; boolean<span class="params">()</span>.</span><br><span class="line"></span><br><span class="line"><span class="comment">%% 无返回约束</span></span><br><span class="line"><span class="keyword">-spec</span> m_error<span class="params">(term())</span> -&gt; no_return<span class="params">()</span>.</span><br><span class="line"><span class="function"><span class="title">m_error</span><span class="params">(Err)</span> -&gt;</span></span><br><span class="line">    erlang:throw(&#123;error, Err&#125;).</span><br></pre></td></tr></table></figure></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Erlang/" rel="tag">#Erlang</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/17/Erlang-EDoc/" rel="next" title="Erlang EDoc">
+                <i class="fa fa-chevron-left"></i> Erlang EDoc
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/03/Erlang-Dialyzer/" rel="prev" title="Erlang Dialyzer">
+                Erlang Dialyzer <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+
+          <!-- ad start -->
+          <!--
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7381930582570374"
+     data-ad-slot="8575096042"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+-->
+          <!-- ad end -->
+
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/beiping96.png"
+               alt="duxingrui" />
+          <p class="site-author-name" itemprop="name">duxingrui</p>
+          <p class="site-description motion-element" itemprop="description">beiping96@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Erlang-类型及函数约束规范"><span class="nav-number">1.</span> <span class="nav-text">Erlang 类型及函数约束规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类型约束语法"><span class="nav-number">2.</span> <span class="nav-text">类型约束语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内置类型"><span class="nav-number">3.</span> <span class="nav-text">内置类型</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" style="text-align:center">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">Total <span id="busuanzi_value_site_pv"></span> views,</span>
+  <span id="busuanzi_container_page_pv">this page <span id="busuanzi_value_page_pv"></span> hits.</span>
+  <br/>
+  
+  &copy;
+   2016
+   - 
+  
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder"><a href="mailto:beiping96@gmail.com">duxingrui</a></span>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98210842-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'http-blog-beiping96-com';
+      var disqus_identifier = '2017/02/24/Erlang-Types-and-Function-Specifications/';
+      var disqus_title = "Erlang Types and Function Specifications";
+      var disqus_url = 'http://blog.beiping96.com/2017/02/24/Erlang-Types-and-Function-Specifications/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<!--
+  <script type="text/javascript" color="0,0,0" opacity='0.33' zIndex="-1" count="66" src="/js/src/canvas-nest.min.js"></script>
+-->
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+</html>

@@ -1,0 +1,807 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Cache,Go,Performance,GCTT," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/B_favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="Ristretto：一个高性能的Go缓存https:&#x2F;&#x2F;blog.dgraph.io&#x2F;post&#x2F;introducing-ristretto-high-perf-go-cache&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Introducing Ristretto: A High-Performance Go Cache">
+<meta property="og:url" content="http://blog.beiping96.com/2019/12/05/Introducing-Ristretto-A-High-Performance-Go-Cache/index.html">
+<meta property="og:site_name" content="Beiping96&#39;s Blog">
+<meta property="og:description" content="Ristretto：一个高性能的Go缓存https:&#x2F;&#x2F;blog.dgraph.io&#x2F;post&#x2F;introducing-ristretto-high-perf-go-cache&#x2F;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://blog.beiping96.com/images/ristretto-espresso.jpg">
+<meta property="og:image" content="https://img.youtube.com/vi/HzMZEsqXDec/0.jpg">
+<meta property="og:image" content="http://blog.beiping96.com/images/ristretto-1.svg">
+<meta property="og:image" content="http://blog.beiping96.com/images/ristretto-2.svg">
+<meta property="og:image" content="http://blog.beiping96.com/images/ristretto-3.svg">
+<meta property="og:image" content="http://blog.beiping96.com/images/ristretto-4.svg">
+<meta property="og:image" content="http://blog.beiping96.com/images/ristretto-5.svg">
+<meta property="og:image" content="http://blog.beiping96.com/images/ristretto-6.svg">
+<meta property="og:image" content="http://blog.beiping96.com/images/ristretto-7.svg">
+<meta property="og:image" content="http://blog.beiping96.com/images/ristretto-8.svg">
+<meta property="article:published_time" content="2019-12-05T02:51:57.000Z">
+<meta property="article:modified_time" content="2020-03-06T13:29:34.141Z">
+<meta property="article:author" content="duxingrui">
+<meta property="article:tag" content="Cache">
+<meta property="article:tag" content="Go">
+<meta property="article:tag" content="Performance">
+<meta property="article:tag" content="GCTT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.beiping96.com/images/ristretto-espresso.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://blog.beiping96.com/2019/12/05/Introducing-Ristretto-A-High-Performance-Go-Cache/"/>
+
+
+  <title> Introducing Ristretto: A High-Performance Go Cache | Beiping96's Blog </title>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Beiping96's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Introducing Ristretto: A High-Performance Go Cache
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2019-12-05T10:51:57+08:00" content="2019-12-05">
+              2019-12-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/12/05/Introducing-Ristretto-A-High-Performance-Go-Cache/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/12/05/Introducing-Ristretto-A-High-Performance-Go-Cache/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a>：一个高性能的Go缓存<br><a href="https://blog.dgraph.io/post/introducing-ristretto-high-perf-go-cache/" target="_blank" rel="noopener">https://blog.dgraph.io/post/introducing-ristretto-high-perf-go-cache/</a></p>
+<a id="more"></a>
+<p><img src="/images/ristretto-espresso.jpg" alt=""><br><strong>This post made it to the top of Golang <a href="https://www.reddit.com/r/golang/comments/d6taoq/introducing_ristretto_a_highperformance_go_cache/" target="_blank" rel="noopener">subreddit</a> and is trending in top 10 on the front page of <a href="https://news.ycombinator.com/item?id=21023949" target="_blank" rel="noopener">Hacker News</a>. Do engage in discussion there and show us love by giving us a <a href="https://github.com/dgraph-io/dgraph" target="_blank" rel="noopener">star</a>.</strong><br><strong>本文已在<a href="https://www.reddit.com/r/golang/comments/d6taoq/introducing_ristretto_a_highperformance_go_cache/" target="_blank" rel="noopener">Reddit</a>上置顶，并且在<a href="https://news.ycombinator.com/item?id=21023949" target="_blank" rel="noopener">Hacker News</a>上处于首页前十。欢迎参与讨论，如果你也喜欢，请给一个<a href="https://github.com/dgraph-io/dgraph" target="_blank" rel="noopener">星星</a></strong></p>
+<p>With over six months of research and development, we’re proud to announce the initial release of <strong><a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a>: A High Performance, Concurrent, Memory-Bound Go cache.</strong> It is contention-proof, scales well and provides consistently high hit-ratios.<br>通过六个多月的调查和开发，我们终于可以很自豪地宣布<strong><a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a>：一个高性能、并发安全、基于内存的Go缓存库</strong>首次发布。它具有低竞争、易于伸缩、高缓存命中率等特点。</p>
+<p>You can now also watch the talk Manish gave at the latest Go Bangalore meetup!<br>可以从这里看到Manish在Go Bangalore meetup中发表的演讲：</p>
+<p><a href="https://www.youtube.com/watch?v=HzMZEsqXDec" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/HzMZEsqXDec/0.jpg" alt=""></a></p>
+<h3 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h3><p>序</p>
+<p>It all started with needing a memory-bound, concurrent Go cache in <a href="https://github.com/dgraph-io/dgraph" target="_blank" rel="noopener">Dgraph</a>. We looked around for a solution, but we couldn’t find a great one. We then tried using a sharded map, with shard eviction to release memory, which caused us memory issues. We then repurposed Groupcache’s <a href="https://github.com/golang/groupcache/blob/master/lru/lru.go" target="_blank" rel="noopener">LRU</a>, using mutex locks for thread safety. After having it around for a year, we noticed that the cache suffered from severe contention. A <a href="https://github.com/dgraph-io/dgraph/commit/b9990f4619b64615c2c18bb7627d198b4397109c" target="_blank" rel="noopener">commit</a> to remove that cache caused our query latency to dramatically improve by 5-10x. <strong>In essence, our cache was slowing us down!</strong><br>这一切都是从<a href="https://github.com/dgraph-io/dgraph" target="_blank" rel="noopener">Dgraph</a>项目需要一个基于内存、并发安全的Go缓存开始的。我们曾在市面上到处寻找已有的解决方案，但是并没有找到一个合适的。我们也曾尝试使用具有分片内存回收机制的共享map，却带来了一系列内存问题。我们也曾使用Groupcache的<a href="https://github.com/golang/groupcache/blob/master/lru/lru.go" target="_blank" rel="noopener">LRU</a>，同时使用互斥锁来确保并发安全，在工作了大约一年以后，却发生了严重的锁竞争。于是在这次<a href="https://github.com/dgraph-io/dgraph/commit/b9990f4619b64615c2c18bb7627d198b4397109c" target="_blank" rel="noopener">提交</a>中我们被迫删除了缓存，直接导致<a href="https://github.com/dgraph-io/dgraph" target="_blank" rel="noopener">Dgraph</a>的查询耗时增加了5-10倍。<strong>换而言之，我们的缓存反而拖慢了我们的项目。</strong></p>
+<p>We concluded that the concurrent cache story in Go is broken and must be fixed. In March, we wrote about the <a href="https://blog.dgraph.io/post/caching-in-go/" target="_blank" rel="noopener">State of Caching in Go</a>, mentioning the problem of databases and systems requiring a smart memory-bound cache which can scale to the multi-threaded environment Go programs find themselves in. In particular, we set these as the requirements for the cache:</p>
+<ol>
+<li>Concurrent</li>
+<li>High cache-hit ratio</li>
+<li>Memory-bounded (limit to configurable max memory usage)</li>
+<li>Scale well as the number of cores and goroutines increases</li>
+<li>Scale well under non-random key access distribution (e.g. Zipf).</li>
+</ol>
+<p>终于，我们意识到项目中Go缓存已经损坏，必须得到重视。在3月的时候，我们发表了一篇关于<a href="https://blog.dgraph.io/post/caching-in-go/" target="_blank" rel="noopener">Go缓存</a>的文章，其中提到构建一个并发安全的Go内存缓存所面临的挑战。同时，我们期望缓存具有以下特性：</p>
+<ol>
+<li>并发安全</li>
+<li>高缓存命中率</li>
+<li>基于内存（可配置最大内存使用量）</li>
+<li>在并发数增加时，保持良好的扩展性</li>
+<li>在缓存Key非随机分布情况下（e.g. <a href="https://en.wikipedia.org/wiki/Zipf%27s_law" target="_blank" rel="noopener">Zipf</a>），保持良好的扩展性</li>
+</ol>
+<p>After publishing the <a href="https://blog.dgraph.io/post/caching-in-go/" target="_blank" rel="noopener">blog post</a>, we built a team to address the challenges mentioned therein and create a Go cache library worthy of being compared to non-Go cache implementations. In particular, <a href="https://github.com/ben-manes/caffeine" target="_blank" rel="noopener">Caffeine</a> which is a high performance, near-optimal caching library based on Java 8. It is being used by many Java-based databases, like Cassandra, HBase, and Neo4j. There’s an article about the design of Caffeine <a href="http://highscalability.com/blog/2016/1/25/design-of-a-modern-cache.html" target="_blank" rel="noopener">here</a>.<br>在发表了关于<a href="https://blog.dgraph.io/post/caching-in-go/" target="_blank" rel="noopener">Go缓存</a>的文章后，我们专门组建了一个团队致力于解决在构建Go缓存时所面临的挑战，同时使用了基于Java的<a href="https://github.com/ben-manes/caffeine" target="_blank" rel="noopener">Caffeine</a>缓存库，来与我们构建Go缓存进行对比。<em><a href="https://github.com/ben-manes/caffeine" target="_blank" rel="noopener">Caffeine</a>基于Java 8，它的性能极高，是接近缓存方案最优解的缓存库。很多基于Java的数据库都采用了该缓存库，比如：Cassandra、 HBase、 Neo4j。<a href="http://highscalability.com/blog/2016/1/25/design-of-a-modern-cache.html" target="_blank" rel="noopener">这篇文章</a>介绍了Caffeine的设计实现。</em></p>
+<h3 id="Ristretto-Better-Half-of-Espresso"><a href="#Ristretto-Better-Half-of-Espresso" class="headerlink" title="Ristretto: Better Half of Espresso"></a>Ristretto: Better Half of Espresso</h3><p>Ristretto：请搭配Espresso食用</p>
+<p>We have since <a href="https://blog.dgraph.io/refs/bp_wrapper.pdf" target="_blank" rel="noopener">read</a> <a href="https://blog.dgraph.io/refs/Adaptive%20Software%20Cache%20Management.pdf" target="_blank" rel="noopener">the</a> <a href="https://blog.dgraph.io/refs/TinyLFU%20-%20A%20Highly%20Efficient%20Cache%20Admission%20Policy.pdf" target="_blank" rel="noopener">literature</a>, extensively tested implementations and discussed every variable there is to consider in writing a cache library. And today, we are proud to announce that it is ready for the wider Go community to use and experiment with.<br>在我们研究了<a href="https://blog.dgraph.io/refs/bp_wrapper.pdf" target="_blank" rel="noopener">这</a><a href="https://blog.dgraph.io/refs/Adaptive%20Software%20Cache%20Management.pdf" target="_blank" rel="noopener">些</a><a href="https://blog.dgraph.io/refs/TinyLFU%20-%20A%20Highly%20Efficient%20Cache%20Admission%20Policy.pdf" target="_blank" rel="noopener">个</a>文献，同时进行了完善的测试，甚至讨论了每个变量的命名之后。我们可以很自豪的宣布：Ristretto已经准备好接受Go社区的检验。</p>
+<p>Before we begin explaining the design of <a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a>, here’s a code snippet which shows how to use it:<br>在开始聊<a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a>的设计实现之前，以下代码快速地展示了如何使用它：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	cache, err := ristretto.NewCache(&amp;ristretto.Config&#123;</span><br><span class="line">		NumCounters: <span class="number">1e7</span>,     <span class="comment">// Num keys to track frequency of (10M).</span></span><br><span class="line">		MaxCost:     <span class="number">1</span> &lt;&lt; <span class="number">30</span>, <span class="comment">// Maximum cost of cache (1GB).</span></span><br><span class="line">		BufferItems: <span class="number">64</span>,      <span class="comment">// Number of keys per Get buffer.</span></span><br><span class="line">	&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	cache.Set(<span class="string">"key"</span>, <span class="string">"value"</span>, <span class="number">1</span>) <span class="comment">// set a value</span></span><br><span class="line">	<span class="comment">// wait for value to pass through buffers</span></span><br><span class="line">	time.Sleep(<span class="number">10</span> * time.Millisecond)</span><br><span class="line"></span><br><span class="line">	value, found := cache.Get(<span class="string">"key"</span>)</span><br><span class="line">	<span class="keyword">if</span> !found &#123;</span><br><span class="line">		<span class="built_in">panic</span>(<span class="string">"missing value"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(value)</span><br><span class="line">	cache.Del(<span class="string">"key"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Guiding-Principles"><a href="#Guiding-Principles" class="headerlink" title="Guiding Principles"></a>Guiding Principles</h4><p>设计原则</p>
+<p><a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a> is built on three guiding principles:</p>
+<ol>
+<li>Fast Accesses</li>
+<li>High Concurrency and Contention Resistance</li>
+<li>Memory Bounding.</li>
+</ol>
+<p><a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a>致力于达成：</p>
+<ol>
+<li>快速读写</li>
+<li>高并发和低竞争</li>
+<li>基于内存</li>
+</ol>
+<p>In this blog post, we’ll discuss these three principles and how we achieved them in Ristretto.<br>在本文中，我们将介绍Ristretto是如何达成以上目标的。</p>
+<h3 id="Fast-Access"><a href="#Fast-Access" class="headerlink" title="Fast Access"></a>Fast Access</h3><p>快速读写</p>
+<p>As much as we love Go and its opinionated stance on features, some of Go design decisions prevented us from squeezing out all the performance we wanted to. The most notable one is Go’s concurrency model. Due to the focus on CSP, most other forms of atomic operations have been neglected. This makes it hard to implement lock-free structures that would be useful in a cache library. For example, Go <a href="https://groups.google.com/d/msg/golang-nuts/M9kF6Tdh2Vo/3tLSFYYOGgAJ" target="_blank" rel="noopener">does not</a> provide thread-local storage.<br>我们很喜欢Go，也很赞同它在某些特性上的坚持。但是不得不承认Go在设计上的某些决策限制了对性能的追求。其中最为显眼的一点就是Go的并发模型，因为过于强调CSP模型，在设计之初，很多形式的原子性操作都被抛弃了。这导致我们很难实现Go缓存中的无锁结构。举个例子，Go<a href="https://groups.google.com/forum/#!msg/golang-nuts/M9kF6Tdh2Vo/3tLSFYYOGgAJ" target="_blank" rel="noopener">并不提供</a>线程局部存储。<br>（注：线程局部存储是指当某个变量只会被某一个线程操作访问的话，并不需要对该变量进行加锁操作，虽说线程间共享内存，但是我们可以认为该变量只存储在该线程内部，因为其它线程不会去访问它。）</p>
+<p>At its core, a cache is a hash map with rules about what goes in and what goes out. If the hash map doesn’t perform well, then the whole cache will suffer. As opposed to Java, Go does not have a lockless concurrent hashmap. Instead, thread safety in Go is achieved via explicitly acquiring mutex locks.<br>缓存的核心是一个控制当A数据输入则B数据输出的哈希表。如果这张哈希表的性能不佳，整个缓存也不会有高性能。与Java不同，Go中并没有无锁且并发安全的哈希表。实际上，Go的并发安全是通过显式地获取互斥锁实现的。</p>
+<p>We experimented with multiple implementations (using the <code>store</code> interface within Ristretto) and found <code>sync.Map</code> performs well for read-heavy workloads but deteriorates for write workloads. Considering there’s no thread-local storage, <strong>we found the best overall performance with sharded mutex-wrapped Go maps.</strong> In particular, we chose to use 256 shards to ensure that this would perform well even with a 64-core server.<br>我们在Ristretto中定义了名为<code>store</code>的接口，并尝试使用多种实现方法，发现Go的<code>sync.Map</code>在读多写少的情况下性能表现优异，但当写操作增多时，性能就会下降。考虑到Go没有线程局部存储机制，<strong>最均衡的方案是：使用Go中互斥锁和多个Map进行分片。</strong>最终，我们采用了256个分片，它在64位处理器上也能很好的工作。</p>
+<p>With a shard based approach, we also needed to find a quick way to calculate which shard a key should go in. This requirement and the concern about long keys consuming too much memory led us to using <code>uint64</code> for keys, instead of storing the entire key. The rationale was that we’ll need the hash of the key in multiple places and doing it once at entry allowed us to reuse that hash, avoiding any more computation.<br>在确定了实现方法后，我们还需要一种可以快速计算出某个Key该处于某个分片中的哈希算法。因为担心过长的Key会导致过多的内存占用，所以并不存储整个缓存Key，而是使用<code>uint64</code>的哈希值作为存储Key。我们会在多个函数入口计算哈希值，但是确保一次操作只计算一次，然后复用哈希值，从而避免重复的无意义计算。</p>
+<p><strong>To generate a fast hash, we borrowed <a href="https://github.com/dgraph-io/ristretto/blob/master/z/rtutil.go#L42-L44" target="_blank" rel="noopener">runtime.memhash</a> from Go Runtime.</strong> This function uses assembly code to quickly generate a hash. Note that the hash has a randomizer that is initialized whenever the process starts, which means the same key would not generate the same hash on the next process run. But, that’s alright for a non-persistent cache. In our <a href="https://github.com/dgraph-io/ristretto/blob/master/z/rtutil_test.go#L11-L44" target="_blank" rel="noopener">experiments</a>, we found that it can hash 64-byte keys in under 10ns.<br>** 为了快速计算哈希值，我们借用了Go源码中的<a href="https://github.com/dgraph-io/ristretto/blob/master/z/rtutil.go#L42-L44" target="_blank" rel="noopener">runtime.memhash</a>** 这个函数会直接通过汇编代码快速计算哈希值。需要注意的是，这个函数中包含一个随机数种子，这个随机数生成器会在进程启动时进行初始化，这意味着相同的缓存Key在进程重启后会计算出不同的哈希值。但是，对于一个非永久性存储的内存缓存而言，完全没影响。通过测试，该哈希函数可以在10纳秒内（8.88ns）计算出64字节的缓存Key的哈希值。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">BenchmarkMemHash-32 200000000	 8.88 ns/op</span><br><span class="line">BenchmarkFarm-32    100000000	 17.9 ns/op</span><br><span class="line">BenchmarkSip-32      30000000	 41.1 ns/op</span><br><span class="line">BenchmarkFnv-32      20000000	 70.6 ns/op</span><br></pre></td></tr></table></figure>
+
+<p>We then used this hash as not only the stored key but also to figure out the shard the key should go into. <em>This does introduce a chance of key collision, that’s something we plan to deal with later.</em><br>在确定了使用哈希值作为存储Key之后，我们必须直面一个问题：<strong>哈希碰撞</strong>，稍后会展示如何处理。</p>
+<h3 id="Concurrency-and-Contention-Resistance"><a href="#Concurrency-and-Contention-Resistance" class="headerlink" title="Concurrency and Contention Resistance"></a>Concurrency and Contention Resistance</h3><p>高并发和低竞争</p>
+<p>Achieving high hit ratios requires managing metadata about what’s present in the cache and what should be present in the cache. This becomes very hard when balancing the performance and scalability of the cache across goroutines. Luckily, there’s a <a href="https://blog.dgraph.io/refs/bp_wrapper.pdf" target="_blank" rel="noopener">paper</a> called BP-Wrapper written about a system framework making any replacement algorithms almost lock contention-free. The paper describes two ways to mitigate contention: <em>prefetching and batching.</em> We only use batching.<br>实现高缓存命中率的关键点在于管理缓存数据与其存储位置的元数据。可是在高性能和扩展性中找到平衡点一直困扰着我们，幸好，这篇<a href="https://blog.dgraph.io/refs/bp_wrapper.pdf" target="_blank" rel="noopener">BP-Wrapper</a>文献展示了一个无锁替换算法的系统框架。它主要采用两种方法来防止竞争：<strong>预取和批处理</strong>。在Ristretto中，只使用了批处理。<br>（注：prefetching-预取是指在获取锁之前，尽可能的处理掉不会发生竞争的操作，从而在获取锁之后，只需要处理可能发生竞争的操作，减少持有锁时执行的操作个数，达到提升性能的目的。）<br>（注：batching-批处理是指在获取锁之后，并不是只处理一个可能发生竞争的操作，也就是说并不是一个操作获取一次锁，而是将一批操作<em>打包</em>在一起，获取一次锁，处理一批可能发生竞争的操作，从而减少获取锁的次数，达到提升性能的目的。）</p>
+<p>Batching works pretty much how you’d think. <strong>Rather than acquiring a mutex lock for every metadata mutation, we wait for a ring buffer to fill up before we acquire a mutex and process the mutations.</strong> As described in the paper, this lowers contention considerably with little overhead.<br>批处理的性能表现比想象中的还要好。<strong>我们并不是每次操作时都获取互斥锁，而是构造了一个环形缓冲区，每次操作只是将该操作加入缓冲区，在环形缓冲区被填满之后，才会获取互斥锁并进行操作。</strong>正如上述文献中所描述的那样，采用这种方法，可以在很大程度上避免数据竞争，而且只有很少的开销。</p>
+<p>We apply this method for all <code>Gets</code> and <code>Sets</code> to the cache.<br>我们在所有的<code>Gets</code>和<code>Sets</code>中都使用了该方法。</p>
+<h4 id="Gets"><a href="#Gets" class="headerlink" title="Gets"></a>Gets</h4><p>All Gets to the cache are, of course, immediately serviced. The hard part is to capture the Get, so we can keep track of the key access. In an LRU cache, typically a key would be placed at the head of a linked list. In our LFU based cache, we need to increment an item’s hit counter. Both operations require thread-safe access to a cache global struct. <a href="https://blog.dgraph.io/refs/bp_wrapper.pdf" target="_blank" rel="noopener">BP-Wrapper</a> suggests using batching to process the hit counter increments, but the question is how do we implement this batching process, without acquiring yet another lock.<br>在缓存进行Get操作时，除了返回对应的缓存元素外，一般还需要以某种形式记录该次访问行为。例如，在LRU缓存中，通常会将最近被访问的缓存元素移动至链表头部。而Ristretto采用LFU策略，这就需要对缓存元素的被访问次数进行计数。Get操作和计数操作都需要对缓存结构进行线程安全的操作，虽然<a href="https://blog.dgraph.io/refs/bp_wrapper.pdf" target="_blank" rel="noopener">BP-Wrapper</a>中提到的批处理可以用来执行计数操作，但是问题是我们如何在不获取另外一个互斥锁的情况下，将计数操作加入批处理缓冲区。</p>
+<p>This might sound like a perfect use case of Go channels, and it is. Unfortunately, the throughput performance of channels prevented us from using them. <strong>Instead, we devised a nifty way to use <code>sync.Pool</code> to implement striped, lossy <a href="https://github.com/dgraph-io/ristretto/blob/master/ring.go#L99-L104" target="_blank" rel="noopener">ring buffers</a></strong> that have great performance with little loss of data.<br>这听起来好像很适合使用Go的channel来处理，不幸的是，channel的性能表现不是特别满意。<strong>所以我们使用<code>sync.Pool</code>构造了一个有损的<a href="https://github.com/dgraph-io/ristretto/blob/master/ring.go#L99-L104" target="_blank" rel="noopener">环形缓冲区</a></strong>它会丢失少量的计数操作，但是性能表现十分出色。</p>
+<p>Any item stored in the Pool may be removed automatically at any time <a href="https://golang.org/pkg/sync/#Pool" target="_blank" rel="noopener">without</a> notification. <em>That introduces one level of lossy behavior</em>. Each item in Pool is effectively a batch of keys. When the batch fills up, it gets pushed to a channel. The channel size is deliberately kept small to avoid consuming too many CPU cycles to process it. If the channel is full, the batch is dropped. <em>This introduces a secondary level of lossy behavior</em>. A goroutine picks up this batch from the internal channel and processes the keys, updating their hit counter.<br>访问计数操作可能会丢失部分操作，主要分两种情况：一是上面提到的<code>sync.Pool</code>，在<code>sync.Pool</code>中存储的元素有可能会被<a href="https://golang.org/pkg/sync/#Pool" target="_blank" rel="noopener">移除</a>；二是当缓冲区被填满后，会将这一批操作推送至一个channel。这里故意没有使用很大缓冲区的channel，是为了避免执行一次批处理需要消耗过多的CPU执行周期。当channel已满时，这批操作会被丢弃。有一个Go协程会从该channel中取出计数操作并执行。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">AddToLossyBuffer(key):</span><br><span class="line">  stripe := b.pool.Get().(*ringStripe)</span><br><span class="line">  stripe.Push(key)</span><br><span class="line">  b.pool.Put(stripe)</span><br><span class="line"></span><br><span class="line">Once buffer fills up, push to channel:</span><br><span class="line">  <span class="keyword">select</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> p.itemsCh &lt;- keys:</span><br><span class="line">      p.stats.Add(keepGets, keys[<span class="number">0</span>], <span class="keyword">uint64</span>(<span class="built_in">len</span>(keys)))</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">  <span class="keyword">default</span>:</span><br><span class="line">      p.stats.Add(dropGets, keys[<span class="number">0</span>], <span class="keyword">uint64</span>(<span class="built_in">len</span>(keys)))</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">p.itemCh processing:</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="params">(p *tinyLFU)</span> <span class="title">Push</span><span class="params">(keys []<span class="keyword">uint64</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> _, key := <span class="keyword">range</span> keys &#123;</span><br><span class="line">      p.Increment(key)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>The performance benefits of using a <code>sync.Pool</code> over anything else (slices, striped mutexes, etc.) are mostly due to the internal usage of thread-local storage, <em>something not available as a public API to Go users.</em><br>使用<code>sync.Pool</code>的性能比使用切片或者分区互斥锁等方案要好很多。其主要原因是因为其内部是使用了线程局部存储。<em>但是Go开发者者却不能直接使用线程局部存储</em>。</p>
+<h4 id="Sets"><a href="#Sets" class="headerlink" title="Sets"></a>Sets</h4><p>The requirements for Set buffer is slightly different from Get. In Gets, we buffer up the keys, only processing them once the buffer fills up. In Sets, we want to process the keys as soon as possible. <strong>So, we use a channel to capture the Sets, dropping them on the floor if the channel is full to avoid contention.</strong> A couple of background goroutines pick sets from the channel and process the Set.<br>Set操作与Get操作不同的是，在Get中，我们会将计数操作加入缓冲区，并使用一个Go协程批量执行。在Set中，我们希望尽可能及时的处理，所以我们使用了一个channel来收集Set操作，同时启动多个Go协程来执行channel中的操作，当channel被填满时，会返回Set失败。</p>
+<p>This approach, as with Gets, is designed to optimize for contention resistance. But, comes with a few caveats, described below.<br>与Get操作一样，Set操作在设计上也是为了尽力避免竞争发生，但是以下有几点注意事项：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> &#123;</span><br><span class="line"><span class="keyword">case</span> c.setBuf &lt;- &amp;item&#123;key: hash, val: val, cost: cost&#125;:</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">    <span class="comment">// drop the set and avoid blocking</span></span><br><span class="line">    c.stats.Add(dropSets, hash, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Caveats"><a href="#Caveats" class="headerlink" title="Caveats"></a>Caveats</h4><p>注意事项</p>
+<p>Sets in <a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a> are queued into a buffer, control is returned back to the caller, and the buffer is then applied to the cache. This has two side-effects:<br>Set函数在将操作加入channel后，就会立刻返回。由多个Go协程执行channel中的操作，这就会带来两个问题：</p>
+<ol>
+<li><p><strong>There is no guarantee that a set would be applied.</strong> It could be dropped immediately to avoid contention or could be rejected later by the policy.</p>
+</li>
+<li><p>Even if a Set gets applied, it might take a few milliseconds after the call has returned to the user. In database terms, it is an eventual consistency model.</p>
+</li>
+<li><p><strong>并不是每次执行Set函数都会成功</strong>，在channel满时，Set会被丢弃。也许以后，我们会想到更好的办法来避免这点。</p>
+</li>
+<li><p>在Set函数返回后，大约还需要几毫秒，Set操作才会真正的被操作。遵循最终一致性。</p>
+</li>
+</ol>
+<p>If however, a key is already present in the cache, Set would update the key immediately. This is to avoid a cached key holding a stale value.<br>对于一个已经存在于缓存中的Key而言，Set会立即更新缓存值。这样做是为了避免缓存中持有已经过期的Key。<br>（注：Set操作对于新创建的Key只遵循最终一致性，对于已存在的Key遵循强一致性。）</p>
+<h4 id="Contention-Resistance"><a href="#Contention-Resistance" class="headerlink" title="Contention Resistance"></a>Contention Resistance</h4><p>避免竞争</p>
+<p><strong>Ristretto is optimized for contention resistance.</strong> This performs really well under heavy concurrent load, as we’ll see with throughput benchmarks below. However, it would lose some metadata in exchange for better throughput performance.<br><strong>Ristretto致力于避免竞争</strong>。稍后的基准测试结果可以看出，在高并发的情况下，Ristretto性能表现优异。但是，Ristretto会付出丢失些许操作记录的代价。</p>
+<p>Interestingly, that information loss doesn’t hurt our hit ratio performance because of the nature of key access distributions. If we do lose metadata, it is generally lost uniformly while the key access distribution remains non-uniform. Therefore, we still achieve high hit ratios and the hit ratio degradation is small as shown by the following graph.<br>有趣的是，这些操作记录的丢失并不会影响Ristretto的缓存命中率，这是由于缓存Key的分布特性，即使发生了操作记录的丢失，缓存Key依旧是不均匀分布的。因此我们还可以保持较高的缓存命中率，在并发数量提高后，缓存命中率只会小幅度下降。</p>
+<p><img src="/images/ristretto-1.svg" alt=""></p>
+<h3 id="Memory-Bounding"><a href="#Memory-Bounding" class="headerlink" title="Memory Bounding"></a>Memory Bounding</h3><p>内存边界</p>
+<h4 id="Key-Cost"><a href="#Key-Cost" class="headerlink" title="Key Cost"></a>Key Cost</h4><p>Key的消耗</p>
+<p><em>An infinitely large cache is practically impossible.</em> A cache must be bounded in size. Many cache libraries would consider cache size to be the number of elements. We found that approach naive. Surely it works in a workload where values are of identical size. Most workloads, however, have variable-sized values. One value could cost a few bytes, another a few kilobytes and yet another, a few megabytes. Treating them as having the same memory cost isn’t realistic.<br><em>无限大的缓存是不存在的</em>。缓存必须有最大使用内存的限制。许多的缓存库会使用缓存元素和数量来统计缓存大小。我们认为这个观点是片面的，如果每个缓存的大小都是一样的话，当然可以这样来统计。但是，大多数情况下，缓存元素的大小是不一致的，可能有些缓存元素只需要几KB，而另外一些却需要几MB，将它们视为同等开销是不现实的。</p>
+<p><strong>In <a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a>, we attach a cost to every key-value.</strong> Users can specify what that cost is when calling Set. We count this cost against the MaxCost of the cache. When the cache is operating at capacity, a heavy item could displace many lightweight items. This mechanism is nice in that it works well for all different workloads, including the naive approach where each key-value costs 1.<br><strong>在<a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a>中，我们会对每组缓存元素标记上其占用内存大小</strong>。而且在调用Set函数时，也可以指定该组缓存所占用的内存大小，我们会将指定的值与配置的MaxCost进行比较。当缓存在满负荷工作的状态下，一个较大的缓存元素的Set可能会使得多个占用内存较少的元素被淘汰。这种策略有一个优点，它几乎可以适配任何工作负载，包括那种每组缓存元素都一样大小的情况。</p>
+<h4 id="Admission-Policy-via-TinyLFU"><a href="#Admission-Policy-via-TinyLFU" class="headerlink" title="Admission Policy via TinyLFU"></a>Admission Policy via TinyLFU</h4><p>基于TinyLFU的录入策略</p>
+<p><em>“What should we let into the cache?”</em><br><em>“我们应当把什么东西放入缓存？”</em></p>
+<p>is answered by the admission policy. The goal, obviously, is to let in new items if they are more <em>“valuable”</em> than the current items. However, this becomes a challenge if you consider the overhead (latency and memory) required to track relevant item information pertaining to the <em>“value”</em> question.<br>这个问题应当由录入策略来回答。当然，我们的理想是，每一个写入缓存的元素都比被淘汰的元素更有“价值”。但是，如何跟踪和统计一个缓存元素的“价值”以及所带来的时间和空间开销，将会是一个难题。</p>
+<p>Despite being a well-documented strategy for increasing hit ratios, most Go cache libraries have no admission policy at all. In fact, many LRU eviction implementations assume the latest key as the most valuable.<br>虽然存储访问记录可以很显著地帮助提供命中率，但是大多数Go缓存都不包含这个功能。许多基于LRU的缓存库，都是很简单地认为最新的元素就是最有“价值”的元素。</p>
+<p>Moreover, most of the Go cache libraries use pure LRU or an approximation of LRU as their eviction policy. The quality of LRU approximation notwithstanding, some workloads are just better suited to LFU eviction policies. We’ve found this to be the case in our benchmarks using various traces.<br>事实上，几乎所有Go缓存库的淘汰策略都是使用纯粹LRU或者近似LRU。我们通过多种基准测试发现：尽管LRU的表现并不差，但是在一些场景下，LFU更棒。</p>
+<p>For our admission policy, we looked at a new and fascinating paper called <strong><a href="https://blog.dgraph.io/refs/TinyLFU%20-%20A%20Highly%20Efficient%20Cache%20Admission%20Policy.pdf" target="_blank" rel="noopener">TinyLFU</a>: A Highly Efficient Cache Admission Policy.</strong> At a very high level, TinyLFU provides three methods:<br>在我们发现了<strong><a href="https://blog.dgraph.io/refs/TinyLFU%20-%20A%20Highly%20Efficient%20Cache%20Admission%20Policy.pdf" target="_blank" rel="noopener">TinyLFU</a>： 一种高效的缓存录入策略。</strong>TinyLFU提供了三个方法：</p>
+<ul>
+<li>Increment(key uint64) - 增加某Key的价值</li>
+<li>Estimate(key uint64) int (referred as ɛ) - 估算某Key的价值（定义为 ɛ）</li>
+<li>Reset - 重置</li>
+</ul>
+<p>The <a href="https://blog.dgraph.io/refs/TinyLFU%20-%20A%20Highly%20Efficient%20Cache%20Admission%20Policy.pdf" target="_blank" rel="noopener">paper</a> explains it best, but TinyLFU is an eviction-agnostic admission policy designed to improve hit ratios with very little memory overhead. The main idea is to <strong>only let in a new item if its estimate is higher than that of the item being evicted.</strong> We implemented TinyLFU in <a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a> using a <a href="https://en.wikipedia.org/wiki/Count%E2%80%93min_sketch" target="_blank" rel="noopener">Count-Min</a> Sketch. It uses 4-bit counters to approximate the frequency of access for the item (ɛ). This small cost per key allows us to keep track of a much larger sample of the global keyspace, than would be possible using a normal key to frequency map.<br>TinyLFU为了达到使用很少的内存同时保持较高命中率的目的，在新缓存元素加入时，会优先淘汰“低价值”的Key。我们在<a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a>中使用<a href="https://en.wikipedia.org/wiki/Count%E2%80%93min_sketch" target="_blank" rel="noopener">Count-Min</a>实现了TinyLFU。每个Key的价值估算值（ɛ）仅占用4-bit，由于每个估算值极小的内存开销，我们可以存储很大的一个全局样本空间。</p>
+<p>TinyLFU also maintains the recency of key access by a <code>Reset</code> function. After N key increments, the counters get halved. So, a key that has not been seen for a while would have its counter get reset to zero; paving the way for more recently seen keys.<br>TinyLFU还提供了<code>Reset</code>方法用于重置Key的访问记录。一段时间未被访问的Key，其“价值”会被重置为零，从而为最近被频繁访问的Key让出空间。</p>
+<h4 id="Eviction-Policy-via-Sampled-LFU"><a href="#Eviction-Policy-via-Sampled-LFU" class="headerlink" title="Eviction Policy via Sampled LFU"></a>Eviction Policy via Sampled LFU</h4><p>基于Sampled LFU的淘汰策略</p>
+<p>When the cache reaches capacity, every incoming key should displace one or more keys present in the cache. Not only that, <strong>the ɛ of incoming key should be higher than the ɛ of key being evicted.</strong> To find a key with low ɛ, we used the natural <a href="https://blog.golang.org/go-maps-in-action" target="_blank" rel="noopener">randomness</a> provided by Go map iteration to pick a sample of keys and loop over them to find a key with the lowest ɛ.<br>当缓存使用容量接近上限时，每存储一个新增的缓存元素都要淘汰一个或多个已存储的缓存元素。<strong>应当使用高“价值”的Key替换低“价值”的Key</strong>，依赖Go中<a href="https://blog.golang.org/go-maps-in-action" target="_blank" rel="noopener">map</a>的迭代随机性，</p>
+<p>We then compare the ɛ of this key against the incoming key. If the incoming key has a higher ɛ, then this key gets evicted <em>(eviction policy)</em>. Otherwise, the incoming key is rejected <em>(admission policy)</em>. This mechanism is repeated until the incoming key’s cost can be fit into the cache. Thus, a single incoming key may displace more than one key. <em>Note that the cost of the incoming key does not play a factor in choosing the eviction keys.</em></p>
+<p><strong>With this approach, the hit ratios are within 1% of the exact LFU policies for a variety of workloads.</strong> This means we get the benefits of admission policy, conservative memory usage, and lower contention in the same little package.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Snippet from the Admission and Eviction Algorithm</span></span><br><span class="line">incHits := p.admit.Estimate(key)</span><br><span class="line"><span class="keyword">for</span> ; room &lt; <span class="number">0</span>; room = p.evict.roomLeft(cost) &#123;</span><br><span class="line">    sample = p.evict.fillSample(sample)</span><br><span class="line">    minKey, minHits, minId := <span class="keyword">uint64</span>(<span class="number">0</span>), <span class="keyword">int64</span>(math.MaxInt64), <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i, pair := <span class="keyword">range</span> sample &#123;</span><br><span class="line">        <span class="keyword">if</span> hits := p.admit.Estimate(pair.key); hits &lt; minHits &#123;</span><br><span class="line">            minKey, minHits, minId = pair.key, hits, i</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> incHits &lt; minHits &#123;</span><br><span class="line">        p.stats.Add(rejectSets, key, <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> victims, <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">    p.evict.del(minKey)</span><br><span class="line">    sample[minId] = sample[<span class="built_in">len</span>(sample)<span class="number">-1</span>]</span><br><span class="line">    sample = sample[:<span class="built_in">len</span>(sample)<span class="number">-1</span>]</span><br><span class="line">    victims = <span class="built_in">append</span>(victims, minKey)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="DoorKeeper"><a href="#DoorKeeper" class="headerlink" title="DoorKeeper"></a>DoorKeeper</h4><p>Before we place a new key in TinyLFU, <a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a> uses a bloom filter to first check if the key has been seen before. Only if the key is already present in the bloom filter, is it inserted into the TinyLFU. This is to avoid polluting TinyLFU with a long tail of keys that are not seen more than once.</p>
+<p>When calculating ɛ of a key, if the item is included in the bloom filter, its frequency is estimated to be the Estimate from TinyLFU plus one. During a <code>Reset</code> of TinyLFU, the bloom filter is also cleared out.</p>
+<h3 id="Metrics"><a href="#Metrics" class="headerlink" title="Metrics"></a>Metrics</h3><p>While optional, it is important to understand how a cache is behaving. We wanted to ensure that tracking metrics related to cache is not only possible, the overhead of doing so is low enough to be turned on and kept on.</p>
+<p>Beyond hits and misses, Ristretto tracks metrics like keys and their cost being added, updated and evicted, sets being dropped or rejected, and gets being dropped or kept. All these numbers help understand the cache behavior on various workloads and pave way for further optimizations.</p>
+<p>We initially used atomic counters for these. However, the overhead was significant. We narrowed the cause down to <a href="https://dzone.com/articles/false-sharing" target="_blank" rel="noopener">False Sharing</a>. Consider a multi-core system, where different atomic counters (8-bytes each) fall in the same cache line (typically 64 bytes). Any update made to one of these counters, causes the others to be marked invalid. This forces a cache reload for all other cores holding that cache, thus creating a write contention on the cache line.</p>
+<p><strong>To achieve scalability, we ensure that each atomic counter completely occupies a full cache line.</strong> So, every core is working on a different cache line. Ristretto uses this by allocating 256 uint64s for each metric, leaving 9 unused uint64s between each active uint64. To avoid extra computation, the key hash is reused to determine which uint64 to increment.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Add:</span><br><span class="line">	valp := p.all[t]</span><br><span class="line">	<span class="comment">// Avoid false sharing by padding at least 64 bytes of space between two</span></span><br><span class="line">	<span class="comment">// atomic counters which would be incremented.</span></span><br><span class="line">	idx := (hash % <span class="number">25</span>) * <span class="number">10</span></span><br><span class="line">	atomic.AddUint64(valp[idx], delta)</span><br><span class="line"></span><br><span class="line">Read:</span><br><span class="line">	valp := p.all[t]</span><br><span class="line">	<span class="keyword">var</span> total <span class="keyword">uint64</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="keyword">range</span> valp &#123;</span><br><span class="line">		total += atomic.LoadUint64(valp[i])</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> total</span><br></pre></td></tr></table></figure>
+
+<p>When reading the metric, all the uint64s are read and summed up to get the latest number. <strong>With this approach, metrics tracking only adds around 10% overhead to the cache performance.</strong></p>
+<h3 id="Benchmarks"><a href="#Benchmarks" class="headerlink" title="Benchmarks"></a>Benchmarks</h3><p>Now that you understand the various mechanisms present in <a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a>, let’s look at the Hit ratio and Throughput benchmarks compared to other popular Go caches.</p>
+<h4 id="Hit-Ratios"><a href="#Hit-Ratios" class="headerlink" title="Hit Ratios"></a>Hit Ratios</h4><p>Hit ratios were measured using Damian Gryski’s <a href="https://github.com/dgraph-io/benchmarks/blob/master/cachebench/cache_bench_test.go" target="_blank" rel="noopener">cachetest</a> along with our own benchmarking <a href="https://github.com/dgraph-io/benchmarks/tree/master/cachebench" target="_blank" rel="noopener">suite</a>. The hit ratio numbers are the same across both utilities, but we added the ability to read certain trace formats (LIRS and ARC, specifically) as well as CSV output for easier graphing. If you want to write your own benchmarks or add a trace format, check out the <a href="https://github.com/dgraph-io/ristretto/tree/master/sim" target="_blank" rel="noopener">sim</a> package.</p>
+<p>To get a better idea of the room for improvement, <strong>we added a theoretically <a href="https://en.wikipedia.org/wiki/Page_replacement_algorithm#The_theoretically_optimal_page_replacement_algorithm" target="_blank" rel="noopener">optimal</a> cache implementation, which uses future knowledge to evict items with the least amount of hits over its entire lifetime.</strong> Note that this is a clairvoyant LFU eviction policy, where other clairvoyant policies may use LRU. Depending on the workload, LFU or LRU may be better suited, but we found clairvoyant LFU useful for comparisons with <a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a>’s Sampled LFU.</p>
+<h5 id="Search"><a href="#Search" class="headerlink" title="Search"></a>Search</h5><p>This trace is described as “disk read accesses initiated by a large commercial search engine in response to various web search requests.”</p>
+<p><img src="/images/ristretto-2.svg" alt=""></p>
+<h5 id="Database"><a href="#Database" class="headerlink" title="Database"></a>Database</h5><p>This trace is described as “a database server running at a commercial site running an ERP application on top of a commercial database.”</p>
+<p><img src="/images/ristretto-3.svg" alt=""></p>
+<h5 id="Looping"><a href="#Looping" class="headerlink" title="Looping"></a>Looping</h5><p>This trace demonstrates a looping access pattern. We couldn’t include Fastcache, Freecache, or Bigcache implementations in this and the following benchmark because they have minimum capacity requirements that would skew the results. Some trace files are small and require small capacities for performance measurements.</p>
+<p><img src="/images/ristretto-4.svg" alt=""></p>
+<h5 id="CODASYL"><a href="#CODASYL" class="headerlink" title="CODASYL"></a>CODASYL</h5><p>This trace is described as “references to a CODASYL database for a one hour period.” Note that <a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a>’s performance suffers in comparison to the others here. This is because of the LFU eviction policy being a bad fit for this workload.</p>
+<p><img src="/images/ristretto-5.svg" alt=""></p>
+<h4 id="Throughput"><a href="#Throughput" class="headerlink" title="Throughput"></a>Throughput</h4><p>Throughput was measured using the <a href="https://github.com/dgraph-io/benchmarks/blob/master/cachebench/cache_bench_test.go" target="_blank" rel="noopener">same utility</a> as the <a href="https://blog.dgraph.io/post/caching-in-go/" target="_blank" rel="noopener">previous</a> blog post, which generates a large number of keys and alternates between goroutines for Getting and Setting according to the workload.</p>
+<p>All throughput benchmarks were ran on an Intel Core i7-8700K (3.7GHz) with 16gb of RAM.</p>
+<h5 id="Mixed-25-Writes-75-Reads"><a href="#Mixed-25-Writes-75-Reads" class="headerlink" title="Mixed: 25% Writes, 75% Reads"></a>Mixed: 25% Writes, 75% Reads</h5><p><img src="/images/ristretto-6.svg" alt=""></p>
+<h5 id="Read-100-Reads"><a href="#Read-100-Reads" class="headerlink" title="Read: 100% Reads"></a>Read: 100% Reads</h5><p><img src="/images/ristretto-7.svg" alt=""></p>
+<h5 id="Write-100-Writes"><a href="#Write-100-Writes" class="headerlink" title="Write: 100% Writes"></a>Write: 100% Writes</h5><p><img src="/images/ristretto-8.svg" alt=""></p>
+<h3 id="Future-Improvements"><a href="#Future-Improvements" class="headerlink" title="Future Improvements"></a>Future Improvements</h3><p>As you may have noticed in the CODASYL benchmarks, <a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a>’s performance suffers in LRU-heavy workloads. However, for most workloads, our Sampled LFU policy performs quite well. The question then becomes <strong>“How can we get the best of both worlds?”</strong></p>
+<p>In a <a href="https://blog.dgraph.io/refs/Adaptive%20Software%20Cache%20Management.pdf" target="_blank" rel="noopener">paper</a> called <em>Adaptive Software Cache Management</em>, this exact question is explored. The basic idea is placing an LRU “window” before the main cache segment, and adaptively sizing that window using hill-climbing techniques to maximize the hit ratio. Caffeine has already seen <a href="https://github.com/ben-manes/caffeine/wiki/Efficiency#adaptivity" target="_blank" rel="noopener">great</a> results by doing <a href="https://github.com/ben-manes/caffeine/wiki/Design#adaptivity" target="_blank" rel="noopener">this</a>. Something we believe Ristretto can benefit from as well in the future.</p>
+<h3 id="Special-Thanks"><a href="#Special-Thanks" class="headerlink" title="Special Thanks"></a>Special Thanks</h3><p>We would like to sincerely thank <a href="https://github.com/ben-manes" target="_blank" rel="noopener">Ben Manes</a>. His depth of knowledge and dedicated, selfless sharing has been a large factor in any progress we’ve made and we are honored to have had many conversations with him about all things caching. Ristretto would just not have been possible without his guidance, support and <a href="https://en.wikipedia.org/wiki/High_availability#%22Nines%22" target="_blank" rel="noopener">99.9%</a> availability on our internal Slack channel.</p>
+<p>We would also like to thank <a href="https://twitter.com/dgryski" target="_blank" rel="noopener">Damian Gryski</a> for his help with benchmarking Ristretto and writing a reference <a href="https://github.com/dgryski/go-tinylfu" target="_blank" rel="noopener">TinyLFU</a> implementation.</p>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>We set out with the goal of making a cache library competitive with Caffeine. While not completely there, <strong>we did create something significantly <a href="https://en.wikipedia.org/wiki/Ristretto" target="_blank" rel="noopener">better</a></strong> than most others in the Go world at the moment by using some new techniques that others can learn from.</p>
+<p>Some initial experiments with using this cache in Dgraph are looking promising. And we hope to integrate <a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">Ristretto</a> into both <a href="https://github.com/dgraph-io/dgraph" target="_blank" rel="noopener">Dgraph</a> and <a href="https://github.com/dgraph-io/badger" target="_blank" rel="noopener">Badger</a> in the upcoming months. Do <a href="https://github.com/dgraph-io/ristretto" target="_blank" rel="noopener">check it out</a> and perhaps use Ristretto to speed up your workloads!</p>
+<hr>
+<p><strong>We are building a fast, transactional and distributed graph database. If you like what you read above, <a href="https://dgraph.io/careers" target="_blank" rel="noopener">come join</a> the team!</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><a href="https://docs.dgraph.io/" target="_blank" rel="noopener">Get started with Dgraph</a></td>
+<td align="center"><a href="https://docs.dgraph.io" target="_blank" rel="noopener">https://docs.dgraph.io</a></td>
+</tr>
+<tr>
+<td align="center"><a href="https://github.com/dgraph-io/dgraph" target="_blank" rel="noopener">Star us on GitHub</a></td>
+<td align="center"><a href="https://github.com/dgraph-io/dgraph" target="_blank" rel="noopener">https://github.com/dgraph-io/dgraph</a></td>
+</tr>
+<tr>
+<td align="center"><a href="https://discuss.dgraph.io/" target="_blank" rel="noopener">Ask us questions</a></td>
+<td align="center"><a href="https://discuss.dgraph.io" target="_blank" rel="noopener">https://discuss.dgraph.io</a></td>
+</tr>
+</tbody></table>
+<p><strong>Fortune 500 companies are using Dgraph in production. If you need production support, <a href="manish@dgraph.io">talk to us</a>.</strong></p>
+<p>Top Image: <a href="https://bluebottlecoffee.com/preparation-guides/espresso" target="_blank" rel="noopener">Blue Bottle</a> Coffee Espresso Preparation Guide.</p>
+<p><a href="https://github.com/dgraph-io/ristretto/pull/104" target="_blank" rel="noopener">https://github.com/dgraph-io/ristretto/pull/104</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Cache/" rel="tag">#Cache</a>
+          
+            <a href="/tags/Go/" rel="tag">#Go</a>
+          
+            <a href="/tags/Performance/" rel="tag">#Performance</a>
+          
+            <a href="/tags/GCTT/" rel="tag">#GCTT</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/09/I-wrote-Gocache-a-complete-and-extensible-Go-cache-library/" rel="next" title="I wrote Gocache: a complete and extensible Go cache library">
+                <i class="fa fa-chevron-left"></i> I wrote Gocache: a complete and extensible Go cache library
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+
+          <!-- ad start -->
+          <!--
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7381930582570374"
+     data-ad-slot="8575096042"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+-->
+          <!-- ad end -->
+
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/beiping96.png"
+               alt="duxingrui" />
+          <p class="site-author-name" itemprop="name">duxingrui</p>
+          <p class="site-description motion-element" itemprop="description">beiping96@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ristretto-Better-Half-of-Espresso"><span class="nav-number">2.</span> <span class="nav-text">Ristretto: Better Half of Espresso</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Guiding-Principles"><span class="nav-number">2.1.</span> <span class="nav-text">Guiding Principles</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fast-Access"><span class="nav-number">3.</span> <span class="nav-text">Fast Access</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Concurrency-and-Contention-Resistance"><span class="nav-number">4.</span> <span class="nav-text">Concurrency and Contention Resistance</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Gets"><span class="nav-number">4.1.</span> <span class="nav-text">Gets</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sets"><span class="nav-number">4.2.</span> <span class="nav-text">Sets</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Caveats"><span class="nav-number">4.3.</span> <span class="nav-text">Caveats</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Contention-Resistance"><span class="nav-number">4.4.</span> <span class="nav-text">Contention Resistance</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Memory-Bounding"><span class="nav-number">5.</span> <span class="nav-text">Memory Bounding</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Key-Cost"><span class="nav-number">5.1.</span> <span class="nav-text">Key Cost</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Admission-Policy-via-TinyLFU"><span class="nav-number">5.2.</span> <span class="nav-text">Admission Policy via TinyLFU</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Eviction-Policy-via-Sampled-LFU"><span class="nav-number">5.3.</span> <span class="nav-text">Eviction Policy via Sampled LFU</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DoorKeeper"><span class="nav-number">5.4.</span> <span class="nav-text">DoorKeeper</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Metrics"><span class="nav-number">6.</span> <span class="nav-text">Metrics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Benchmarks"><span class="nav-number">7.</span> <span class="nav-text">Benchmarks</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Hit-Ratios"><span class="nav-number">7.1.</span> <span class="nav-text">Hit Ratios</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Search"><span class="nav-number">7.1.1.</span> <span class="nav-text">Search</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Database"><span class="nav-number">7.1.2.</span> <span class="nav-text">Database</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Looping"><span class="nav-number">7.1.3.</span> <span class="nav-text">Looping</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CODASYL"><span class="nav-number">7.1.4.</span> <span class="nav-text">CODASYL</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Throughput"><span class="nav-number">7.2.</span> <span class="nav-text">Throughput</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Mixed-25-Writes-75-Reads"><span class="nav-number">7.2.1.</span> <span class="nav-text">Mixed: 25% Writes, 75% Reads</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Read-100-Reads"><span class="nav-number">7.2.2.</span> <span class="nav-text">Read: 100% Reads</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Write-100-Writes"><span class="nav-number">7.2.3.</span> <span class="nav-text">Write: 100% Writes</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Future-Improvements"><span class="nav-number">8.</span> <span class="nav-text">Future Improvements</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Special-Thanks"><span class="nav-number">9.</span> <span class="nav-text">Special Thanks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Conclusion"><span class="nav-number">10.</span> <span class="nav-text">Conclusion</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" style="text-align:center">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">Total <span id="busuanzi_value_site_pv"></span> views,</span>
+  <span id="busuanzi_container_page_pv">this page <span id="busuanzi_value_page_pv"></span> hits.</span>
+  <br/>
+  
+  &copy;
+   2016
+   - 
+  
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder"><a href="mailto:beiping96@gmail.com">duxingrui</a></span>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98210842-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'http-blog-beiping96-com';
+      var disqus_identifier = '2019/12/05/Introducing-Ristretto-A-High-Performance-Go-Cache/';
+      var disqus_title = "Introducing Ristretto: A High-Performance Go Cache";
+      var disqus_url = 'http://blog.beiping96.com/2019/12/05/Introducing-Ristretto-A-High-Performance-Go-Cache/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<!--
+  <script type="text/javascript" color="0,0,0" opacity='0.33' zIndex="-1" count="66" src="/js/src/canvas-nest.min.js"></script>
+-->
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+</html>

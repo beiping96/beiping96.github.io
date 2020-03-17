@@ -1,0 +1,765 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Go,Runtime,GopherCon 2019,Performance," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/B_favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="GopherCon 2019Patrick Hawley - Controlling the go runtime">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Controlling the Go Runtime">
+<meta property="og:url" content="http://blog.beiping96.com/2019/10/09/Controlling-the-go-runtime/index.html">
+<meta property="og:site_name" content="Beiping96&#39;s Blog">
+<meta property="og:description" content="GopherCon 2019Patrick Hawley - Controlling the go runtime">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://blog.beiping96.com/images/uses-in-github.png">
+<meta property="og:image" content="http://blog.beiping96.com/images/controlling-the-go-runtime.png">
+<meta property="article:published_time" content="2019-10-09T13:00:28.000Z">
+<meta property="article:modified_time" content="2020-03-06T05:08:09.599Z">
+<meta property="article:author" content="duxingrui">
+<meta property="article:tag" content="Go">
+<meta property="article:tag" content="Runtime">
+<meta property="article:tag" content="GopherCon 2019">
+<meta property="article:tag" content="Performance">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.beiping96.com/images/uses-in-github.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://blog.beiping96.com/2019/10/09/Controlling-the-go-runtime/"/>
+
+
+  <title> Controlling the Go Runtime | Beiping96's Blog </title>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Beiping96's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Controlling the Go Runtime
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2019-10-09T21:00:28+08:00" content="2019-10-09">
+              2019-10-09
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/10/09/Controlling-the-go-runtime/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/09/Controlling-the-go-runtime/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>GopherCon 2019<br>Patrick Hawley - Controlling the go runtime</p>
+<a id="more"></a>
+
+<h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><p>概述</p>
+<p>Sometimes we need to tell the go runtime what to do. This talk explains how to control the runtime, why we should, and describes three new ways to control it better.</p>
+<p>本文将展示为什么需要控制以及如何控制runtime，并讨论三种更好的控制runtime的方法。</p>
+<p><img src="/images/uses-in-github.png" alt=""></p>
+<h3 id="What-is-the-Go-runtime"><a href="#What-is-the-Go-runtime" class="headerlink" title="What is the Go runtime?"></a>What is the Go runtime?</h3><p>runtime包能做什么？</p>
+<p>It’s a library used by Go programs while they are executing. It controls things like:</p>
+<ul>
+<li>the garbage collector, managing memory</li>
+<li>the goroutine scheduler</li>
+</ul>
+<p>runtime包可以用于控制：</p>
+<ul>
+<li>垃圾回收、内存管理；</li>
+<li>Goroutine调度器。</li>
+</ul>
+<p>It is a helpful assistant. It is a Go package (<a href="https://golang.org/pkg/runtime/" target="_blank" rel="noopener">https://golang.org/pkg/runtime/</a>). It is not an interpreter (e.g. Python, Ruby) or full runtime environment such as the Java virtual machine. It is useful for profiling and observing what happens during program execution.</p>
+<p>runtime包既不是一个解释器（在Python、Ruby中）也不是一个完整的运行时（JVM）。runtime包是一个工具集合，可以用于监督和分析系统运行状态。</p>
+<p>Some functions that can be used to control the garbage collector:</p>
+<ul>
+<li>GC() - start garbage collection now (blocking operation)</li>
+<li>KeepAlive(obj) - obj is needed, at least until now</li>
+<li>SetFinalizer(obj, f) - call f when obj is no longer needed</li>
+</ul>
+<p>runtime包有以下函数可用于控制垃圾回收：</p>
+<ul>
+<li>GC() - 立即阻塞，开始垃圾回收；</li>
+<li>KeepAlive(obj) - object在该函数执行前，不会被释放；</li>
+<li>SetFinalizer(obj, f) - 在object释放时，调用函数f。</li>
+</ul>
+<p>Some functions that can be used to control the scheduler:</p>
+<ul>
+<li>GOMAXPROCS(n) - set max simultaneously executing CPU’s</li>
+<li>Goexit() - terminate the calling goroutine</li>
+<li>Gosched() - yield processor allowing other goroutines to run</li>
+<li>LockOSThread()/UnlockOSThread() - wire/unwire goroutine to current OS thread</li>
+</ul>
+<p>runtime包有以下函数可用于控制调度器：</p>
+<ul>
+<li>GOMAXPROCS(n) - 设置最大CPU逻辑核数； // better: <a href="https://github.com/uber-go/automaxprocs" target="_blank" rel="noopener">https://github.com/uber-go/automaxprocs</a> </li>
+<li>Goexit() - 退出当前Goroutine；</li>
+<li>Gosched() - 中断当前Goroutine，让出CPU执行权；</li>
+<li>LockOSThread()/UnlockOSThread() - 绑定/解绑 当前Goroutine与当前系统线程。</li>
+</ul>
+<p>Some more controls, in package runtime/debug:</p>
+<ul>
+<li>func FreeOSMemory()</li>
+<li>func SetMaxStack(int) int</li>
+<li>func SetGCPercent(int32) int32</li>
+<li>func SetPanicOnFault(bool) bool</li>
+<li>func SetMaxThreads(int) int</li>
+</ul>
+<p>env vars: GOMAXPROCS (max executing operating system threads), GOGC (turn off garbage collector)</p>
+<p>在 (<a href="https://golang.org/pkg/runtime/debug/" target="_blank" rel="noopener">https://golang.org/pkg/runtime/debug/</a>) 包还提供了以下函数：</p>
+<ul>
+<li>func FreeOSMemory() - 强制进行垃圾回收，尽可能多的向系统返还内存；</li>
+<li>func SetMaxStack(int) int - 设置单个Goroutine最大可占用栈，默认在32位系统上为250MB，在64位系统上为1GB；</li>
+<li>func SetGCPercent(int32) int32 - 设置触发垃圾回收的阈值，当(新获得的内存 / 上次GC后仍占用的内存 * 100 &gt;= 该阈值)时，触发GC。 默认值为100，当该值为负时，将禁用垃圾回收；</li>
+<li>func SetPanicOnFault(bool) bool - 设置当发生Panic时，是否触发main崩溃，该设置只对当前调用者Goroutine有效；</li>
+<li>func SetMaxThreads(int) int - 设置当前Go系统进程最大系统线程数，超出则触发崩溃，默认值为10000。</li>
+</ul>
+<p>环境变量： GOMAXPROCS (最大并行数)， GOGC (垃圾回收 开/关)</p>
+<p>You can get indirect control of the runtime via context</p>
+<p>ctx, cancel := context.WithCancel(ctx)</p>
+<p>The above requests that all goroutines with ctx, stop. This is scheduler control</p>
+<p>还可以通过context.Context间接控制runtime（不做赘述）</p>
+<p><code>ctx, cancel := context.WithCancel(ctx)</code></p>
+<h3 id="So-…-Why-Control-the-Runtime"><a href="#So-…-Why-Control-the-Runtime" class="headerlink" title="So … Why Control the Runtime?"></a>So … Why Control the Runtime?</h3><p>所以…为什么要控制运行时？</p>
+<p>Performance reasons. Testing and benchmarks.</p>
+<p>runtime包在提升性能、测试和基准测试中很有帮助。</p>
+<p><code>go test -cpu 1,2,4</code></p>
+<p>Jaeger tracing uses runtime control to match container CPU quota changes.</p>
+<p>We use Goexit() all the time via <code>t.Fatal(&quot;some test failed&quot;)</code></p>
+<p>Gosched() yields processor to allow other goroutines to run. This can be put in a tight loop to make sure the CPU isn’t hogged.</p>
+<p>LockOSThread()/UnlockOSThread()</p>
+<p>Thread local state is used by some libs eg Cocoa, OpenGL, libSDL.</p>
+<p>GC() is useful for testing, improving performance. For example checking the performance of allocating a slice of integers vs a slice of pointers to int. There are garbage collection implications to handling of values vs pointers so runtime directives can be used to benchmark them.</p>
+<p>KeepAlive() holds off garbage collection and there are certain situations where it can be used to stop premature cleanup of e.g. file descriptors.</p>
+<p>SetFinalizer() as mentioned sets a function to be called when an obj is no longer needed and can be garbage collected. An example was shown which closes an os.File when it goes out of scope.</p>
+<p><code>go test -cpu 1,2,4</code></p>
+<p>在测试中，可以使用<code>-cpu</code>来指定CPU核数。</p>
+<p><code>t.Fatal(&quot;some test failed&quot;)</code></p>
+<p>在测试中，Fatal函数会执行Goexit()。</p>
+<p>Gosched()可以让出CPU执行权，确保其它Goroutine也会被执行，而不是执行权被当前Goroutine独占。</p>
+<p>在Cocoa, OpenGL, libSDL库中，均使用了LockOSThread()/UnlockOSThread()。</p>
+<p>在测试中使用GC()，可以帮忙比较程序性能差异，从而优化程序性能，比如可以通过基准测试比较出回收一个“整数切片”和一个“整数指针切片”的性能差异。</p>
+<p>KeepAlive()可以确保某资源不会在使用前被释放，比如文件句柄。</p>
+<p>SetFinalizer()可以确保某资源被释放时，执行指定的函数钩子。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> File <span class="keyword">struct</span> &#123; d <span class="keyword">int</span> &#125;</span><br><span class="line">d, err := syscall.Open(<span class="string">"/file/path"</span>, syscall.O_RDONLY, <span class="number">0</span>)</span><br><span class="line"><span class="comment">// ... do something if err != nil ...</span></span><br><span class="line">p := &amp;File&#123;d&#125;</span><br><span class="line">runtime.SetFinalizer(p, <span class="function"><span class="keyword">func</span><span class="params">(p *File)</span></span> &#123; syscall.Close(p.d) &#125;)</span><br><span class="line"><span class="keyword">var</span> buf [<span class="number">10</span>]<span class="keyword">byte</span></span><br><span class="line">n, err := syscall.Read(p.d, buf[:])</span><br><span class="line"><span class="comment">// Ensure p is not finalized until Read returns.</span></span><br><span class="line">runtime.KeepAlive(p)</span><br><span class="line"><span class="comment">// No more uses of p after this point.</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Other-Uses-For-Go-Runtime"><a href="#Other-Uses-For-Go-Runtime" class="headerlink" title="Other Uses For Go Runtime"></a>Other Uses For Go Runtime</h3><p>runtime包还可以这样用</p>
+<p>Not just performance! Testing, Correctness, Profiling</p>
+<p>So now that we are convinced that using the Go runtime is good!</p>
+<p>不仅仅在测试和性能分析，runtime包也可以在程序准确性判断和程序状态分析上提供帮助。<br>So 愉快地使用runtime包吧！</p>
+<h3 id="New-Ways-to-Control-the-Runtime"><a href="#New-Ways-to-Control-the-Runtime" class="headerlink" title="New Ways to Control the Runtime"></a>New Ways to Control the Runtime</h3><p>更好的控制runtime的方法</p>
+<p>These are a thought experiment, they do NOT exist (yet)!</p>
+<p>以下是脑洞环节，均未实现！</p>
+<p>Used the analogy of a “color” to describe goroutines of a related type</p>
+<p><img src="/images/controlling-the-go-runtime.png" alt=""></p>
+<p>goroutineID - 描述一个goroutine的唯一标识，特指一个goroutine<br>goroutineColor - 描述一类goroutines，the kind of goroutines</p>
+<p><strong>Patrick 认为应该使用color描述goroutines，应关注于goroutines的功能和目的，而不是goroutine本身。</strong></p>
+<p>GoSchedNext(goroutineColor) - Instruct runtime what to run next. Not by goroutine ids, but goroutines of a certain type. </p>
+<p>GoSchedNext(goroutineColor) - 开始调度一类Goroutines。</p>
+<p>GoAffinity() - requires or suggests that all goroutines of a certain “color” execute on the same CPU.</p>
+<p>Reason:</p>
+<ul>
+<li>avoid CPU L1/L2 cache misses</li>
+<li>NUMA architecture</li>
+<li>isolation, keeping code of a certain type separate from other types (e.g. math operations vs http)</li>
+</ul>
+<p>GoCancel() - cancel all goroutines of a particular “color”<br>GoSend() - Communicate with goroutines of a particular “color”</p>
+<p>GoAffinity() - 将某一类Goroutines绑定在同一个CPU核上。</p>
+<p>将某一类Goroutines绑定在同一个CPU核上的优势：</p>
+<ul>
+<li>有效提高CPU L1/L2 缓存命中率</li>
+<li>适配NUMA架构 <a href="https://en.wikipedia.org/wiki/Non-uniform_memory_access" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Non-uniform_memory_access</a></li>
+<li>isolation 隔离，将不同类型的程序隔离开，比如密集运算型和密集IO型。</li>
+</ul>
+<p>GoCancel() - 取消/关闭 某一类Goroutines<br>GoSend() - 向某一类Goroutines发送Msg （CSP/Actor模型）</p>
+<h3 id="Why-is-there-no-goroutine-ID"><a href="#Why-is-there-no-goroutine-ID" class="headerlink" title="Why is there no goroutine ID?"></a>Why is there no goroutine ID?</h3><p>为什么我们没有GoroutineID？</p>
+<p><a href="https://golang.org/doc/faq#no_goroutine_id" target="_blank" rel="noopener">https://golang.org/doc/faq#no_goroutine_id</a></p>
+<p>虽然你说了很多，但是我还是想要 🤣 </p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"runtime"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	buf := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="number">32</span>)</span><br><span class="line">	runtime.Stack(buf[:], <span class="literal">false</span>)</span><br><span class="line">	offset := <span class="built_in">len</span>(<span class="string">"goroutine "</span>)</span><br><span class="line">	bytesGoID := []<span class="keyword">byte</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> _, r := <span class="keyword">range</span> buf[offset:] &#123;</span><br><span class="line">		<span class="keyword">if</span> r &lt; <span class="string">'0'</span> &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> r &gt; <span class="string">'9'</span> &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		bytesGoID = <span class="built_in">append</span>(bytesGoID, r)</span><br><span class="line">	&#125;</span><br><span class="line">	goID := <span class="keyword">string</span>(bytesGoID)</span><br><span class="line">	fmt.Println(goID)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Go/" rel="tag">#Go</a>
+          
+            <a href="/tags/Runtime/" rel="tag">#Runtime</a>
+          
+            <a href="/tags/GopherCon-2019/" rel="tag">#GopherCon 2019</a>
+          
+            <a href="/tags/Performance/" rel="tag">#Performance</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/01/Go-Is-the-encoding-json-Package-Really-Slow/" rel="next" title="Go: Is the encoding/json Package Really Slow?">
+                <i class="fa fa-chevron-left"></i> Go: Is the encoding/json Package Really Slow?
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/09/I-wrote-Gocache-a-complete-and-extensible-Go-cache-library/" rel="prev" title="I wrote Gocache: a complete and extensible Go cache library">
+                I wrote Gocache: a complete and extensible Go cache library <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+
+          <!-- ad start -->
+          <!--
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7381930582570374"
+     data-ad-slot="8575096042"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+-->
+          <!-- ad end -->
+
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/beiping96.png"
+               alt="duxingrui" />
+          <p class="site-author-name" itemprop="name">duxingrui</p>
+          <p class="site-description motion-element" itemprop="description">beiping96@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-is-the-Go-runtime"><span class="nav-number">2.</span> <span class="nav-text">What is the Go runtime?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#So-…-Why-Control-the-Runtime"><span class="nav-number">3.</span> <span class="nav-text">So … Why Control the Runtime?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Other-Uses-For-Go-Runtime"><span class="nav-number">4.</span> <span class="nav-text">Other Uses For Go Runtime</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#New-Ways-to-Control-the-Runtime"><span class="nav-number">5.</span> <span class="nav-text">New Ways to Control the Runtime</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Why-is-there-no-goroutine-ID"><span class="nav-number">6.</span> <span class="nav-text">Why is there no goroutine ID?</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" style="text-align:center">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">Total <span id="busuanzi_value_site_pv"></span> views,</span>
+  <span id="busuanzi_container_page_pv">this page <span id="busuanzi_value_page_pv"></span> hits.</span>
+  <br/>
+  
+  &copy;
+   2016
+   - 
+  
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder"><a href="mailto:beiping96@gmail.com">duxingrui</a></span>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98210842-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'http-blog-beiping96-com';
+      var disqus_identifier = '2019/10/09/Controlling-the-go-runtime/';
+      var disqus_title = "Controlling the Go Runtime";
+      var disqus_url = 'http://blog.beiping96.com/2019/10/09/Controlling-the-go-runtime/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<!--
+  <script type="text/javascript" color="0,0,0" opacity='0.33' zIndex="-1" count="66" src="/js/src/canvas-nest.min.js"></script>
+-->
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+</html>

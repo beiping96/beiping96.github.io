@@ -1,0 +1,708 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Cache,Go,GCTT," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/B_favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="Gocache: 一个功能齐全且易于扩展的Go缓存库https:&#x2F;&#x2F;vincent.composieux.fr&#x2F;article&#x2F;i-wrote-gocache-a-complete-and-extensible-go-cache-library">
+<meta property="og:type" content="article">
+<meta property="og:title" content="I wrote Gocache: a complete and extensible Go cache library">
+<meta property="og:url" content="http://blog.beiping96.com/2019/11/09/I-wrote-Gocache-a-complete-and-extensible-Go-cache-library/index.html">
+<meta property="og:site_name" content="Beiping96&#39;s Blog">
+<meta property="og:description" content="Gocache: 一个功能齐全且易于扩展的Go缓存库https:&#x2F;&#x2F;vincent.composieux.fr&#x2F;article&#x2F;i-wrote-gocache-a-complete-and-extensible-go-cache-library">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-11-09T11:53:12.000Z">
+<meta property="article:modified_time" content="2020-03-06T05:08:09.605Z">
+<meta property="article:author" content="duxingrui">
+<meta property="article:tag" content="Cache">
+<meta property="article:tag" content="Go">
+<meta property="article:tag" content="GCTT">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://blog.beiping96.com/2019/11/09/I-wrote-Gocache-a-complete-and-extensible-Go-cache-library/"/>
+
+
+  <title> I wrote Gocache: a complete and extensible Go cache library | Beiping96's Blog </title>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Beiping96's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                I wrote Gocache: a complete and extensible Go cache library
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2019-11-09T19:53:12+08:00" content="2019-11-09">
+              2019-11-09
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/11/09/I-wrote-Gocache-a-complete-and-extensible-Go-cache-library/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/09/I-wrote-Gocache-a-complete-and-extensible-Go-cache-library/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://github.com/eko/gocache" target="_blank" rel="noopener">Gocache</a>: 一个功能齐全且易于扩展的Go缓存库<br><a href="https://vincent.composieux.fr/article/i-wrote-gocache-a-complete-and-extensible-go-cache-library" target="_blank" rel="noopener">https://vincent.composieux.fr/article/i-wrote-gocache-a-complete-and-extensible-go-cache-library</a></p>
+<a id="more"></a>
+<p>In the previous weeks, I wrote Gocache, an extensible and full of set cache library for Go developers.<br>在先前几周的时候，我完成了<a href="https://github.com/eko/gocache" target="_blank" rel="noopener">Gocache</a>，对于Go开发者而言，它是功能齐全且易于扩展的。</p>
+<p>The goal of this library is to provide all that you need to start caching your data, maybe use multiple (chaning) cache, retrieve some metrics about things you cache and all the needs you could encounter.<br>这个库的设计目的是为了解决在使用缓存或者使用多种（多级）缓存时所遇到的问题，它为缓存方案制定了一个标准。</p>
+<h3 id="History"><a href="#History" class="headerlink" title="History"></a>History</h3><p>背景</p>
+<p>When I started working on implementing a cache on a GraphQL Go project, it already had a memory cache that used a little library that have a simple API but also used another memory cache library to load data using batch mode with a different library and API, to do the same thing: cache items.<br>当我一开始在为GraphQL的Go项目构建缓存时，该项目已经包含了一套有简单API的内存缓存，还使用了另外一套有不同API的内存缓存和加载缓存数据的代码，它们实际上都是在只做了同一件事：缓存。</p>
+<p>Later, we had another need: in addition of this memory cache, we wanted to add a layer of distributed cache using Redis principally to avoid our new Kubernetes pods to have an empty cache when rolling a new version of the application into production.<br>后来，我们又有了另一个需求：除了内存缓存外，我们还想添加一套基于Redis集群的分布式缓存，其主要目的是为了在新版本上线时，避免Kubernetes的Pods使用的缓存为空。</p>
+<p>Here comes the Gocache idea: it’s time to have a unified API to rule multiple cache storages: memory, redis, memcache or whatever you want.<br>于是创造Gocache的契机出现了，是时候用一套统一的规则来管理多种缓存方案了，不管是内存、Redis、Memcache或者其他任何形式的缓存。</p>
+<p>Oh, that’s not all, we also wanted to have metrics (to be scrapped by our Prometheus server) on these cache items.<br>哦，还不止这些，我们还希望缓存的数据可以被Metrics监控（后来被我们的Prometheus替代）。（译者注：Metrics和Prometheus均是监控工具。）</p>
+<p>Project Gocache is born: <a href="https://github.com/eko/gocache" target="_blank" rel="noopener">https://github.com/eko/gocache</a>.<br>Gocache项目诞生了：<a href="https://github.com/eko/gocache" target="_blank" rel="noopener">https://github.com/eko/gocache</a> 。</p>
+<h3 id="Store-adapters"><a href="#Store-adapters" class="headerlink" title="Store adapters"></a>Store adapters</h3><p>存储接口</p>
+<p>First of all, when you want to cache items, you have to select where you want to cache your items: in memory? in a shared redis or memcache? or maybe in another storage.<br>首先，当你准备缓存一些数据时，你必须选择缓存的存储方式：简单的直接放进内存？使用Redis或者Memcache？或者其它某种形式的存储。</p>
+<p>At this time, Gocache have the following stores implemented:</p>
+<ul>
+<li><strong>Bigcache</strong>: An in memory store,</li>
+<li><strong>Ristretto</strong>: Another in memory store provided by DGraph,</li>
+<li><strong>Memcache</strong>: A memcache store based on the bradfitz/gomemcache client library,</li>
+<li><strong>Redis</strong>: A redis store based on the go-redis/redis client library.</li>
+</ul>
+<p>目前，Gocache已经实现了以下存储方案：</p>
+<ul>
+<li><strong>Bigcache</strong>: 简单的内存存储。</li>
+<li><strong>Ristretto</strong>: 由DGraph提供的内存存储。</li>
+<li><strong>Memcache</strong>: 基于bradfitz/gomemcache的Memcache存储。</li>
+<li><strong>Redis</strong>: 基于go-redis/redis的Redis存储。</li>
+</ul>
+<p>All of these stores implement a really simple API that respect the following interface:<br>所有的存储方案都实现了一个非常简单的接口：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> StoreInterface <span class="keyword">interface</span> &#123;</span><br><span class="line">	Get(key <span class="keyword">interface</span>&#123;&#125;) (<span class="keyword">interface</span>&#123;&#125;, error)</span><br><span class="line">	Set(key <span class="keyword">interface</span>&#123;&#125;, value <span class="keyword">interface</span>&#123;&#125;, options *Options) error</span><br><span class="line">	Delete(key <span class="keyword">interface</span>&#123;&#125;) error</span><br><span class="line">	Invalidate(options InvalidateOptions) error</span><br><span class="line">	Clear() error</span><br><span class="line">	GetType() <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This interface represents all the actions you can do on the stores and each of them call the necessary methods in the client libraries.<br>这个接口展示了可以对存储器执行的所有操作，每个操作只调用了存储器客户端的必要方法。</p>
+<p>All of these stores have different configuration, depending on the client libraries you want to use, for instance, to initialize a Memcache store:<br>这些存储器都有不同的配置，具体配置取决于实现存储器的客户端，举个例子，以下为初始化Memcache存储器的示例：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">store := store.NewMemcache(</span><br><span class="line">	memcache.New(<span class="string">"10.0.0.1:11211"</span>, <span class="string">"10.0.0.2:11211"</span>, <span class="string">"10.0.0.3:11212"</span>),</span><br><span class="line">	&amp;store.Options&#123;</span><br><span class="line">		Expiration: <span class="number">10</span>*time.Second,</span><br><span class="line">	&#125;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>Then, the initialized store have have to be passed into a cache object constructor.<br>然后，必须将初始化存储器的代码放进缓存的构造函数中。</p>
+<h3 id="Cache-adapters"><a href="#Cache-adapters" class="headerlink" title="Cache adapters"></a>Cache adapters</h3><p>缓存接口</p>
+<p>One cache interface to rule them all. The cache interface is quite the same to the store one because basically, a cache will do actions on a store:<br>以下为缓存接口，缓存接口和存储接口是一样的，毕竟，缓存就是对存储器做一些操作。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> CacheInterface <span class="keyword">interface</span> &#123;</span><br><span class="line">	Get(key <span class="keyword">interface</span>&#123;&#125;) (<span class="keyword">interface</span>&#123;&#125;, error)</span><br><span class="line">	Set(key, object <span class="keyword">interface</span>&#123;&#125;, options *store.Options) error</span><br><span class="line">	Delete(key <span class="keyword">interface</span>&#123;&#125;) error</span><br><span class="line">	Invalidate(options store.InvalidateOptions) error</span><br><span class="line">	Clear() error</span><br><span class="line">	GetType() <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>With this interface, I have all the necessary actions I have to perform on my cache items: Set, Get, Delete, Invalidate data, Clear all the cache and another method (GetType) that allows to know what is the current cache item, useful in some cases.<br>该接口包含了需要对缓存数据进行的所有必要操作：Set，Get，Delete，使某条缓存失效，清空缓存。如果需要的话，还可以使用GetType方法获取缓存类型。</p>
+<p>Starting from this interface, the implemented cache types are the following:</p>
+<ul>
+<li><strong>Cache</strong>: The basic cache that allows to manipulate data from the given stores,</li>
+<li><strong>Chain</strong>: A special cache adapter that allows to chain multiple cache (could be because you have a memory cache, a redis cache, etc…),</li>
+<li><strong>Loadable</strong>: A special cache adapter that allows to specify a kind of callback function to automatically reload data into your cache if expired or invalidated,</li>
+<li><strong>Metric</strong>: A special cache adapter that allows to store metrics about your cache data: how many items setted, getted, invalidated, successfully or not.</li>
+</ul>
+<p>缓存接口已有以下实现：</p>
+<ul>
+<li><strong>Cache</strong>: 基础版，直接操作存储器。</li>
+<li><strong>Chain</strong>: 链式缓存，它允许使用多级缓存（项目中可能同时存在内存缓存，Redis缓存等等）。</li>
+<li><strong>Loadable</strong>: 可自动加载数据的缓存，它可以指定回调函数，在缓存过期或失效的时候，会自动通过回调函数将数据加载进缓存中。</li>
+<li><strong>Metric</strong>: 内嵌监控的缓存，它会收集缓存的一些指标，比如Set、Get、失效和成功的缓存数量。</li>
+</ul>
+<p>The beauty comes when all of these cache implements the same interface and can be wrapped each other: a metrics cache can take a loadable cache that can take a chained cache that can take multiple caches.<br>最棒的是：这些缓存器都实现了相同的接口，所以它们可以很容易地相互组合。你的缓存可以同时具有链式、可自动加载数据、包含监控等特性。</p>
+<p>Remember, I wanted to have a clean API. Here is a simple Memcache example:<br>还记得吗？我们想要简单的API，以下为使用Memcache的示例：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">memcacheStore := store.NewMemcache(</span><br><span class="line">	memcache.New(<span class="string">"10.0.0.1:11211"</span>, <span class="string">"10.0.0.2:11211"</span>, <span class="string">"10.0.0.3:11212"</span>),</span><br><span class="line">	&amp;store.Options&#123;</span><br><span class="line">		Expiration: <span class="number">10</span>*time.Second,</span><br><span class="line">	&#125;,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">cacheManager := cache.New(memcacheStore)</span><br><span class="line">err := cacheManager.Set(<span class="string">"my-key"</span>, []<span class="keyword">byte</span>(<span class="string">"my-value"</span>), &amp;cache.Options&#123;</span><br><span class="line">	Expiration: <span class="number">15</span>*time.Second, <span class="comment">// Override default value of 10 seconds defined in the store</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="built_in">panic</span>(err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">value := cacheManager.Get(<span class="string">"my-key"</span>)</span><br><span class="line"></span><br><span class="line">cacheManager.Delete(<span class="string">"my-key"</span>)</span><br><span class="line"></span><br><span class="line">cacheManager.Clear() <span class="comment">// Clears the entire cache, in case you want to flush all cache</span></span><br></pre></td></tr></table></figure>
+
+<p>Now, let’s say you want to have a chained cache with a memory Ristretto store and a distributed Redis store as a fallback, with a marshaller and metrics in bonus:<br>现在，假设你想要将已有的缓存修改为一个链式缓存，该缓存包含Ristretto（内存型）和Redis集群，并且具备缓存数据序列化和监控特性：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Initialize Ristretto cache and Redis client</span></span><br><span class="line">ristrettoCache, err := ristretto.NewCache(&amp;ristretto.Config&#123;NumCounters: <span class="number">1000</span>, MaxCost: <span class="number">100</span>, BufferItems: <span class="number">64</span>&#125;)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="built_in">panic</span>(err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">redisClient := redis.NewClient(&amp;redis.Options&#123;Addr: <span class="string">"127.0.0.1:6379"</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Initialize stores</span></span><br><span class="line">ristrettoStore := store.NewRistretto(ristrettoCache, <span class="literal">nil</span>)</span><br><span class="line">redisStore := store.NewRedis(redisClient, &amp;cache.Options&#123;Expiration: <span class="number">5</span>*time.Second&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Initialize Prometheus metrics</span></span><br><span class="line">promMetrics := metrics.NewPrometheus(<span class="string">"my-amazing-app"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Initialize chained cache</span></span><br><span class="line">cacheManager := cache.NewMetric(promMetrics, cache.NewChain(</span><br><span class="line">    cache.New(ristrettoStore),</span><br><span class="line">    cache.New(redisStore),</span><br><span class="line">))</span><br><span class="line"></span><br><span class="line"><span class="comment">// Initializes a marshaler</span></span><br><span class="line">marshal := marshaler.New(cacheManager)</span><br><span class="line"></span><br><span class="line">key := BookQuery&#123;Slug: <span class="string">"my-test-amazing-book"</span>&#125;</span><br><span class="line">value := Book&#123;ID: <span class="number">1</span>, Name: <span class="string">"My test amazing book"</span>, Slug: <span class="string">"my-test-amazing-book"</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Set the value in cache using given key</span></span><br><span class="line">err = marshal.Set(key, value)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="built_in">panic</span>(err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">returnedValue, err := marshal.Get(key, <span class="built_in">new</span>(Book))</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="built_in">panic</span>(err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Then, do what you want with the value</span></span><br></pre></td></tr></table></figure>
+
+<p>We didn’t talked about the Marshaler yet but it’s another feature of Gocache: we provided a service to help your automatically marshal/unmarshal your objects from/to your storages.<br>我们不对序列化做过多的讨论，因为这个是Gocache的另外一个特性：提供一套在存储和取出缓存对象时可以自动序列化和反序列化缓存对象的工具。</p>
+<p>That’s useful when working with struct objects as key and other than memory storages because you have to convert your objects into bytes.<br>该特性在使用对象作为缓存Key时会很有用，它省去了在代码中手动转换对象的操作。</p>
+<p>All of these features: a chained cache with memory &amp; redis, Prometheus metrics and marshaler are ready in only ~20 lines of code.<br>所有的这些特性：包含内存型和Redis的链式缓存、包含Prometheus监控功能和自动序列化功能，都可以在20行左右的代码里完成。</p>
+<h3 id="Write-your-own-cache-or-storage"><a href="#Write-your-own-cache-or-storage" class="headerlink" title="Write your own cache or storage"></a>Write your own cache or storage</h3><p>定制你自己的缓存</p>
+<p>If you want to implement your own proprietary cache, it’s also really easy to do.<br>如果你想定制自己的缓存也很容易。</p>
+<p>Here is a simple example in case you want to log each action that is done in your cache (not really a good idea but well, that’s simple todo as an example):<br>以下示例展示了如何给对缓存的每个操作添加日志（这不是一个好主意，只是作为示例）：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> customcache</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"log"</span></span><br><span class="line"></span><br><span class="line">	<span class="string">"github.com/eko/gocache/cache"</span></span><br><span class="line">	<span class="string">"github.com/eko/gocache/store"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> LoggableType = <span class="string">"loggable"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> LoggableCache <span class="keyword">struct</span> &#123;</span><br><span class="line">	cache cache.CacheInterface</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewLoggable</span><span class="params">(cache cache.CacheInterface)</span> *<span class="title">LoggableCache</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;LoggableCache&#123;</span><br><span class="line">		cache: cache,</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *LoggableCache)</span> <span class="title">Get</span><span class="params">(key <span class="keyword">interface</span>&#123;&#125;)</span> <span class="params">(<span class="keyword">interface</span>&#123;&#125;, error)</span></span> &#123;</span><br><span class="line">	log.Print(<span class="string">"Get some data..."</span>)</span><br><span class="line">	<span class="keyword">return</span> c.cache.Get(key)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *LoggableCache)</span> <span class="title">Set</span><span class="params">(key, object <span class="keyword">interface</span>&#123;&#125;, options *store.Options)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	log.Print(<span class="string">"Set some data..."</span>)</span><br><span class="line">	<span class="keyword">return</span> c.cache.Set(key, object, options)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *LoggableCache)</span> <span class="title">Delete</span><span class="params">(key <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	log.Print(<span class="string">"Delete some data..."</span>)</span><br><span class="line">	<span class="keyword">return</span> c.cache.Delete(key)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *LoggableCache)</span> <span class="title">Invalidate</span><span class="params">(options store.InvalidateOptions)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	log.Print(<span class="string">"Invalidate some data..."</span>)</span><br><span class="line">	<span class="keyword">return</span> c.cache.Invalidate(options)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *LoggableCache)</span> <span class="title">Clear</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	log.Print(<span class="string">"Clear some data..."</span>)</span><br><span class="line">	<span class="keyword">return</span> c.cache.Clear()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *LoggableCache)</span> <span class="title">GetType</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> LoggableType</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>In a same way, you can also implement a custom storage.<br>通过同样的方法，你也可以自己实现存储接口。</p>
+<p>If you think other people can benefit your cache or storage implementation, please do not hesitate to open a pull request and contribute directly on the project so we could discuss your idea together and bring a more powerful cache library.<br>如果你认为其他人也可以从你的缓存实现中获得启发，请不要犹豫，直接在项目中发起合并请求。通过共同讨论你的想法，我们会提供一个功能更加强大的缓存库。</p>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>结论</p>
+<p>By writing this library, I also try to improve the Go community tools to help build better softwares.<br>在构建这个库的过程中，我还尝试改进了Go的社区工具。</p>
+<p>I hope you enjoyed this post and I would be happy to discuss about your needs or special use cases if you have some.<br>希望你喜欢这篇博客，如果有需要的话，我非常乐意和你讨论需求或者你的想法。</p>
+<p>Finally, if you need some help implementing something about caching, do not hesitate to contact me via Twitter or email.<br>最后，如果你在缓存方面需要帮助，你可以随时通过Twitter或者邮件联系我。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Cache/" rel="tag">#Cache</a>
+          
+            <a href="/tags/Go/" rel="tag">#Go</a>
+          
+            <a href="/tags/GCTT/" rel="tag">#GCTT</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/09/Controlling-the-go-runtime/" rel="next" title="Controlling the Go Runtime">
+                <i class="fa fa-chevron-left"></i> Controlling the Go Runtime
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/05/Introducing-Ristretto-A-High-Performance-Go-Cache/" rel="prev" title="Introducing Ristretto: A High-Performance Go Cache">
+                Introducing Ristretto: A High-Performance Go Cache <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+
+          <!-- ad start -->
+          <!--
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7381930582570374"
+     data-ad-slot="8575096042"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+-->
+          <!-- ad end -->
+
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/beiping96.png"
+               alt="duxingrui" />
+          <p class="site-author-name" itemprop="name">duxingrui</p>
+          <p class="site-description motion-element" itemprop="description">beiping96@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#History"><span class="nav-number">1.</span> <span class="nav-text">History</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Store-adapters"><span class="nav-number">2.</span> <span class="nav-text">Store adapters</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cache-adapters"><span class="nav-number">3.</span> <span class="nav-text">Cache adapters</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Write-your-own-cache-or-storage"><span class="nav-number">4.</span> <span class="nav-text">Write your own cache or storage</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Conclusion"><span class="nav-number">5.</span> <span class="nav-text">Conclusion</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" style="text-align:center">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">Total <span id="busuanzi_value_site_pv"></span> views,</span>
+  <span id="busuanzi_container_page_pv">this page <span id="busuanzi_value_page_pv"></span> hits.</span>
+  <br/>
+  
+  &copy;
+   2016
+   - 
+  
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder"><a href="mailto:beiping96@gmail.com">duxingrui</a></span>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98210842-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'http-blog-beiping96-com';
+      var disqus_identifier = '2019/11/09/I-wrote-Gocache-a-complete-and-extensible-Go-cache-library/';
+      var disqus_title = "I wrote Gocache: a complete and extensible Go cache library";
+      var disqus_url = 'http://blog.beiping96.com/2019/11/09/I-wrote-Gocache-a-complete-and-extensible-Go-cache-library/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<!--
+  <script type="text/javascript" color="0,0,0" opacity='0.33' zIndex="-1" count="66" src="/js/src/canvas-nest.min.js"></script>
+-->
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+</html>

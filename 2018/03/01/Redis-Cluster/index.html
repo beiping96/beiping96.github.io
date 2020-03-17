@@ -1,0 +1,665 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Cache,Redis," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/B_favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="How Redis-Cluster works?">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis Cluster">
+<meta property="og:url" content="http://blog.beiping96.com/2018/03/01/Redis-Cluster/index.html">
+<meta property="og:site_name" content="Beiping96&#39;s Blog">
+<meta property="og:description" content="How Redis-Cluster works?">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://blog.beiping96.com/images/RedisClusterMain.jpg">
+<meta property="og:image" content="http://blog.beiping96.com/images/RedisCluster_1.jpg">
+<meta property="og:image" content="http://blog.beiping96.com/images/RedisCluster_2.jpg">
+<meta property="og:image" content="http://blog.beiping96.com/images/RedisCluster_3.jpg">
+<meta property="og:image" content="http://blog.beiping96.com/images/RedisCluster_4.jpg">
+<meta property="og:image" content="http://blog.beiping96.com/images/RedisCluster_5.jpg">
+<meta property="og:image" content="http://blog.beiping96.com/images/RedisCluster_6.jpg">
+<meta property="article:published_time" content="2018-03-01T15:59:59.000Z">
+<meta property="article:modified_time" content="2020-03-06T05:08:09.608Z">
+<meta property="article:author" content="duxingrui">
+<meta property="article:tag" content="Cache">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.beiping96.com/images/RedisClusterMain.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://blog.beiping96.com/2018/03/01/Redis-Cluster/"/>
+
+
+  <title> Redis Cluster | Beiping96's Blog </title>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Beiping96's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Redis Cluster
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2018-03-01T23:59:59+08:00" content="2018-03-01">
+              2018-03-01
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/03/01/Redis-Cluster/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/03/01/Redis-Cluster/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>How Redis-Cluster works?</p>
+<a id="more"></a>
+<p><img src="/images/RedisClusterMain.jpg" alt=""></p>
+<h3 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h3><p><img src="/images/RedisCluster_1.jpg" alt=""><br>多个Redis节点协同工作，Redis节点之间两两通信<br>客户端可连接至任意Redis节点</p>
+<h3 id="键分布模型"><a href="#键分布模型" class="headerlink" title="键分布模型"></a>键分布模型</h3><p><img src="/images/RedisCluster_2.jpg" alt=""><br>Redis集群共持有16384（2^14）个槽位，每个槽位仅可存在于一个Redis主节点上<br>单个Redis主节点可含有任意数量的槽位（0-16384）个<br>所有的槽位（0-16383）必须被分配<br>每个Redis从节点持有其主节点一样的槽位<br>集群通过哈希一致性算法计算键所属槽位 <code>CRC16(&quot;key&quot;) mod 16384</code></p>
+<h3 id="客户端请求示例"><a href="#客户端请求示例" class="headerlink" title="客户端请求示例"></a>客户端请求示例</h3><p><img src="/images/RedisCluster_3.jpg" alt=""></p>
+<h4 id="客户端不存储槽位信息"><a href="#客户端不存储槽位信息" class="headerlink" title="客户端不存储槽位信息"></a>客户端不存储槽位信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Client &#x3D;&gt; A: GET foo</span><br><span class="line">A &#x3D;&gt; Client: -MOVED 9 127.0.0.1:9003</span><br><span class="line">Client &#x3D;&gt; C: GET foo</span><br><span class="line">C &#x3D;&gt; Client: &quot;bar&quot;</span><br></pre></td></tr></table></figure>
+<h4 id="客户端存储槽位信息"><a href="#客户端存储槽位信息" class="headerlink" title="客户端存储槽位信息"></a>客户端存储槽位信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Client &#x3D;&gt; A: CLUSTER HINTS</span><br><span class="line">A &#x3D;&gt; Client: ... a map of hash slots -&gt; nodes</span><br><span class="line">Client &#x3D;&gt; C: GET foo</span><br><span class="line">C &#x3D;&gt; Client: &quot;bar&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h3><p><img src="/images/RedisCluster_4.jpg" alt=""><br>Redis节点间通过Ping-Pong的方式检测状态<br>当半数以上节点认定某从节点失效时，仅标记失效状态，不做后续处理，当从节点重新上线，移除失效标记<br>当半数以上节点认定某主节点失效时，在其所拥有的从节点中发起选举，当选者成为新的主节点<br>当集群中超过半数的Redis主节点可用，且失效的主节点有可用的从节点，整个Redis集群就是可用的</p>
+<h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><p><img src="/images/RedisCluster_5.jpg" alt=""></p>
+<h4 id="异步复制"><a href="#异步复制" class="headerlink" title="异步复制"></a>异步复制</h4><ol>
+<li>客户端向主节点发送一条写命令</li>
+<li>主节点执行写命令，并向客户端返回命令回复</li>
+<li>主节点将刚刚执行的写命令复制给它的从节点</li>
+</ol>
+<h3 id="最终一致性"><a href="#最终一致性" class="headerlink" title="最终一致性"></a>最终一致性</h3><h4 id="Redis-集群不保证数据的强一致性"><a href="#Redis-集群不保证数据的强一致性" class="headerlink" title="Redis 集群不保证数据的强一致性"></a>Redis 集群不保证数据的强一致性</h4><ol>
+<li>主节点写，从节点读 ——读到的数据是旧数据</li>
+<li>网络分区时间足够长——从节点替换主节点，原主节点写操作丢失</li>
+</ol>
+<h3 id="局限性"><a href="#局限性" class="headerlink" title="局限性"></a>局限性</h3><p>Redis集群在多个Redis节点之间进行数据共享<br>Redis集群不支持“multi-key”操作，即执行的命令需要在多个Redis节点之间移动数据<br>比如Set类型的并集、事务操作、M命令等，除非这些key属于同一个slot，即Cluster不能对多个slots操作</p>
+<h3 id="Key-hash-tags"><a href="#Key-hash-tags" class="headerlink" title="Key hash tags"></a>Key hash tags</h3><p>Redis提供了hash tags操作，允许为key自定义一个tag，在存储时，Redis会依据key的tag计算出slot</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SET &#123;hello&#125;world value</span><br><span class="line">SET &#123;hello&#125;kugou value</span><br></pre></td></tr></table></figure>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Radix.v2</span></span><br><span class="line"><span class="comment">// Slot returns the cluster slot the given key will fall into, taking into</span></span><br><span class="line"><span class="comment">// account curly braces within the keys as per the spec.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Slot</span><span class="params">(key <span class="keyword">string</span>)</span> <span class="title">uint16</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> start := strings.Index(key, <span class="string">"&#123;"</span>); start &gt;= <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> end := strings.Index(key[start+<span class="number">1</span>:], <span class="string">"&#125;"</span>); end &gt; <span class="number">0</span> &#123;</span><br><span class="line">			key = key[start+<span class="number">1</span> : start+<span class="number">1</span>+end]</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> CRC16([]<span class="keyword">byte</span>(key)) % NumSlots</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="扩容"><a href="#扩容" class="headerlink" title="扩容"></a>扩容</h3><p><img src="/images/RedisCluster_6.jpg" alt=""><br>启动一个新的Redis节点D并与集群节点建立连接<br>迁移槽位7至新的Redis节点D<br>在7号槽位迁移过程中，当C收到操作7的命令时，会产生-ASK 转向<br>在7号槽位迁移完成后，当C收到操作7的命令时，会产生-MOVED 转向</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Cache/" rel="tag">#Cache</a>
+          
+            <a href="/tags/Redis/" rel="tag">#Redis</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/02/Internet-Protocol-Suite/" rel="next" title="Internet Protocol Suite">
+                <i class="fa fa-chevron-left"></i> Internet Protocol Suite
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/01/Linux-umask/" rel="prev" title="Linux umask">
+                Linux umask <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+
+          <!-- ad start -->
+          <!--
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7381930582570374"
+     data-ad-slot="8575096042"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+-->
+          <!-- ad end -->
+
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/beiping96.png"
+               alt="duxingrui" />
+          <p class="site-author-name" itemprop="name">duxingrui</p>
+          <p class="site-description motion-element" itemprop="description">beiping96@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#集群"><span class="nav-number">1.</span> <span class="nav-text">集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#键分布模型"><span class="nav-number">2.</span> <span class="nav-text">键分布模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端请求示例"><span class="nav-number">3.</span> <span class="nav-text">客户端请求示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端不存储槽位信息"><span class="nav-number">3.1.</span> <span class="nav-text">客户端不存储槽位信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端存储槽位信息"><span class="nav-number">3.2.</span> <span class="nav-text">客户端存储槽位信息</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高可用"><span class="nav-number">4.</span> <span class="nav-text">高可用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主从复制"><span class="nav-number">5.</span> <span class="nav-text">主从复制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#异步复制"><span class="nav-number">5.1.</span> <span class="nav-text">异步复制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最终一致性"><span class="nav-number">6.</span> <span class="nav-text">最终一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis-集群不保证数据的强一致性"><span class="nav-number">6.1.</span> <span class="nav-text">Redis 集群不保证数据的强一致性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#局限性"><span class="nav-number">7.</span> <span class="nav-text">局限性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Key-hash-tags"><span class="nav-number">8.</span> <span class="nav-text">Key hash tags</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩容"><span class="nav-number">9.</span> <span class="nav-text">扩容</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" style="text-align:center">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">Total <span id="busuanzi_value_site_pv"></span> views,</span>
+  <span id="busuanzi_container_page_pv">this page <span id="busuanzi_value_page_pv"></span> hits.</span>
+  <br/>
+  
+  &copy;
+   2016
+   - 
+  
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder"><a href="mailto:beiping96@gmail.com">duxingrui</a></span>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98210842-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'http-blog-beiping96-com';
+      var disqus_identifier = '2018/03/01/Redis-Cluster/';
+      var disqus_title = "Redis Cluster";
+      var disqus_url = 'http://blog.beiping96.com/2018/03/01/Redis-Cluster/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<!--
+  <script type="text/javascript" color="0,0,0" opacity='0.33' zIndex="-1" count="66" src="/js/src/canvas-nest.min.js"></script>
+-->
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+</html>

@@ -1,0 +1,655 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Go,Effective Go," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/B_favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="Parts of Effective Go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EffectiveGo-2-控制结构、函数">
+<meta property="og:url" content="http://blog.beiping96.com/2016/11/09/EffectiveGo-2-%E6%8E%A7%E5%88%B6%E7%BB%93%E6%9E%84%E3%80%81%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="Beiping96&#39;s Blog">
+<meta property="og:description" content="Parts of Effective Go">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2016-11-09T02:12:11.000Z">
+<meta property="article:modified_time" content="2020-03-06T05:08:09.600Z">
+<meta property="article:author" content="duxingrui">
+<meta property="article:tag" content="Go">
+<meta property="article:tag" content="Effective Go">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://blog.beiping96.com/2016/11/09/EffectiveGo-2-控制结构、函数/"/>
+
+
+  <title> EffectiveGo-2-控制结构、函数 | Beiping96's Blog </title>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Beiping96's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                EffectiveGo-2-控制结构、函数
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-11-09T10:12:11+08:00" content="2016-11-09">
+              2016-11-09
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/11/09/EffectiveGo-2-%E6%8E%A7%E5%88%B6%E7%BB%93%E6%9E%84%E3%80%81%E5%87%BD%E6%95%B0/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/11/09/EffectiveGo-2-控制结构、函数/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Parts of <code>Effective Go</code></p>
+<a id="more"></a>
+<h3 id="控制结构"><a href="#控制结构" class="headerlink" title="控制结构"></a>控制结构</h3><h4 id="if"><a href="#if" class="headerlink" title="if"></a><code>if</code></h4><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// simple if</span></span><br><span class="line"><span class="keyword">if</span> x &gt; <span class="number">0</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> y</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 带初始化参数的 if</span></span><br><span class="line"><span class="keyword">if</span> err := file:Chmod(<span class="number">0661</span>); err := <span class="literal">nil</span> &#123;</span><br><span class="line">	log.Print(err)</span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1.当 if 语句不会执行下一条语句</span></span><br><span class="line"><span class="comment">// 2.当 if 的执行体以 break OR continue OR goto OR return 结束 (例如：防御式编程，错误时 return)</span></span><br><span class="line"><span class="comment">// 不必要的 else 会被省略</span></span><br><span class="line">f, err := os.Open(name)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br><span class="line">doSomething(f)</span><br></pre></td></tr></table></figure>
+<h4 id="重新声明与再次赋值"><a href="#重新声明与再次赋值" class="headerlink" title="重新声明与再次赋值"></a>重新声明与再次赋值</h4><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// err 被声明</span></span><br><span class="line">f, err := os:Open(name)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// err 被重新声明并再次赋值</span></span><br><span class="line">d, err := f.Stat()</span><br></pre></td></tr></table></figure>
+<p>上述处理方法是合法的<br>尽管在两次初始化声明中都存在了<code>err</code>变量<br>满足以下三个条件，已被声明的变量<code>x</code>可以再次出现在<code>:=</code>声明中</p>
+<ul>
+<li>本次声明与已声明的<code>x</code>处于同一作用域(若<code>x</code>已在外层作用域中声明过，则本次声明会创建一个新的变量)</li>
+<li>在初始化时，与其类型相同的值才能赋予<code>x</code></li>
+<li>在本次声明中至少另有一个变量是新声明的</li>
+</ul>
+<p><strong>函数的形参和返回值在词法上处于大括号以外，但它们的作用域与该函数体仍然相同。</strong></p>
+<h4 id="for"><a href="#for" class="headerlink" title="for"></a><code>for</code></h4><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Go的for循环有三种形式</span></span><br><span class="line"><span class="comment">// 只有一种需要分号</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 1.Like a C for</span></span><br><span class="line"><span class="keyword">for</span> init; condition; post &#123;</span><br><span class="line">	do()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2.Like a C while</span></span><br><span class="line"><span class="keyword">for</span> condition &#123;</span><br><span class="line">	do()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3.Like a C for(;;)</span></span><br><span class="line"><span class="keyword">for</span> &#123;</span><br><span class="line">	do()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 若想遍历</span></span><br><span class="line"><span class="comment">// 数组/切片/字符串/映射/从信道中读取</span></span><br><span class="line"><span class="comment">// range</span></span><br><span class="line"><span class="keyword">for</span> key, value := <span class="keyword">range</span> old &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> key := <span class="keyword">range</span> old &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> _, value := <span class="keyword">range</span> old &#123;&#125; <span class="comment">// 空白标识符</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 对于字符串</span></span><br><span class="line"><span class="comment">// range能解析UTF-8</span></span><br><span class="line"><span class="comment">// 分离每个独立的Unicode码点</span></span><br><span class="line"><span class="comment">// 错误的编码将占用一个字节</span></span><br><span class="line"><span class="comment">// 并以 U+FFFD 代替</span></span><br><span class="line"><span class="keyword">for</span> pos, char := <span class="keyword">range</span> <span class="string">"日本\x80語"</span> &#123; <span class="comment">// \x80是非法的UTF-8编码</span></span><br><span class="line">	fmt.Printf(<span class="string">"character %#U starts at byte position %d\n"</span>, char, pos)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// character U+65E5 '日' starts at byte position 0</span></span><br><span class="line"><span class="comment">// character U+672C '本' starts at byte position 3</span></span><br><span class="line"><span class="comment">// character U+FFFD '�' starts at byte position 6</span></span><br><span class="line"><span class="comment">// character U+8A9E '語' starts at byte position 7</span></span><br></pre></td></tr></table></figure>
+<p><code>Go has no comma operator and ++ and -- are statements not expressions</code><br><code>Go</code>中没有逗号操作符，而<code>++</code>和<code>--</code>是语句而非表达式</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 若想在for中使用多个变量</span></span><br><span class="line"><span class="comment">// 应采用平行赋值(parallel assignment)的方式</span></span><br><span class="line"><span class="comment">// 因为它会拒绝 ++ 和 --</span></span><br><span class="line"><span class="comment">// Reverse a</span></span><br><span class="line"><span class="keyword">for</span> i, j := <span class="number">0</span>, <span class="built_in">len</span>(a)<span class="number">-1</span>; i &lt; j; i, j = i+<span class="number">1</span>, j+<span class="number">1</span> &#123;</span><br><span class="line">	a[i], a[j] = a[j], a[i]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="switch"><a href="#switch" class="headerlink" title="switch"></a><code>switch</code></h4><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// case语句会自上而下逐一求值直到匹配为止</span></span><br><span class="line"><span class="comment">// 若swich后没有表达式，它将匹配true</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">unhex</span><span class="params">(c <span class="keyword">byte</span>)</span> <span class="title">byte</span></span> &#123;</span><br><span class="line">	<span class="keyword">switch</span> &#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="string">'0'</span> &lt;= c &amp;&amp; c &lt;= <span class="string">'9'</span>:</span><br><span class="line">		<span class="keyword">return</span> c - <span class="string">'0'</span></span><br><span class="line">	<span class="keyword">case</span> <span class="string">'a'</span> &lt;= c &amp;&amp; c &lt;= <span class="string">'f'</span>:</span><br><span class="line">		<span class="keyword">return</span> c - <span class="string">'a'</span> + <span class="number">10</span></span><br><span class="line">	<span class="keyword">case</span> <span class="string">'A'</span> &lt;= c &amp;&amp; c &lt;= <span class="string">'F'</span>:</span><br><span class="line">		<span class="keyword">return</span> c - <span class="string">'A'</span> + <span class="number">10</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// switch并不会自动下溯</span></span><br><span class="line"><span class="comment">// 但case可通过逗号分隔来列举相同的处理条件</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">shouldEscape</span><span class="params">(c <span class="keyword">byte</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">	<span class="keyword">switch</span> c &#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="string">' '</span>, <span class="string">'?'</span>, <span class="string">'&amp;'</span>, <span class="string">'='</span>, <span class="string">'+'</span>, <span class="string">'%'</span>:</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// break终止switch</span></span><br><span class="line">Loop:</span><br><span class="line">	<span class="keyword">for</span> n := <span class="number">0</span>; n &lt; <span class="built_in">len</span>(src); n += size &#123;</span><br><span class="line">		<span class="keyword">switch</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> src[n] &lt; sizeOne:</span><br><span class="line">			<span class="keyword">if</span> validateOnly &#123;</span><br><span class="line">				<span class="keyword">break</span> 	<span class="comment">// 跳出switch</span></span><br><span class="line">			&#125;</span><br><span class="line">			size = <span class="number">1</span></span><br><span class="line">			update(src[n])</span><br><span class="line">		<span class="keyword">case</span> src[n] &lt; sizeTwo:</span><br><span class="line">			<span class="keyword">if</span> n+<span class="number">1</span> &gt;= <span class="built_in">len</span>(src) &#123;</span><br><span class="line">				err = errShortInput</span><br><span class="line">				<span class="keyword">break</span> Loop 	<span class="comment">// 跳到标签Loop处 breaking label</span></span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> validateOnly &#123;</span><br><span class="line">				<span class="keyword">break</span> 	<span class="comment">// 跳出switch</span></span><br><span class="line">			&#125;</span><br><span class="line">			size = <span class="number">2</span></span><br><span class="line">			update(scr[n] + src[n+<span class="number">1</span>]&lt;&lt;shift)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="comment">// continue语句也可以使用一个可选的标签</span></span><br><span class="line"><span class="comment">// 不过continue只能在循环中使用</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Compare 按字典顺序比较两个字节切片并返回一个整数。</span></span><br><span class="line"><span class="comment">// 若 a == b，则结果为零；若 a &lt; b；则结果为 -1；若 a &gt; b，则结果为 +1。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Compare</span><span class="params">(a, b []<span class="keyword">byte</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(a) &amp;&amp; i &lt; <span class="built_in">len</span>(b); i++ &#123;</span><br><span class="line">		<span class="keyword">switch</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> a[i] &gt; b[i]:</span><br><span class="line">			<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">		<span class="keyword">case</span> a[i] &lt; b[i]:</span><br><span class="line">			<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">switch</span> &#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="built_in">len</span>(a) &gt; <span class="built_in">len</span>(b):</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">	<span class="keyword">case</span> <span class="built_in">len</span>(a) &lt; <span class="built_in">len</span>(b):</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="类型选择"><a href="#类型选择" class="headerlink" title="类型选择"></a>类型选择</h4><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> t <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">	t = functionOfSomeType()</span><br><span class="line">	<span class="comment">// Output: integer 1</span></span><br><span class="line">	<span class="keyword">switch</span> t := t.(<span class="keyword">type</span>) &#123;</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		fmt.Printf(<span class="string">"unexpected type %T"</span>, t) <span class="comment">// %T 输出 t 是什么类型</span></span><br><span class="line">	<span class="keyword">case</span> <span class="keyword">bool</span>:</span><br><span class="line">		fmt.Printf(<span class="string">"boolean %t\n"</span>, t) <span class="comment">// t 是 bool 类型</span></span><br><span class="line">	<span class="keyword">case</span> <span class="keyword">int</span>:</span><br><span class="line">		fmt.Printf(<span class="string">"integer %d\n"</span>, t) <span class="comment">// t 是 int 类型</span></span><br><span class="line">	<span class="keyword">case</span> *<span class="keyword">bool</span>:</span><br><span class="line">		fmt.Printf(<span class="string">"pointer to boolean %t\n"</span>, *t) <span class="comment">// t 是 *bool 类型</span></span><br><span class="line">	<span class="keyword">case</span> *<span class="keyword">int</span>:</span><br><span class="line">		fmt.Printf(<span class="string">"pointer to integer %d\n"</span>, *t) <span class="comment">// t 是 *int 类型</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">functionOfSomeType</span><span class="params">()</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><h4 id="多值返回"><a href="#多值返回" class="headerlink" title="多值返回"></a>多值返回</h4><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 从字节数组中的特定位置获取其值，并返回该数值和下一个位置</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">nextInt</span><span class="params">(b []<span class="keyword">byte</span>, i <span class="keyword">int</span>)</span> <span class="params">(<span class="keyword">int</span>, <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> ; i &lt; <span class="built_in">len</span>(b) &amp;&amp; !isDigit(b[i]); i++ &#123;</span><br><span class="line">	&#125;</span><br><span class="line">	x := <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> ; i &lt; <span class="built_in">len</span>(b) &amp;&amp; !isDigit(b[i]); i++ &#123;</span><br><span class="line">		x = x*<span class="number">10</span> + <span class="keyword">int</span>(b[i]) - <span class="string">'0'</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> x, i</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过扫描输入的切片b来获取数字</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(b); &#123;</span><br><span class="line">		x, i := nextInt(b, i)</span><br><span class="line">		fmt.Println(x)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="可命名结果形参"><a href="#可命名结果形参" class="headerlink" title="可命名结果形参"></a>可命名结果形参</h4><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">nextInt</span><span class="params">(b []<span class="keyword">byte</span>, pos <span class="keyword">int</span>)</span> <span class="params">(value, nextPos <span class="keyword">int</span>)</span></span> &#123; <span class="keyword">return</span> &#125;</span><br><span class="line"><span class="comment">// 返回值被命名后，一旦该函数开始执行</span></span><br><span class="line"><span class="comment">// value nextPos会被初始化为与其类型相对应的零值</span></span><br><span class="line"><span class="comment">// 若该函数执行了一条不带实参的return</span></span><br><span class="line"><span class="comment">// 则结果形参的当前值将被返回</span></span><br><span class="line"><span class="comment">// 命名结果形参能使代码更加简短清晰</span></span><br></pre></td></tr></table></figure>
+<h4 id="defer"><a href="#defer" class="headerlink" title="defer"></a><code>defer</code></h4><p><code>defer</code>语句用于预设一个函数调用，该函数会在执行<code>defer</code>的函数<code>返回之前</code>立即执行。<br>被推迟函数的实参在<code>推迟执行时</code>就会求值(<code>defer</code>时)，而不是在<code>调用执行时</code>才求值。<br>被推迟的函数按照后进先出(<code>LIFO</code>)的顺序执行。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Contents 将文件的内容作为字符串返回。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Contents</span><span class="params">(filename <span class="keyword">string</span>)</span> <span class="params">(<span class="keyword">string</span>, error)</span></span> &#123;</span><br><span class="line">	f, err := os.Open(filename)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">""</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> f.Close() <span class="comment">// f.Close 会在我们结束后运行。</span></span><br><span class="line">	<span class="keyword">var</span> result []<span class="keyword">byte</span></span><br><span class="line">	buf := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="number">100</span>)</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		n, err := f.Read(buf[<span class="number">0</span>:])</span><br><span class="line">		result = <span class="built_in">append</span>(result, buf[<span class="number">0</span>:n]...) <span class="comment">// append 将在后面讨论。</span></span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> err == io.EOF &#123;</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> <span class="string">""</span>, err <span class="comment">// 我们在这里返回后，f 就会被关闭。</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">string</span>(result), <span class="literal">nil</span> <span class="comment">// 我们在这里返回后，f 就会被关闭。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 1</span></span><br><span class="line">	fmt.Println(deferWithDefaultResult())</span><br><span class="line">	<span class="comment">// 0</span></span><br><span class="line">	fmt.Println(deferWithNormalResult())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">deferWithDefaultResult</span><span class="params">()</span> <span class="params">(result <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		result++</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">deferWithNormalResult</span><span class="params">()</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	result := <span class="number">0</span></span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		result++</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Go/" rel="tag">#Go</a>
+          
+            <a href="/tags/Effective-Go/" rel="tag">#Effective Go</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/05/EffectiveGo-1-%E6%A0%BC%E5%BC%8F%E5%8C%96%E3%80%81%E6%B3%A8%E9%87%8A%E3%80%81%E5%91%BD%E5%90%8D%E3%80%81%E5%88%86%E5%8F%B7/" rel="next" title="EffectiveGo-1-格式化、注释、命名、分号">
+                <i class="fa fa-chevron-left"></i> EffectiveGo-1-格式化、注释、命名、分号
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/09/EffectiveGo-3-%E6%95%B0%E6%8D%AE%E3%80%81%E5%88%9D%E5%A7%8B%E5%8C%96/" rel="prev" title="EffectiveGo-3-数据、初始化">
+                EffectiveGo-3-数据、初始化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+
+          <!-- ad start -->
+          <!--
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7381930582570374"
+     data-ad-slot="8575096042"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+-->
+          <!-- ad end -->
+
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/beiping96.png"
+               alt="duxingrui" />
+          <p class="site-author-name" itemprop="name">duxingrui</p>
+          <p class="site-description motion-element" itemprop="description">beiping96@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#控制结构"><span class="nav-number">1.</span> <span class="nav-text">控制结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#if"><span class="nav-number">1.1.</span> <span class="nav-text">if</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重新声明与再次赋值"><span class="nav-number">1.2.</span> <span class="nav-text">重新声明与再次赋值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#for"><span class="nav-number">1.3.</span> <span class="nav-text">for</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#switch"><span class="nav-number">1.4.</span> <span class="nav-text">switch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类型选择"><span class="nav-number">1.5.</span> <span class="nav-text">类型选择</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数"><span class="nav-number">2.</span> <span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#多值返回"><span class="nav-number">2.1.</span> <span class="nav-text">多值返回</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可命名结果形参"><span class="nav-number">2.2.</span> <span class="nav-text">可命名结果形参</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#defer"><span class="nav-number">2.3.</span> <span class="nav-text">defer</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" style="text-align:center">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">Total <span id="busuanzi_value_site_pv"></span> views,</span>
+  <span id="busuanzi_container_page_pv">this page <span id="busuanzi_value_page_pv"></span> hits.</span>
+  <br/>
+  
+  &copy;
+   2016
+   - 
+  
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder"><a href="mailto:beiping96@gmail.com">duxingrui</a></span>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98210842-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'http-blog-beiping96-com';
+      var disqus_identifier = '2016/11/09/EffectiveGo-2-控制结构、函数/';
+      var disqus_title = "EffectiveGo-2-控制结构、函数";
+      var disqus_url = 'http://blog.beiping96.com/2016/11/09/EffectiveGo-2-%E6%8E%A7%E5%88%B6%E7%BB%93%E6%9E%84%E3%80%81%E5%87%BD%E6%95%B0/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<!--
+  <script type="text/javascript" color="0,0,0" opacity='0.33' zIndex="-1" count="66" src="/js/src/canvas-nest.min.js"></script>
+-->
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+</html>

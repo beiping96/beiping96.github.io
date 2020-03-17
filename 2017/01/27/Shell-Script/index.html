@@ -1,0 +1,887 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="OS,Shell Script," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/B_favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="From《鸟哥的Linux私房菜——基础学习篇》Part-13">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell Script">
+<meta property="og:url" content="http://blog.beiping96.com/2017/01/27/Shell-Script/index.html">
+<meta property="og:site_name" content="Beiping96&#39;s Blog">
+<meta property="og:description" content="From《鸟哥的Linux私房菜——基础学习篇》Part-13">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-01-27T13:19:11.000Z">
+<meta property="article:modified_time" content="2020-03-06T05:08:09.608Z">
+<meta property="article:author" content="duxingrui">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="Shell Script">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://blog.beiping96.com/2017/01/27/Shell-Script/"/>
+
+
+  <title> Shell Script | Beiping96's Blog </title>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Beiping96's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Shell Script
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-01-27T21:19:11+08:00" content="2017-01-27">
+              2017-01-27
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/01/27/Shell-Script/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/01/27/Shell-Script/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>From《鸟哥的Linux私房菜——基础学习篇》Part-13</p>
+<a id="more"></a>
+<h3 id="helloworld-sh"><a href="#helloworld-sh" class="headerlink" title="helloworld.sh"></a>helloworld.sh</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	This program shows "Hello World!" in your screen.</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"Hello World! \a \n"</span></span><br><span class="line"><span class="built_in">exit</span> 0</span><br></pre></td></tr></table></figure>
+<h3 id="Exec-Shell-Script"><a href="#Exec-Shell-Script" class="headerlink" title="Exec Shell Script"></a>Exec Shell Script</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 当子进程执行完成后，子进程内的各变量或操作将结束，而不会传回给父进程</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 			Script在子进程中运行</span></span><br><span class="line"><span class="comment"># 直接执行</span></span><br><span class="line"><span class="comment"># 	helloworld.sh 必须要有可读和可执行(rx)权限</span></span><br><span class="line"><span class="comment"># 	绝对路径</span></span><br><span class="line">/home/xx/helloworld.sh</span><br><span class="line"><span class="comment"># 	相对路径</span></span><br><span class="line">./helloworld.sh</span><br><span class="line"><span class="comment">#	将helloworld.sh放在PATH指定的目录内</span></span><br><span class="line">helloworld.sh</span><br><span class="line"><span class="comment"># 以bash子进程执行:</span></span><br><span class="line">bash helloworld.sh</span><br><span class="line">sh helloworld.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 			Script在父进程中运行</span></span><br><span class="line"><span class="comment"># 使用 source 或者 小数点 . 来执行</span></span><br><span class="line"><span class="built_in">source</span> helloworld.sh</span><br><span class="line">. helloworld.sh</span><br></pre></td></tr></table></figure>
+<h3 id="read-sh"><a href="#read-sh" class="headerlink" title="read.sh"></a>read.sh</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	User inputs his first name and last name. Program shows his full name.</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"Please input your first name: "</span> firstname 	<span class="comment"># 提示用户输入</span></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"Please input your last name: "</span> lastname 	<span class="comment"># 提示用户输入</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"\nYour full name is: <span class="variable">$firstname</span> <span class="variable">$lastname</span>"</span></span><br></pre></td></tr></table></figure>
+<h3 id="create3files-sh"><a href="#create3files-sh" class="headerlink" title="create3files.sh"></a>create3files.sh</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	Program creates three files, which named by user's input and date command.</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1.用户输入文件名，获取fileuser</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"I will use 'touch' command to create 3 files."</span></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"Please input your filename: "</span> fileuser</span><br><span class="line"><span class="comment"># 2.为避免用户随意按[Enter]，利用变量功能分析文件名是否设置</span></span><br><span class="line">filename=<span class="variable">$&#123;fileuser:-"filename"&#125;</span> 	<span class="comment"># 判断开始是否有配置文件名</span></span><br><span class="line"><span class="comment"># 3.date命令取日期</span></span><br><span class="line">date1=$(date --date=<span class="string">'2 days ago'</span> +%Y%m%d)</span><br><span class="line">date2=$(date --date=<span class="string">'1 days ago'</span> +%Y%m%d)</span><br><span class="line">date3=$(date +%Y%d%m%d)</span><br><span class="line"><span class="comment"># 4.创建文件名</span></span><br><span class="line">file1=<span class="variable">$&#123;filename&#125;</span><span class="variable">$&#123;date1&#125;</span></span><br><span class="line">file2=<span class="variable">$&#123;filename&#125;</span><span class="variable">$&#123;date2&#125;</span></span><br><span class="line">file3=<span class="variable">$&#123;filename&#125;</span><span class="variable">$&#123;date3&#125;</span></span><br><span class="line"><span class="comment"># 5.创建文件</span></span><br><span class="line">touch <span class="string">"<span class="variable">$file1</span>"</span></span><br><span class="line">touch <span class="string">"<span class="variable">$file2</span>"</span></span><br><span class="line">touch <span class="string">"<span class="variable">$file3</span>"</span></span><br></pre></td></tr></table></figure>
+<h3 id="sum-sh"><a href="#sum-sh" class="headerlink" title="sum.sh"></a>sum.sh</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	User inputs 2 integer number; program will cross these two numbers.</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"You SHOULD input 2 numbers, I will cross them! \n"</span></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"first number: "</span> firstnu</span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"second number: "</span> secnu</span><br><span class="line">total=$((<span class="variable">$firstnu</span>*<span class="variable">$secnu</span>))</span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"\nThe result of <span class="variable">$firstnu</span> x <span class="variable">$secnu</span> is ==&gt; <span class="variable">$total</span>"</span></span><br></pre></td></tr></table></figure>
+<h3 id="Command-test"><a href="#Command-test" class="headerlink" title="Command test"></a>Command <code>test</code></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	User input a filename, program will check the flowing:</span></span><br><span class="line"><span class="comment"># 		1.exist?</span></span><br><span class="line"><span class="comment"># 		2.file/directory?</span></span><br><span class="line"><span class="comment"># 		3.file permissions?</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1.输入文件名，判断是否是字符串</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"Please input a filename, i will check the filename's type and permission.\n\n"</span></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"Input a filename: "</span> filename</span><br><span class="line"><span class="built_in">test</span> -z <span class="variable">$filename</span> &amp;&amp; <span class="built_in">echo</span> <span class="string">"You MUST input a filename."</span> &amp;&amp; <span class="built_in">exit</span> 0</span><br><span class="line"><span class="comment"># 2.判断文件是否存在？不存在则结束脚本</span></span><br><span class="line"><span class="built_in">test</span> ! -e <span class="variable">$filename</span> &amp;&amp; <span class="built_in">echo</span> <span class="string">"The filename '<span class="variable">$filename</span>' DO NOT exist"</span> &amp;&amp; <span class="built_in">exit</span> 0</span><br><span class="line"><span class="comment"># 3.判断文件类型和属性</span></span><br><span class="line"><span class="built_in">test</span> -f <span class="variable">$filename</span> &amp;&amp; filetype=<span class="string">"regulare file"</span></span><br><span class="line"><span class="built_in">test</span> -d <span class="variable">$filename</span> &amp;&amp; filetype=<span class="string">"directory"</span></span><br><span class="line"><span class="built_in">test</span> -r <span class="variable">$filename</span> &amp;&amp; perm=<span class="string">"readable"</span></span><br><span class="line"><span class="built_in">test</span> -w <span class="variable">$filename</span> &amp;&amp; perm=<span class="string">"<span class="variable">$perm</span> writable"</span></span><br><span class="line"><span class="built_in">test</span> -x <span class="variable">$filename</span> &amp;&amp; perm=<span class="string">"<span class="variable">$perm</span> executable"</span></span><br><span class="line"><span class="comment"># 4.echo</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"The filename: <span class="variable">$filename</span> is a <span class="variable">$filetype</span>"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"And the permission are: <span class="variable">$perm</span>"</span></span><br></pre></td></tr></table></figure>
+<h4 id="文件类型判断"><a href="#文件类型判断" class="headerlink" title="文件类型判断"></a>文件类型判断</h4><table>
+<thead>
+<tr>
+<th align="center">Command</th>
+<th align="left">Desc</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>test -e filename</code></td>
+<td align="left">判断filename是否存在</td>
+</tr>
+<tr>
+<td align="center"><code>test -f filename</code></td>
+<td align="left">判断filename是否存在 且 是文件</td>
+</tr>
+<tr>
+<td align="center"><code>test -d filename</code></td>
+<td align="left">判断filename是否存在 且 是目录</td>
+</tr>
+<tr>
+<td align="center"><code>test -b filename</code></td>
+<td align="left">判断filename是否存在 且 是block device</td>
+</tr>
+<tr>
+<td align="center"><code>test -c filename</code></td>
+<td align="left">判断filename是否存在 且 是character device</td>
+</tr>
+<tr>
+<td align="center"><code>test -S filename</code></td>
+<td align="left">判断filename是否存在 且 是Socket</td>
+</tr>
+<tr>
+<td align="center"><code>test -p filename</code></td>
+<td align="left">判断filename是否存在 且 是FIFO(pipe)</td>
+</tr>
+<tr>
+<td align="center"><code>test -L filename</code></td>
+<td align="left">判断filename是否存在 且 是Link</td>
+</tr>
+<tr>
+<td align="center">#### 文件权限判断</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">Command</td>
+<td align="left">Desc</td>
+</tr>
+<tr>
+<td align="center">:–:</td>
+<td align="left">:–</td>
+</tr>
+<tr>
+<td align="center"><code>test -r filename</code></td>
+<td align="left">判断filename是否存在 且 具有read权限</td>
+</tr>
+<tr>
+<td align="center"><code>test -w filename</code></td>
+<td align="left">判断filename是否存在 且 具有write权限</td>
+</tr>
+<tr>
+<td align="center"><code>test -x filename</code></td>
+<td align="left">判断filename是否存在 且 具有execute权限</td>
+</tr>
+<tr>
+<td align="center"><code>test -u filename</code></td>
+<td align="left">判断filename是否存在 且 具有set-user-id属性</td>
+</tr>
+<tr>
+<td align="center"><code>test -g filename</code></td>
+<td align="left">判断filename是否存在 且 具有set-group-id属性</td>
+</tr>
+<tr>
+<td align="center"><code>test -k filename</code></td>
+<td align="left">判断filename是否存在 且 具有sticky-bit属性</td>
+</tr>
+<tr>
+<td align="center"><code>test -s filename</code></td>
+<td align="left">判断filename是否存在 且 不是空白文件(size&gt;0)</td>
+</tr>
+<tr>
+<td align="center">#### 文件比较</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">Command</td>
+<td align="left">Desc</td>
+</tr>
+<tr>
+<td align="center">:–:</td>
+<td align="left">:–</td>
+</tr>
+<tr>
+<td align="center"><code>test file1 -nt file2</code></td>
+<td align="left">(newer than)判断file1是否比file2新</td>
+</tr>
+<tr>
+<td align="center"><code>test file1 -ot file2</code></td>
+<td align="left">(older than)判断file1是否比file2旧</td>
+</tr>
+<tr>
+<td align="center"><code>test file1 -ef file2</code></td>
+<td align="left">依据文件inode，判断file1和file2是否是同一个文件，可用于判断hard link</td>
+</tr>
+<tr>
+<td align="center">#### 整数比较</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">Command</td>
+<td align="left">Desc</td>
+</tr>
+<tr>
+<td align="center">:–:</td>
+<td align="left">:–</td>
+</tr>
+<tr>
+<td align="center"><code>test num1 -eq num2</code></td>
+<td align="left">num1 == num2 (equal)</td>
+</tr>
+<tr>
+<td align="center"><code>test num1 -ne num2</code></td>
+<td align="left">num1 != num2 (not equal)</td>
+</tr>
+<tr>
+<td align="center"><code>test num1 -gt num2</code></td>
+<td align="left">num1 &gt; num2 (greater than)</td>
+</tr>
+<tr>
+<td align="center"><code>test num1 -lt num2</code></td>
+<td align="left">num1 &lt; num2 (less than)</td>
+</tr>
+<tr>
+<td align="center"><code>test num1 -ge num2</code></td>
+<td align="left">num1 &gt;= num2 (greater than or equal)</td>
+</tr>
+<tr>
+<td align="center"><code>test num1 -le num2</code></td>
+<td align="left">num1 &lt;= num2 (less than or equal)</td>
+</tr>
+<tr>
+<td align="center">#### 字符串判断</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">Command</td>
+<td align="left">Desc</td>
+</tr>
+<tr>
+<td align="center">:–:</td>
+<td align="left">:–</td>
+</tr>
+<tr>
+<td align="center"><code>test -z str</code></td>
+<td align="left">判断str是否为空(if str == nil {return true} return false)</td>
+</tr>
+<tr>
+<td align="center"><code>test -n str</code></td>
+<td align="left">判断str是否为空(if str == nil {return false} return true)</td>
+</tr>
+<tr>
+<td align="center"><code>test str1 = str2</code></td>
+<td align="left">判断str1是否等于str2</td>
+</tr>
+<tr>
+<td align="center"><code>test str1 != str2</code></td>
+<td align="left">判断str1是否不等于str2</td>
+</tr>
+<tr>
+<td align="center">#### 多重判断</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">Command</td>
+<td align="left">Desc</td>
+</tr>
+<tr>
+<td align="center">:–:</td>
+<td align="left">:–</td>
+</tr>
+<tr>
+<td align="center"><code>test -r file -a -x file</code></td>
+<td align="left">(AND) 当file同时具有r和x权限时，返回true</td>
+</tr>
+<tr>
+<td align="center"><code>test -r file -o -x file</code></td>
+<td align="left">(OR) 当file具有r或者x权限时，返回true</td>
+</tr>
+<tr>
+<td align="center"><code>test ! -x file</code></td>
+<td align="left">(NOT) 当file不具有x权限时，返回true</td>
+</tr>
+<tr>
+<td align="center">### readPlus.sh by <code>[]</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center"><code>[]</code>的用法与<code>test</code>基本相同</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">使用<code>[]</code>两侧必须加入空格，例<code>[ $x == $y ]</code></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	This program shows the user's choice</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用户输入 Y y N n</span></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"Please input (Y/N): "</span> yn</span><br><span class="line"><span class="comment"># 检查是否合法</span></span><br><span class="line">[ <span class="string">"<span class="variable">$yn</span>"</span> == <span class="string">"Y"</span> -o <span class="string">"<span class="variable">$yn</span>"</span> == <span class="string">"y"</span> ] &amp;&amp; <span class="built_in">echo</span> <span class="string">"OK, continue"</span> &amp;&amp; <span class="built_in">exit</span> 0</span><br><span class="line">[ <span class="string">"<span class="variable">$yn</span>"</span> == <span class="string">"N"</span> -o <span class="string">"<span class="variable">$yn</span>"</span> == <span class="string">"n"</span> ] &amp;&amp; <span class="built_in">echo</span> <span class="string">"OH, interrupt!"</span> &amp;&amp; <span class="built_in">exit</span> 0</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"I don't know what your choice is"</span> &amp;&amp; <span class="built_in">exit</span> 0</span><br></pre></td></tr></table></figure>
+<h3 id="Shell-Script-Default-Arguments-0-1"><a href="#Shell-Script-Default-Arguments-0-1" class="headerlink" title="Shell Script Default Arguments $0,$1..."></a>Shell Script Default Arguments <code>$0,$1...</code></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 执行脚本</span></span><br><span class="line">/home/xx/arg.sh arg1 arg2 arg3</span><br><span class="line">	<span class="variable">$0</span>			<span class="variable">$1</span>   <span class="variable">$2</span>   <span class="variable">$3</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 以下特殊变量可在脚本中使用</span></span><br><span class="line"><span class="variable">$#</span> 	<span class="comment"># 代表脚本参数个数 上例中为3</span></span><br><span class="line"><span class="variable">$@</span> 	<span class="comment"># 代表 "$1" "$2" "$3" 每个参数独立在双引号内</span></span><br><span class="line">$* 	<span class="comment"># 代表 "$1 $2 $3" 每个参数之间用空格分隔</span></span><br></pre></td></tr></table></figure>
+<h4 id="echoArg-sh"><a href="#echoArg-sh" class="headerlink" title="echoArg.sh"></a>echoArg.sh</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	Program shows the script name, parameters...</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"The script name is 		==&gt; <span class="variable">$0</span>"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"Total parameter number is ==&gt; <span class="variable">$#</span>"</span></span><br><span class="line">[ <span class="string">"<span class="variable">$#</span>"</span> -lt 2 ] &amp;&amp; <span class="built_in">echo</span> <span class="string">"The number of parameter is less than 2. Stop here."</span> &amp;&amp; <span class="built_in">exit</span> 0</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"Your whole parameter is 	==&gt; '<span class="variable">$@</span>'"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"The 1st parameter 		==&gt; <span class="variable">$1</span>"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"The 2nd parameter 		==&gt; <span class="variable">$2</span>"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sh echoArg.sh theone haha quot</span><br><span class="line"><span class="comment"># The script name is 		==&gt; echoArg.sh</span></span><br><span class="line"><span class="comment"># Total parameter number is ==&gt; 3</span></span><br><span class="line"><span class="comment"># Your whole parameter is 	==&gt; 'theone haha quot'</span></span><br><span class="line"><span class="comment"># The 1st parameter 		==&gt; theone</span></span><br><span class="line"><span class="comment"># The 2nd parameter 		==&gt; haha</span></span><br></pre></td></tr></table></figure>
+<h4 id="shift-sh-变量偏移"><a href="#shift-sh-变量偏移" class="headerlink" title="shift.sh 变量偏移"></a>shift.sh 变量偏移</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	Program shows the effect of shift function.</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"Total parameter number is ==&gt; <span class="variable">$#</span>"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"Your whole parameter is 	==&gt; '<span class="variable">$@</span>'"</span></span><br><span class="line"><span class="built_in">shift</span> 		<span class="comment"># shift 一个</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"Total parameter number is ==&gt; <span class="variable">$#</span>"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"Your whole parameter is 	==&gt; '<span class="variable">$@</span>'"</span></span><br><span class="line"><span class="built_in">shift</span> 3 	<span class="comment"># shift 三个 </span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"Total parameter number is ==&gt; <span class="variable">$#</span>"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"Your whole parameter is 	==&gt; '<span class="variable">$@</span>'"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sh shift.sh one two three four five six</span><br><span class="line"></span><br><span class="line"><span class="comment"># 		原始参数</span></span><br><span class="line"><span class="comment"># Total parameter number is ==&gt; 6</span></span><br><span class="line"><span class="comment"># Your whole parameter is 	==&gt; 'one two three four five six'</span></span><br><span class="line"><span class="comment"># 		偏移1位</span></span><br><span class="line"><span class="comment"># Total parameter number is ==&gt; 5</span></span><br><span class="line"><span class="comment"># Your whole parameter is 	==&gt; 'two three four five six'</span></span><br><span class="line"><span class="comment"># 		偏移3位</span></span><br><span class="line"><span class="comment"># Total parameter number is ==&gt; 2</span></span><br><span class="line"><span class="comment"># Your whole parameter is 	==&gt; 'five six'</span></span><br></pre></td></tr></table></figure>
+<h3 id="if-sh"><a href="#if-sh" class="headerlink" title="if.sh"></a>if.sh</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	This program shows the user's choice.</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"Please input(Y/N): "</span> yn</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$yn</span>"</span> == <span class="string">"Y"</span> ] || [ <span class="string">"<span class="variable">$yn</span>"</span> == <span class="string">"y"</span> ]; <span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"OK, continue"</span></span><br><span class="line">	<span class="built_in">exit</span> 0</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$yn</span>"</span> == <span class="string">"N"</span> ] || [ <span class="string">"<span class="variable">$yn</span>"</span> == <span class="string">"n"</span> ]; <span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"OH, interrupt!"</span></span><br><span class="line">	<span class="built_in">exit</span> 0</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"I don't know what your choice is"</span> &amp;&amp; <span class="built_in">exit</span> 0</span><br></pre></td></tr></table></figure>
+<h3 id="ifElse-sh"><a href="#ifElse-sh" class="headerlink" title="ifElse.sh"></a>ifElse.sh</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	This program shows the user's choice.</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"Please input(Y/N): "</span> yn</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$yn</span>"</span> == <span class="string">"Y"</span> ] || [ <span class="string">"<span class="variable">$yn</span>"</span> == <span class="string">"y"</span> ]; <span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"OK, continue"</span></span><br><span class="line"><span class="keyword">elif</span> [ <span class="string">"<span class="variable">$yn</span>"</span> == <span class="string">"N"</span> ] || [ <span class="string">"<span class="variable">$yn</span>"</span> == <span class="string">"n"</span> ]; <span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"OH, interrupt!"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"I don't know what your choice is"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	Check $1 is equal to "hello"</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$1</span>"</span> == <span class="string">"hello"</span> ]; <span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"Hello, how are you?"</span></span><br><span class="line"><span class="keyword">elif</span> [ <span class="string">"<span class="variable">$1</span>"</span> == <span class="string">""</span> ]; <span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"You MUST input parameter, ex&gt; &#123;<span class="variable">$0</span> someword&#125;"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"The only parameter is 'hello', ex&gt; &#123;<span class="variable">$0</span> hell0&#125;"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	Using netstat and grep to detect WWW,SSH,FTP and Mail services.</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"Now, i will detect your Linux server's services!"</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"The www,ssh,ftp and mail will be detect!\n"</span></span><br><span class="line"></span><br><span class="line">testing=$(netstat -tuln | grep <span class="string">":80 "</span>)</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$testing</span>"</span> != <span class="string">""</span> ]; <span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"WWW is running in your system."</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">testing=$(netstat -tuln | grep <span class="string">":22 "</span>)</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$testing</span>"</span> != <span class="string">""</span> ]; <span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"SSH is running in your system."</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">testing=$(netstat -tuln | grep <span class="string">":21 "</span>)</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$testing</span>"</span> != <span class="string">""</span> ]; <span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"FTP is running in your system."</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">testing=$(netstat -tuln | grep <span class="string">":25 "</span>)</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$testing</span>"</span> != <span class="string">""</span> ]; <span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"Mail is running in your system."</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	You input your demobilization date.</span></span><br><span class="line"><span class="comment"># 	I calculate how many days before you demobilize.</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"This program will try to calculate :"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"How many days before your demobilization date..."</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"Please input your demobilization date (YYYYMMDD ex&gt;20090401): "</span> date2</span><br><span class="line"></span><br><span class="line">date_d=$(<span class="built_in">echo</span> <span class="variable">$date2</span> |grep <span class="string">'[0-9]\&#123;8\&#125;'</span>)</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$date_d</span>"</span> == <span class="string">""</span> ]; <span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"You input the wrong date format...."</span></span><br><span class="line">	<span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">declare</span> -i date_dem=`date --date=<span class="string">"<span class="variable">$date2</span>"</span> +%s`</span><br><span class="line"><span class="built_in">declare</span> -i date_now=`date +%s`</span><br><span class="line"><span class="built_in">declare</span> -i date_total_s=$((<span class="variable">$date_dem</span>-<span class="variable">$date_now</span>))</span><br><span class="line"><span class="built_in">declare</span> -i date_d=$((<span class="variable">$date_total_s</span>/60/60/24))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$date_total_s</span>"</span> -lt <span class="string">"0"</span> ]; <span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"You had been demobilization before: "</span> $((-1*<span class="variable">$date_d</span>)) <span class="string">" ago"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">	<span class="built_in">declare</span> -i date_h=$(($((<span class="variable">$date_total_s</span>-<span class="variable">$date_d</span>*60*60*24))/60/60))</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"You will demobilize after <span class="variable">$date_d</span> days and <span class="variable">$date_h</span> hours."</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<h3 id="case-sh"><a href="#case-sh" class="headerlink" title="case.sh"></a>case.sh</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	Show "Hello" from $1...</span></span><br><span class="line"><span class="comment"># 	By using case...esac</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="variable">$1</span> <span class="keyword">in</span></span><br><span class="line">	<span class="string">"hello"</span>)</span><br><span class="line">		<span class="built_in">echo</span> <span class="string">"Hello, how are you?"</span></span><br><span class="line">		;;</span><br><span class="line">	<span class="string">""</span>)</span><br><span class="line">		<span class="built_in">echo</span> <span class="string">"You MUST input parameter, ex&gt; &#123;<span class="variable">$0</span> someword&#125;"</span></span><br><span class="line">		;;</span><br><span class="line">	*) 	<span class="comment"># default</span></span><br><span class="line">		<span class="built_in">echo</span> <span class="string">"Usage <span class="variable">$0</span> &#123;hello&#125;"</span></span><br><span class="line">		;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	Show "Hello" from $1...</span></span><br><span class="line"><span class="comment"># 	By using case...esac</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"This program will print your selection!"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># read -p "Input your choice: " choice</span></span><br><span class="line"><span class="comment"># case $choice in</span></span><br><span class="line"><span class="keyword">case</span> <span class="variable">$1</span> <span class="keyword">in</span></span><br><span class="line">	<span class="string">"one"</span>)</span><br><span class="line">		<span class="built_in">echo</span> <span class="string">"Your choice is ONE"</span></span><br><span class="line">		;;</span><br><span class="line">	<span class="string">"two"</span>)</span><br><span class="line">		<span class="built_in">echo</span> <span class="string">"Your choice is TWO"</span></span><br><span class="line">		;;</span><br><span class="line">	<span class="string">"three"</span>)</span><br><span class="line">		<span class="built_in">echo</span> <span class="string">"Your choice is THREE"</span></span><br><span class="line">		;;</span><br><span class="line">	*)</span><br><span class="line">		<span class="built_in">echo</span> <span class="string">"Usage <span class="variable">$0</span> &#123;one|two|three&#125;"</span></span><br><span class="line">		;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure>
+<h3 id="function-sh"><a href="#function-sh" class="headerlink" title="function.sh"></a>function.sh</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	Use function to repeat information.</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">printit</span></span>() &#123;</span><br><span class="line">	<span class="built_in">echo</span> -n <span class="string">"Your choice is "</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"This program will print your selection!"</span></span><br><span class="line"><span class="keyword">case</span> <span class="variable">$1</span> <span class="keyword">in</span></span><br><span class="line">	<span class="string">"one"</span>)</span><br><span class="line">		printit; <span class="built_in">echo</span> <span class="variable">$1</span> | tr <span class="string">'a-z'</span> <span class="string">'A-Z'</span></span><br><span class="line">		;;</span><br><span class="line">	<span class="string">"two"</span>)</span><br><span class="line">		printit; <span class="built_in">echo</span> <span class="variable">$1</span> | tr <span class="string">'a-z'</span> <span class="string">'A-Z'</span></span><br><span class="line">		;;</span><br><span class="line">	<span class="string">"three"</span>)</span><br><span class="line">		printit; <span class="built_in">echo</span> <span class="variable">$1</span> | tr <span class="string">'a-z'</span> <span class="string">'A-Z'</span></span><br><span class="line">		;;</span><br><span class="line">	*)</span><br><span class="line">		<span class="built_in">echo</span> <span class="string">"Usage <span class="variable">$0</span> &#123;one|two|three&#125;"</span></span><br><span class="line">		;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	Use function to repeat information.</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">printit</span></span>() &#123;</span><br><span class="line">	<span class="built_in">echo</span> -n <span class="string">"Your choice is <span class="variable">$1</span>"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"This program will print your selection!"</span></span><br><span class="line"><span class="keyword">case</span> <span class="variable">$1</span> <span class="keyword">in</span></span><br><span class="line">	<span class="string">"one"</span>)</span><br><span class="line">		printit 1</span><br><span class="line">		;;</span><br><span class="line">	<span class="string">"two"</span>)</span><br><span class="line">		printit 2</span><br><span class="line">		;;</span><br><span class="line">	<span class="string">"three"</span>)</span><br><span class="line">		printit 3</span><br><span class="line">		;;</span><br><span class="line">	*)</span><br><span class="line">		<span class="built_in">echo</span> <span class="string">"Usage <span class="variable">$0</span> &#123;one|two|three&#125;"</span></span><br><span class="line">		;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure>
+<h3 id="while-sh"><a href="#while-sh" class="headerlink" title="while.sh"></a>while.sh</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	Use loop to calculate "1+2+3+...+100" result.</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line">s=0</span><br><span class="line">i=0</span><br><span class="line"><span class="keyword">while</span> [ <span class="string">"<span class="variable">$i</span>"</span> != <span class="string">"100"</span> ]</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	i=$((<span class="variable">$i</span>+1))</span><br><span class="line">	s=$((<span class="variable">$s</span>+<span class="variable">$i</span>))</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"The result of '1+2+3+...+100' is ==&gt; <span class="variable">$s</span>"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	Repeat question until user input correct answer.</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> [ <span class="string">"<span class="variable">$yn</span>"</span> != <span class="string">"yes"</span> -a <span class="string">"<span class="variable">$yn</span>"</span> != <span class="string">"YES"</span> ]</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="built_in">read</span> -p <span class="string">"Please input yes/YES to stop this program: "</span> yn</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"OK!you input the correct answer."</span></span><br></pre></td></tr></table></figure>
+<h3 id="until-sh"><a href="#until-sh" class="headerlink" title="until.sh"></a>until.sh</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	Repeat question until user input correct answer.</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line">until [ <span class="string">"<span class="variable">$yn</span>"</span> == <span class="string">"yes"</span> -a <span class="string">"<span class="variable">$yn</span>"</span> == <span class="string">"YES"</span> ]</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="built_in">read</span> -p <span class="string">"Please input yes/YES to stop this program: "</span> yn</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"OK!you input the correct answer."</span></span><br></pre></td></tr></table></figure>
+<h3 id="for-sh"><a href="#for-sh" class="headerlink" title="for.sh"></a>for.sh</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	Using for ... loop to print 3 animals</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> animal <span class="keyword">in</span> dog cat elephant</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"There are <span class="variable">$&#123;animal&#125;</span>s..."</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	Use id, finger command to check system account's information.</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line">users=$(cut -d <span class="string">':'</span> -f1 /etc/passwd)</span><br><span class="line"><span class="keyword">for</span> username <span class="keyword">in</span> <span class="variable">$users</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	id <span class="variable">$username</span></span><br><span class="line">	finger <span class="variable">$username</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	Use ping command to check the network's PC state.</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line">network=<span class="string">"192.168.1.1"</span></span><br><span class="line"><span class="keyword">for</span> sitenu <span class="keyword">in</span> $(seq 1 100)</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	ping -c 1 w 1 <span class="variable">$&#123;network&#125;</span>.<span class="variable">$&#123;sitenu&#125;</span> &amp;&gt; /dev/null &amp;&amp; result=0 || result=1</span><br><span class="line">	<span class="keyword">if</span> [ <span class="variable">$result</span> == 0 ]; <span class="keyword">then</span></span><br><span class="line">		<span class="built_in">echo</span> <span class="string">"Server <span class="variable">$&#123;network&#125;</span>.<span class="variable">$&#123;sitenu&#125;</span> is UP."</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">echo</span> <span class="string">"Server <span class="variable">$&#123;network&#125;</span>.<span class="variable">$&#123;sitenu&#125;</span> is DOWN."</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	User input dir name, i find the permission of files.</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"Please input a directory: "</span> dir</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$dir</span>"</span> == <span class="string">""</span> -o ! -d <span class="string">"<span class="variable">$dir</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"This <span class="variable">$dir</span> is NOT exist in your system."</span></span><br><span class="line">	<span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">filelist=$(ls <span class="variable">$dir</span>)</span><br><span class="line"><span class="keyword">for</span> filename <span class="keyword">in</span> <span class="variable">$filelist</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	perm=<span class="string">""</span></span><br><span class="line">	<span class="built_in">test</span> -r <span class="string">"<span class="variable">$dir</span>/<span class="variable">$filename</span>"</span> &amp;&amp; perm=<span class="string">"<span class="variable">$perm</span> readable"</span></span><br><span class="line">	<span class="built_in">test</span> -w <span class="string">"<span class="variable">$dir</span>/<span class="variable">$filename</span>"</span> &amp;&amp; perm=<span class="string">"<span class="variable">$perm</span> writable"</span></span><br><span class="line">	<span class="built_in">test</span> -x <span class="string">"<span class="variable">$dir</span>/<span class="variable">$filename</span>"</span> &amp;&amp; perm=<span class="string">"<span class="variable">$perm</span> executable"</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"The file <span class="variable">$dir</span>/<span class="variable">$filename</span>'s permission is <span class="variable">$perm</span>"</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	Try do calculate 1+2+...+$&#123;user_input&#125;</span></span><br><span class="line"><span class="comment"># History:</span></span><br><span class="line"><span class="comment"># 2017/01/01	beiping96	First release</span></span><br><span class="line">PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/<span class="built_in">local</span>/bin:/usr/<span class="built_in">local</span>/sbin:~/bin</span><br><span class="line"><span class="built_in">export</span> PATH</span><br><span class="line"></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">"Please input a number, i will count for 1+2+...+user_input: "</span> nu</span><br><span class="line"></span><br><span class="line">s=0</span><br><span class="line"><span class="keyword">for</span> (( i=1; i&lt;=<span class="variable">$nu</span>; i=i+1 ))</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	s=$((<span class="variable">$s</span>+<span class="variable">$i</span>))</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"The result of '1+2+...+<span class="variable">$nu</span>' is ==&gt; <span class="variable">$s</span>"</span></span><br></pre></td></tr></table></figure>
+<h3 id="SVN-post-commit-sh"><a href="#SVN-post-commit-sh" class="headerlink" title="SVN_post_commit.sh"></a>SVN_post_commit.sh</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Program:</span></span><br><span class="line"><span class="comment"># 	Add Jira comment when SVN commit</span></span><br><span class="line"><span class="comment"># history:</span></span><br><span class="line"><span class="comment"># 2017/02/28	beiping96	First release</span></span><br><span class="line"><span class="comment"># 2017/03/01	beiping96	Format comment</span></span><br><span class="line">REPOS=<span class="string">"<span class="variable">$1</span>"</span></span><br><span class="line">REV=<span class="string">"<span class="variable">$2</span>"</span></span><br><span class="line">LOG=`svnlook <span class="built_in">log</span> -r <span class="variable">$REV</span> <span class="variable">$REPOS</span>`</span><br><span class="line">LOG_INFO=<span class="string">"User:"</span></span><br><span class="line">LOG_INFO=<span class="variable">$&#123;LOG_INFO&#125;</span>`svnlook author -r <span class="variable">$REV</span> <span class="variable">$REPOS</span>`</span><br><span class="line">LOG_INFO=<span class="variable">$&#123;LOG_INFO&#125;</span><span class="string">" \\\\\\\\Comment:<span class="variable">$&#123;LOG&#125;</span> \\\\\\\\SVN_ID:<span class="variable">$&#123;REV&#125;</span> \\\\\\\\ Change:      "</span></span><br><span class="line">LOG_INFO=<span class="variable">$&#123;LOG_INFO&#125;</span>`<span class="built_in">echo</span> $(svnlook changed -r <span class="variable">$REV</span> <span class="variable">$REPOS</span>)`</span><br><span class="line">LOG_INFO=`<span class="built_in">echo</span> <span class="variable">$&#123;LOG_INFO&#125;</span> | sed <span class="string">'s/[[:space:]][[:space:]]*[ADU_][U[:space:]]/ \\\\\\\\\\\\\\\\  /g'</span>`</span><br><span class="line">LOG_INFO=`<span class="built_in">echo</span> <span class="variable">$&#123;LOG_INFO&#125;</span>`</span><br><span class="line"></span><br><span class="line"><span class="comment"># Parse Jira issue id</span></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">parse_jira_ids</span></span>() &#123;</span><br><span class="line">	<span class="keyword">for</span> ID <span class="keyword">in</span> <span class="string">"<span class="variable">$(echo $LOG | grep -Po '[A-Z]*-[0-9]*')</span>"</span></span><br><span class="line">	<span class="keyword">do</span></span><br><span class="line">		<span class="built_in">echo</span> <span class="variable">$ID</span></span><br><span class="line">	<span class="keyword">done</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">JIRA_IDS=$(parse_jira_ids)</span><br><span class="line"><span class="keyword">for</span> JIRA_ID <span class="keyword">in</span> <span class="variable">$JIRA_IDS</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	curl -D- -u xingrui:112233 -X POST --data <span class="string">"&#123;\"body\":\"<span class="variable">$&#123;LOG_INFO&#125;</span>\"&#125;"</span> -H <span class="string">"Content-Type: application/json"</span> http://xx.com:8088/rest/api/2/issue/<span class="string">"<span class="variable">$JIRA_ID</span>"</span>/comment</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<h3 id="Shell-Script-DEBUG"><a href="#Shell-Script-DEBUG" class="headerlink" title="Shell Script DEBUG"></a>Shell Script DEBUG</h3><table>
+<thead>
+<tr>
+<th align="center">Command</th>
+<th align="left">Desc</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>sh -n xx.sh</code></td>
+<td align="left">不运行，仅检查语法问题</td>
+</tr>
+<tr>
+<td align="center"><code>sh -v xx.sh</code></td>
+<td align="left">运行前，先将xx.sh的内容打印到屏幕</td>
+</tr>
+<tr>
+<td align="center"><code>sh -x xx.sh</code></td>
+<td align="left">将xx.sh的运行过程全部列出来(常用)</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OS/" rel="tag">#OS</a>
+          
+            <a href="/tags/Shell-Script/" rel="tag">#Shell Script</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/20/Regular-Expression/" rel="next" title="Regular Expression">
+                <i class="fa fa-chevron-left"></i> Regular Expression
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/03/Erlang-Shell/" rel="prev" title="Erlang Shell">
+                Erlang Shell <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+
+          <!-- ad start -->
+          <!--
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7381930582570374"
+     data-ad-slot="8575096042"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+-->
+          <!-- ad end -->
+
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/beiping96.png"
+               alt="duxingrui" />
+          <p class="site-author-name" itemprop="name">duxingrui</p>
+          <p class="site-description motion-element" itemprop="description">beiping96@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#helloworld-sh"><span class="nav-number">1.</span> <span class="nav-text">helloworld.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Exec-Shell-Script"><span class="nav-number">2.</span> <span class="nav-text">Exec Shell Script</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#read-sh"><span class="nav-number">3.</span> <span class="nav-text">read.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#create3files-sh"><span class="nav-number">4.</span> <span class="nav-text">create3files.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sum-sh"><span class="nav-number">5.</span> <span class="nav-text">sum.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Command-test"><span class="nav-number">6.</span> <span class="nav-text">Command test</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件类型判断"><span class="nav-number">6.1.</span> <span class="nav-text">文件类型判断</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shell-Script-Default-Arguments-0-1"><span class="nav-number">7.</span> <span class="nav-text">Shell Script Default Arguments $0,$1...</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#echoArg-sh"><span class="nav-number">7.1.</span> <span class="nav-text">echoArg.sh</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shift-sh-变量偏移"><span class="nav-number">7.2.</span> <span class="nav-text">shift.sh 变量偏移</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#if-sh"><span class="nav-number">8.</span> <span class="nav-text">if.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ifElse-sh"><span class="nav-number">9.</span> <span class="nav-text">ifElse.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#case-sh"><span class="nav-number">10.</span> <span class="nav-text">case.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#function-sh"><span class="nav-number">11.</span> <span class="nav-text">function.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#while-sh"><span class="nav-number">12.</span> <span class="nav-text">while.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#until-sh"><span class="nav-number">13.</span> <span class="nav-text">until.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for-sh"><span class="nav-number">14.</span> <span class="nav-text">for.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SVN-post-commit-sh"><span class="nav-number">15.</span> <span class="nav-text">SVN_post_commit.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shell-Script-DEBUG"><span class="nav-number">16.</span> <span class="nav-text">Shell Script DEBUG</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" style="text-align:center">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">Total <span id="busuanzi_value_site_pv"></span> views,</span>
+  <span id="busuanzi_container_page_pv">this page <span id="busuanzi_value_page_pv"></span> hits.</span>
+  <br/>
+  
+  &copy;
+   2016
+   - 
+  
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder"><a href="mailto:beiping96@gmail.com">duxingrui</a></span>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98210842-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'http-blog-beiping96-com';
+      var disqus_identifier = '2017/01/27/Shell-Script/';
+      var disqus_title = "Shell Script";
+      var disqus_url = 'http://blog.beiping96.com/2017/01/27/Shell-Script/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<!--
+  <script type="text/javascript" color="0,0,0" opacity='0.33' zIndex="-1" count="66" src="/js/src/canvas-nest.min.js"></script>
+-->
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+</html>
