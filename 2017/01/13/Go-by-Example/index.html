@@ -92,7 +92,7 @@
 <meta property="og:description" content="From https:&#x2F;&#x2F;gobyexample.com&#x2F;">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2017-01-13T07:52:18.000Z">
-<meta property="article:modified_time" content="2020-03-06T05:08:09.603Z">
+<meta property="article:modified_time" content="2020-04-09T10:04:27.626Z">
 <meta property="article:author" content="duxingrui">
 <meta property="article:tag" content="Go">
 <meta name="twitter:card" content="summary">
@@ -338,6 +338,147 @@
 <h3 id="Time"><a href="#Time" class="headerlink" title="Time"></a><code>Time</code></h3><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"time"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	p := fmt.Println</span><br><span class="line"></span><br><span class="line">	now := time.Now()</span><br><span class="line">	<span class="comment">// 2017-01-27 17:10:19.5024236 +0800 CST</span></span><br><span class="line">	p(now)</span><br><span class="line"></span><br><span class="line">	then := time.Date(<span class="number">2017</span>, <span class="number">1</span>, <span class="number">11</span>, <span class="number">17</span>, <span class="number">03</span>, <span class="number">58</span>, <span class="number">651387237</span>, time.UTC)</span><br><span class="line">	<span class="comment">// 2017-01-11 17:03:58.651387237 +0000 UTC</span></span><br><span class="line">	p(then)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 2017</span></span><br><span class="line">	p(then.Year())</span><br><span class="line">	<span class="comment">// January</span></span><br><span class="line">	p(then.Month())</span><br><span class="line">	<span class="comment">// 11</span></span><br><span class="line">	p(then.Day())</span><br><span class="line">	<span class="comment">// 17</span></span><br><span class="line">	p(then.Hour())</span><br><span class="line">	<span class="comment">// 3</span></span><br><span class="line">	p(then.Minute())</span><br><span class="line">	<span class="comment">// 58</span></span><br><span class="line">	p(then.Second())</span><br><span class="line">	<span class="comment">// 651387237</span></span><br><span class="line">	p(then.Nanosecond())</span><br><span class="line">	<span class="comment">// UTC</span></span><br><span class="line">	p(then.Location())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Wednesday</span></span><br><span class="line">	p(then.Weekday())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// true</span></span><br><span class="line">	p(then.Before(now))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// false</span></span><br><span class="line">	p(then.After(now))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// false</span></span><br><span class="line">	p(then.Equal(now))</span><br><span class="line"></span><br><span class="line">	diff := now.Sub(then)</span><br><span class="line">	<span class="comment">// 376h6m20.851036363s</span></span><br><span class="line">	p(diff)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 376.1057919545453</span></span><br><span class="line">	p(diff.Hours())</span><br><span class="line">	<span class="comment">// 22566.347517272716</span></span><br><span class="line">	p(diff.Minutes())</span><br><span class="line">	<span class="comment">// 1.353980851036363e+06</span></span><br><span class="line">	p(diff.Seconds())</span><br><span class="line">	<span class="comment">// 1353980851036363</span></span><br><span class="line">	p(diff.Nanoseconds())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 2017-01-27 09:10:19.5024236 +0000 UTC</span></span><br><span class="line">	p(then.Add(diff))</span><br><span class="line">	<span class="comment">// 2016-12-27 00:57:37.800350874 +0000 UTC</span></span><br><span class="line">	p(then.Add(-diff))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="Epoch"><a href="#Epoch" class="headerlink" title="Epoch"></a><code>Epoch</code></h3><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"time"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	now := time.Now()</span><br><span class="line">	secs := now.Unix()</span><br><span class="line">	nanos := now.UnixNano()</span><br><span class="line">	<span class="comment">// 2017-01-27 17:17:49.0002965 +0800 CST</span></span><br><span class="line">	fmt.Println(now)</span><br><span class="line"></span><br><span class="line">	millis := nanos / <span class="number">1000000</span></span><br><span class="line">	<span class="comment">// 1485508669</span></span><br><span class="line">	fmt.Println(secs)</span><br><span class="line">	<span class="comment">// 1485508669000</span></span><br><span class="line">	fmt.Println(millis)</span><br><span class="line">	<span class="comment">// 1485508669000296500</span></span><br><span class="line">	fmt.Println(nanos)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 2017-01-27 17:17:49 +0800 CST</span></span><br><span class="line">	fmt.Println(time.Unix(secs, <span class="number">0</span>))</span><br><span class="line">	<span class="comment">// 2017-01-27 17:17:49.0002965 +0800 CST</span></span><br><span class="line">	fmt.Println(time.Unix(<span class="number">0</span>, nanos))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="Time-Formatting-Parsing"><a href="#Time-Formatting-Parsing" class="headerlink" title="Time Formatting / Parsing"></a><code>Time Formatting / Parsing</code></h3><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"time"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	p := fmt.Println</span><br><span class="line"></span><br><span class="line">	t := time.Now()</span><br><span class="line">	<span class="comment">// 2017-01-27T17:29:51+08:00</span></span><br><span class="line">	p(t.Format(time.RFC3339))</span><br><span class="line"></span><br><span class="line">	t1, e := time.Parse(time.RFC3339, <span class="string">"2017-01-11T17:23:23+00:00"</span>)</span><br><span class="line">	<span class="comment">// 2017-01-11 17:23:23 +0000 +0000</span></span><br><span class="line">	p(t1)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 5:51PM</span></span><br><span class="line">	p(t.Format(<span class="string">"3:05PM"</span>))</span><br><span class="line">	<span class="comment">// Fri Jan 27 17:53:53 2017</span></span><br><span class="line">	p(t.Format(<span class="string">"Mon Jan _2 15:05:05 2006"</span>))</span><br><span class="line">	<span class="comment">// 2017-01-27T17:53:53.075142+08:00</span></span><br><span class="line">	p(t.Format(<span class="string">"2006-01-02T15:05:05.999999-07:00"</span>))</span><br><span class="line">	form := <span class="string">"3 05 PM"</span></span><br><span class="line">	t2, e := time.Parse(form, <span class="string">"8 51 PM"</span>)</span><br><span class="line">	<span class="comment">// 0000-01-01 20:00:51 +0000 UTC</span></span><br><span class="line">	p(t2)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 2017-01-27T17:39:23-00:00</span></span><br><span class="line">	fmt.Printf(<span class="string">"%d-%02d-%02dT%02d:%02d:%02d-00:00\n"</span>,</span><br><span class="line">		t.Year(), t.Month(), t.Day(),</span><br><span class="line">		t.Hour(), t.Minute(), t.Second())</span><br><span class="line"></span><br><span class="line">	ansic := <span class="string">"Mon Jan _2 15:05:05 2006"</span></span><br><span class="line">	_, e = time.Parse(ansic, <span class="string">"8:51PM"</span>)</span><br><span class="line">	<span class="comment">// parsing time "8:51PM" as "Mon Jan _2 15:05:05 2006": cannot parse "8:51PM" as "Mon"</span></span><br><span class="line">	p(e)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>In this Case:<br><code>1609-09-12 19:02:35 PM +03:00 Sep Sat PDT</code></p>
+<table>
+<thead>
+<tr>
+<th align="center">Type</th>
+<th align="center">Placeholder</th>
+<th align="center">Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Year</td>
+<td align="center">2006</td>
+<td align="center">1609</td>
+</tr>
+<tr>
+<td align="center">Year</td>
+<td align="center">06</td>
+<td align="center">09</td>
+</tr>
+<tr>
+<td align="center">Month</td>
+<td align="center">01</td>
+<td align="center">09</td>
+</tr>
+<tr>
+<td align="center">Month</td>
+<td align="center">1</td>
+<td align="center">9</td>
+</tr>
+<tr>
+<td align="center">Month</td>
+<td align="center">Jan</td>
+<td align="center">Sep</td>
+</tr>
+<tr>
+<td align="center">Month</td>
+<td align="center">January</td>
+<td align="center">September</td>
+</tr>
+<tr>
+<td align="center">Day</td>
+<td align="center">02</td>
+<td align="center">12</td>
+</tr>
+<tr>
+<td align="center">Day</td>
+<td align="center">2</td>
+<td align="center">12</td>
+</tr>
+<tr>
+<td align="center">Week day</td>
+<td align="center">Mon</td>
+<td align="center">Sat</td>
+</tr>
+<tr>
+<td align="center">Week day</td>
+<td align="center">Monday</td>
+<td align="center">Saturday</td>
+</tr>
+<tr>
+<td align="center">Hours</td>
+<td align="center">03</td>
+<td align="center">07</td>
+</tr>
+<tr>
+<td align="center">Hours</td>
+<td align="center">3</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">Hours</td>
+<td align="center">15</td>
+<td align="center">19</td>
+</tr>
+<tr>
+<td align="center">Minutes</td>
+<td align="center">04</td>
+<td align="center">02</td>
+</tr>
+<tr>
+<td align="center">Minutes</td>
+<td align="center">4</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">Seconds</td>
+<td align="center">05</td>
+<td align="center">35</td>
+</tr>
+<tr>
+<td align="center">Seconds</td>
+<td align="center">5</td>
+<td align="center">35</td>
+</tr>
+<tr>
+<td align="center">AM or PM</td>
+<td align="center">PM</td>
+<td align="center">PM</td>
+</tr>
+<tr>
+<td align="center">Milliseconds</td>
+<td align="center">.000</td>
+<td align="center">.123</td>
+</tr>
+<tr>
+<td align="center">Microseconds</td>
+<td align="center">.000000</td>
+<td align="center">.123456</td>
+</tr>
+<tr>
+<td align="center">Nanoseconds</td>
+<td align="center">.000000000</td>
+<td align="center">.123456789</td>
+</tr>
+<tr>
+<td align="center">Timezone offset</td>
+<td align="center">-0700</td>
+<td align="center">+0300</td>
+</tr>
+<tr>
+<td align="center">Timezone offset</td>
+<td align="center">-07:00</td>
+<td align="center">+03:00</td>
+</tr>
+<tr>
+<td align="center">Timezone offset</td>
+<td align="center">Z0700</td>
+<td align="center">+0300</td>
+</tr>
+<tr>
+<td align="center">Timezone offset</td>
+<td align="center">Z07:00</td>
+<td align="center">+03:00</td>
+</tr>
+<tr>
+<td align="center">Timezone</td>
+<td align="center">MST</td>
+<td align="center">PDT</td>
+</tr>
+</tbody></table>
 <h3 id="Random-Numbers"><a href="#Random-Numbers" class="headerlink" title="Random Numbers"></a><code>Random Numbers</code></h3><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"time"</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"math/rand"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 81,87</span></span><br><span class="line">	fmt.Print(rand.Intn(<span class="number">100</span>), <span class="string">","</span>)</span><br><span class="line">	fmt.Print(rand.Intn(<span class="number">100</span>))</span><br><span class="line">	fmt.Println()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 0.6645600532184904</span></span><br><span class="line">	fmt.Println(rand.Float64())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 7.1885709359349015,7.123187485356329</span></span><br><span class="line">	fmt.Print((rand.Float64()*<span class="number">5</span>)+<span class="number">5</span>, <span class="string">","</span>)</span><br><span class="line">	fmt.Print((rand.Float64() * <span class="number">5</span>) + <span class="number">5</span>)</span><br><span class="line">	fmt.Println()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 96,16</span></span><br><span class="line">	s1 := rand.NewSource(time.Now().UnixNano())</span><br><span class="line">	r1 := rand.New(s1)</span><br><span class="line">	fmt.Print(r1.Intn(<span class="number">100</span>), <span class="string">","</span>)</span><br><span class="line">	fmt.Print(r1.Intn(<span class="number">100</span>))</span><br><span class="line">	fmt.Println()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 2,16</span></span><br><span class="line">	s2 := rand.NewSource(<span class="number">83</span>)</span><br><span class="line">	r2 := rand.New(s2)</span><br><span class="line">	fmt.Print(r2.Intn(<span class="number">100</span>), <span class="string">","</span>)</span><br><span class="line">	fmt.Print(r2.Intn(<span class="number">100</span>))</span><br><span class="line">	fmt.Println()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 2,16</span></span><br><span class="line">	s3 := rand.NewSource(<span class="number">83</span>)</span><br><span class="line">	r3 := rand.New(s3)</span><br><span class="line">	fmt.Print(r3.Intn(<span class="number">100</span>), <span class="string">","</span>)</span><br><span class="line">	fmt.Print(r3.Intn(<span class="number">100</span>))</span><br><span class="line">	fmt.Println()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="Number-Parsing"><a href="#Number-Parsing" class="headerlink" title="Number Parsing"></a><code>Number Parsing</code></h3><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"strconv"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 1.234</span></span><br><span class="line">	f, _ := strconv.ParseFloat(<span class="string">"1.234"</span>, <span class="number">64</span>)</span><br><span class="line">	fmt.Println(f)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 123</span></span><br><span class="line">	i, _ := strconv.ParseInt(<span class="string">"123"</span>, <span class="number">0</span>, <span class="number">64</span>)</span><br><span class="line">	fmt.Println(i)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 456</span></span><br><span class="line">	d, _ := strconv.ParseInt(<span class="string">"0x1c8"</span>, <span class="number">0</span>, <span class="number">64</span>)</span><br><span class="line">	fmt.Println(d)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 789</span></span><br><span class="line">	u, _ := strconv.ParseUint(<span class="string">"789"</span>, <span class="number">0</span>, <span class="number">64</span>)</span><br><span class="line">	fmt.Println(u)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 135</span></span><br><span class="line">	k, _ := strconv.Atoi(<span class="string">"135"</span>)</span><br><span class="line">	fmt.Println(k)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// strconv.ParseInt: parsing "wat": invalid syntax</span></span><br><span class="line">	_, e := strconv.Atoi(<span class="string">"wat"</span>)</span><br><span class="line">	fmt.Println(e)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="URL-Parsing"><a href="#URL-Parsing" class="headerlink" title="URL Parsing"></a><code>URL Parsing</code></h3><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"net"</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"net/url"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s := <span class="string">"postgres://user:pass@host.com:5432/path?k=v#f"</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// postgres</span></span><br><span class="line">	u, err := url.Parse(s)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(err)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(u.Scheme)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// user:pass</span></span><br><span class="line">	fmt.Println(u.User)</span><br><span class="line">	<span class="comment">// usr</span></span><br><span class="line">	fmt.Println(u.User.Username())</span><br><span class="line"></span><br><span class="line">	p, _ := u.User.Password()</span><br><span class="line">	<span class="comment">// pass</span></span><br><span class="line">	fmt.Println(p)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// host.com:5432</span></span><br><span class="line">	fmt.Println(u.Host)</span><br><span class="line">	host, port, _ := net.SplitHostPort(u.Host)</span><br><span class="line">	<span class="comment">// host.com</span></span><br><span class="line">	fmt.Println(host)</span><br><span class="line">	<span class="comment">// 5432</span></span><br><span class="line">	fmt.Println(port)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// /path</span></span><br><span class="line">	fmt.Println(u.Path)</span><br><span class="line">	<span class="comment">// f</span></span><br><span class="line">	fmt.Println(u.Fragment)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// k=v</span></span><br><span class="line">	fmt.Println(u.RawQuery)</span><br><span class="line">	m, _ := url.ParseQuery(u.RawQuery)</span><br><span class="line">	<span class="comment">// map[k:[v]]</span></span><br><span class="line">	fmt.Println(m)</span><br><span class="line">	<span class="comment">// v</span></span><br><span class="line">	fmt.Println(m[<span class="string">"k"</span>][<span class="number">0</span>])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
