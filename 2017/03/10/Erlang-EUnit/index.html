@@ -1,0 +1,642 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Erlang," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/B_favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="Erlang单元测试框架">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Erlang EUnit">
+<meta property="og:url" content="http://blog.beiping96.com/2017/03/10/Erlang-EUnit/index.html">
+<meta property="og:site_name" content="Beiping96&#39;s Blog">
+<meta property="og:description" content="Erlang单元测试框架">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-03-10T07:32:26.000Z">
+<meta property="article:modified_time" content="2020-03-06T05:08:09.601Z">
+<meta property="article:author" content="duxingrui">
+<meta property="article:tag" content="Erlang">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://blog.beiping96.com/2017/03/10/Erlang-EUnit/"/>
+
+
+  <script data-ad-client="ca-pub-7381930582570374" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <title> Erlang EUnit | Beiping96's Blog </title>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Beiping96's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Erlang EUnit
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-03-10T15:32:26+08:00" content="2017-03-10">
+              2017-03-10
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/10/Erlang-EUnit/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/10/Erlang-EUnit/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Erlang单元测试框架</p>
+<a id="more"></a>
+<h3 id="EUnit头文件"><a href="#EUnit头文件" class="headerlink" title="EUnit头文件"></a>EUnit头文件</h3><p><code>-include_lib(&quot;eunit/include/eunit.hrl&quot;).</code><br>在Erlang模块中使用EUnit，需要在模块中包含EUnit头文件(位于模块声明之后，函数声明之前)。</p>
+<p>在<code>xx.erl</code>模块中声明了EUnit头文件会产生3种影响：</p>
+<ol>
+<li>自动导出一个 <code>xx:test/0</code> 函数</li>
+<li>自动导出xx模块中全部函数名以 <code>_test/0</code> 和 <code>_test_/0</code> 结尾的函数</li>
+<li>可以在xx模块中使用EUnit的宏定义</li>
+</ol>
+<p>为了使EUnit头文件生效，Erlang的模块搜索路径必须包含一个以<code>eunit/ebin</code>结尾的目录(指向EUnit安装目录的ebin子目录)。如果EUnit作为<code>lib/eunit</code>安装在Erlang/OTP系统目录下，那么当Erlang启动时，EUnit的ebin子目录会自动添加到搜索路径；否则，就需要通过向<code>erl</code>或<code>erlc</code>命令传递<code>-pa</code>参数来显式的添加目录：<br>e.g.<code>erlc -pa &quot;path/to/eunit/ebin&quot; $(ERL_COMPILE_FLAGS) -o$(EBIN) $&lt;</code><br>如果希望EUnit始终可用，则可以在<code>$HOME/.erlang</code>文件中添加一行<code>code:add_path(&quot;/path/to/eunit/ebin&quot;).</code></p>
+<h3 id="test-0"><a href="#test-0" class="headerlink" title="_test/0"></a><code>_test/0</code></h3><p>一个名称以<code>_test/0</code>结尾的函数会被EUnit识别成一个简单的测试函数：<br>测试函数返回任意值都会被EUnit丢弃，会被认为测试通过；<br>如果测试函数抛出异常，或者死循环(这种情况下它会在一段时间后被终止)，会被认为测试未通过。</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">reverse_list</span><span class="params">(List)</span> -&gt;</span></span><br><span class="line">    lists:reverse(List).</span><br><span class="line"></span><br><span class="line"><span class="comment">%% 返回任意值 测试通过</span></span><br><span class="line"><span class="function"><span class="title">reverse_list_test</span><span class="params">()</span> -&gt;</span></span><br><span class="line">    reverse_list([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]).</span><br><span class="line"></span><br><span class="line"><span class="comment">%% 抛出异常 测试未通过</span></span><br><span class="line"><span class="function"><span class="title">reverse_list_throw_test</span><span class="params">()</span> -&gt;</span></span><br><span class="line">    [] = reverse_list([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]).</span><br><span class="line"></span><br><span class="line"><span class="comment">%% EUnit宏</span></span><br><span class="line"><span class="comment">%% 表达式不为 true 则抛出异常</span></span><br><span class="line"><span class="function"><span class="title">length_test</span><span class="params">()</span> -&gt;</span></span><br><span class="line">    ?assert(length([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]) =:= <span class="number">3</span>).</span><br><span class="line"><span class="comment">%% 如果 length([1,2,3]) =:= 3 为 false</span></span><br><span class="line"><span class="comment">%% 将抛出异常，测试不通过</span></span><br></pre></td></tr></table></figure>
+<h3 id="Running-EUnit"><a href="#Running-EUnit" class="headerlink" title="Running EUnit"></a>Running EUnit</h3><p>当<code>xx.erl</code>包含了EUnit头文件，并且添加了测试代码后，可以在Erlang shell中使用<code>xx:test().</code>或者<code>eunit:test(xx).</code>运行测试代码。<br>并行执行<code>eunit:test({inparallel, xx}).</code></p>
+<h3 id="将测试代码放在单独模块中"><a href="#将测试代码放在单独模块中" class="headerlink" title="将测试代码放在单独模块中"></a>将测试代码放在单独模块中</h3><p>为<code>xx.erl</code>编写测试模块<code>xx_tests.erl</code>(NOT<code>xx_test.erl</code>)，当请求EUnit对xx模块进行测试，它也会寻找xx_tests模块。</p>
+<h3 id="EUnit捕获标准输出"><a href="#EUnit捕获标准输出" class="headerlink" title="EUnit捕获标准输出"></a>EUnit捕获标准输出</h3><p>EUnit会捕获测试代码中全部的标准输出，在测试代码中产生标准输出，不会出现在Erlang shell中<br>如果要在测试代码中产生标准输出，可以用使用<code>io:format(user, &quot;~w&quot;, [X])</code>写入用户输出流，或者使用EUnit宏</p>
+<h3 id="test-0-1"><a href="#test-0-1" class="headerlink" title="_test_/0"></a><code>_test_/0</code></h3><p><code>_test/0</code>的缺点是必须为每一个测试用例编写一个独立的函数(还得具有独立的名字)，而使用<code>_test_/0</code>可以编写返回测试的函数(test generator function)。</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">basic_test_</span><span class="params">()</span> -&gt;</span></span><br><span class="line">    <span class="keyword">fun</span>() -&gt; ?assert(<span class="number">1</span> + <span class="number">1</span> =:= <span class="number">2</span>) <span class="keyword">end</span>.</span><br><span class="line"><span class="comment">%% 等同于</span></span><br><span class="line"><span class="function"><span class="title">simple_test</span><span class="params">()</span> -&gt;</span></span><br><span class="line">    ?assert(<span class="number">1</span> + <span class="number">1</span> =:= <span class="number">2</span>).</span><br></pre></td></tr></table></figure>
+<p>事实上，EUnit处理所有的简单测试<code>_test/0</code>，就像处理fun表达式一样，将它们放在一个列表中，并逐个运行它们。</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%% _test宏</span></span><br><span class="line"><span class="comment">%% 将任何表达式作为参数，并将其放在fun表达式中</span></span><br><span class="line"><span class="comment">%% 主体可以是任何类型的测试表达式，就像一个简单的测试函数的主体</span></span><br><span class="line"><span class="function"><span class="title">basic_test_</span><span class="params">()</span> -&gt;</span></span><br><span class="line">    ?_test(?assert(<span class="number">1</span> + <span class="number">1</span> =:= <span class="number">2</span>)).</span><br><span class="line"><span class="comment">%% 等同于</span></span><br><span class="line"><span class="function"><span class="title">basic_test_</span><span class="params">()</span> -&gt;</span></span><br><span class="line">    ?_assert(<span class="number">1</span> + <span class="number">1</span> =:= <span class="number">2</span>).</span><br></pre></td></tr></table></figure>
+<p><code>?_assert()</code>是<code>?_test(?assert())</code>的简写。</p>
+<h3 id="An-example"><a href="#An-example" class="headerlink" title="An example"></a>An example</h3><figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-module</span><span class="params">(fib)</span>.</span><br><span class="line"><span class="keyword">-export</span><span class="params">([fib/<span class="number">1</span>])</span>.</span><br><span class="line"><span class="keyword">-include_lib</span><span class="params">(<span class="string">"eunit/include/eunit.hrl"</span>)</span>.</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">fib</span><span class="params">(<span class="number">0</span>)</span> -&gt;</span> <span class="number">1</span>;</span><br><span class="line"><span class="function"><span class="title">fib</span><span class="params">(<span class="number">1</span>)</span> -&gt;</span> <span class="number">1</span>;</span><br><span class="line"><span class="function"><span class="title">fib</span><span class="params">(N)</span> <span class="title">when</span> N &gt; 1 -&gt;</span> fib(N-<span class="number">1</span>) + fib(N-<span class="number">2</span>).</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">fib_test_</span><span class="params">()</span> -&gt;</span></span><br><span class="line">    [</span><br><span class="line">        ?_assert(fib(<span class="number">0</span>) =:= <span class="number">1</span>),</span><br><span class="line">        ?_assert(fib(<span class="number">1</span>) =:= <span class="number">1</span>),</span><br><span class="line">        ?_assert(fib(<span class="number">2</span>) =:= <span class="number">2</span>),</span><br><span class="line">        ?_assert(fib(<span class="number">3</span>) =:= <span class="number">3</span>),</span><br><span class="line">        ?_assert(fib(<span class="number">4</span>) =:= <span class="number">5</span>),</span><br><span class="line">        ?_assert(fib(<span class="number">5</span>) =:= <span class="number">8</span>),</span><br><span class="line">        ?_assertException(error, function_clause, fib(-<span class="number">1</span>)),</span><br><span class="line">        ?_assert(fib(<span class="number">31</span>) =:= <span class="number">2178309</span>)</span><br><span class="line">    ].</span><br></pre></td></tr></table></figure>
+<h3 id="禁用测试"><a href="#禁用测试" class="headerlink" title="禁用测试"></a>禁用测试</h3><p>EUnit可以通过在编译时定义<code>NOTEST</code>宏来关闭<br><code>erlc -DNOTEST xx.erl</code><br>或者在包含EUnit头文件之前添加宏定义<br><code>-define(NOTEST, 1).</code>该值不重要，通常是1或者true</p>
+<p>除非定义了<code>EUNIT_NOAUTO</code>宏，否则<code>NOTEST</code>宏会自动将代码中没有明确声明导出的测试函数删除</p>
+<h3 id="采用条件编译来避免EUnit对编译的依赖"><a href="#采用条件编译来避免EUnit对编译的依赖" class="headerlink" title="采用条件编译来避免EUnit对编译的依赖"></a>采用条件编译来避免EUnit对编译的依赖</h3><figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-ifdef</span><span class="params">(TEST)</span>.</span><br><span class="line">    -include_lib(<span class="string">"eunit/include/eunit.hrl"</span>).</span><br><span class="line"><span class="keyword">-endif</span>.</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Erlang/" rel="tag">#Erlang</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/03/Erlang-Dialyzer/" rel="next" title="Erlang Dialyzer">
+                <i class="fa fa-chevron-left"></i> Erlang Dialyzer
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/17/Erlang-Programming-Rules-and-Conventions/" rel="prev" title="Erlang Programming Rules and Conventions">
+                Erlang Programming Rules and Conventions <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+
+          <!-- ad start -->
+          <script data-ad-client="ca-pub-7381930582570374" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+          <!-- ad end -->
+
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/beiping96.png"
+               alt="duxingrui" />
+          <p class="site-author-name" itemprop="name">duxingrui</p>
+          <p class="site-description motion-element" itemprop="description">beiping96@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#EUnit头文件"><span class="nav-number">1.</span> <span class="nav-text">EUnit头文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#test-0"><span class="nav-number">2.</span> <span class="nav-text">_test&#x2F;0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Running-EUnit"><span class="nav-number">3.</span> <span class="nav-text">Running EUnit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#将测试代码放在单独模块中"><span class="nav-number">4.</span> <span class="nav-text">将测试代码放在单独模块中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EUnit捕获标准输出"><span class="nav-number">5.</span> <span class="nav-text">EUnit捕获标准输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#test-0-1"><span class="nav-number">6.</span> <span class="nav-text">_test_&#x2F;0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#An-example"><span class="nav-number">7.</span> <span class="nav-text">An example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#禁用测试"><span class="nav-number">8.</span> <span class="nav-text">禁用测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#采用条件编译来避免EUnit对编译的依赖"><span class="nav-number">9.</span> <span class="nav-text">采用条件编译来避免EUnit对编译的依赖</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" style="text-align:center">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">Total <span id="busuanzi_value_site_pv"></span> views,</span>
+  <span id="busuanzi_container_page_pv">this page <span id="busuanzi_value_page_pv"></span> hits.</span>
+  <br/>
+  
+  &copy;
+   2016
+   - 
+  
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder"><a href="mailto:beiping96@gmail.com">duxingrui</a></span>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98210842-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'http-blog-beiping96-com';
+      var disqus_identifier = '2017/03/10/Erlang-EUnit/';
+      var disqus_title = "Erlang EUnit";
+      var disqus_url = 'http://blog.beiping96.com/2017/03/10/Erlang-EUnit/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<!--
+  <script type="text/javascript" color="0,0,0" opacity='0.33' zIndex="-1" count="66" src="/js/src/canvas-nest.min.js"></script>
+-->
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+</html>

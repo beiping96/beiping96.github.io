@@ -1,0 +1,673 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="OS,Compiler," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/B_favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="原文： http:&#x2F;&#x2F;sqybi.com&#x2F;blog&#x2F;archives&#x2F;322">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编译器和它的故事——自展与交叉编译">
+<meta property="og:url" content="http://blog.beiping96.com/2017/03/19/%E7%BC%96%E8%AF%91%E5%99%A8%E5%92%8C%E5%AE%83%E7%9A%84%E6%95%85%E4%BA%8B%E2%80%94%E2%80%94%E8%87%AA%E5%B1%95%E4%B8%8E%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/index.html">
+<meta property="og:site_name" content="Beiping96&#39;s Blog">
+<meta property="og:description" content="原文： http:&#x2F;&#x2F;sqybi.com&#x2F;blog&#x2F;archives&#x2F;322">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://blog.beiping96.com/images/compiler_1.png">
+<meta property="og:image" content="http://blog.beiping96.com/images/compiler_11.png">
+<meta property="og:image" content="http://blog.beiping96.com/images/compiler_12.png">
+<meta property="og:image" content="http://blog.beiping96.com/images/compiler_13.png">
+<meta property="article:published_time" content="2017-03-19T15:58:21.000Z">
+<meta property="article:modified_time" content="2020-03-06T05:08:09.609Z">
+<meta property="article:author" content="duxingrui">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="Compiler">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.beiping96.com/images/compiler_1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://blog.beiping96.com/2017/03/19/编译器和它的故事——自展与交叉编译/"/>
+
+
+  <script data-ad-client="ca-pub-7381930582570374" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <title> 编译器和它的故事——自展与交叉编译 | Beiping96's Blog </title>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Beiping96's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                编译器和它的故事——自展与交叉编译
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-03-19T23:58:21+08:00" content="2017-03-19">
+              2017-03-19
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/19/%E7%BC%96%E8%AF%91%E5%99%A8%E5%92%8C%E5%AE%83%E7%9A%84%E6%95%85%E4%BA%8B%E2%80%94%E2%80%94%E8%87%AA%E5%B1%95%E4%B8%8E%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/19/编译器和它的故事——自展与交叉编译/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文： <a href="http://sqybi.com/blog/archives/322" target="_blank" rel="noopener">http://sqybi.com/blog/archives/322</a></p>
+<a id="more"></a>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>阅读本文，不需要太高深的编译原理知识，甚至不需要编译相关的知识。但是你至少要知道：</p>
+<ol>
+<li>不管是exe可执行文件还是Linux下的程序，都是一些二进制码，我们称之为机器语言。这些二进制码的执行与系统以及CPU都有关。</li>
+<li>大部分情况下，编译器是一种将高级语言翻译成机器语言的程序。而任何程序本身也是一些机器语言的二进制码。</li>
+<li>无论是高级语言、汇编语言还是机器语言，实际上都是等价的，唯一有区别的是，越高级的语言写起来越容易（所以我们倾向于尽量多编写高级语言代码）；同时，机器语言是可以直接运行的。</li>
+</ol>
+<p>如果你觉得上面三条可以理解或者可以理解一部分，那么请继续阅读。另外，本文中提到的无论是编译的过程还是语言的分类甚至是一些例子，都可以看做是一个简化的模型。实际上，很少有一个exe程序就可以运行的编译器，现代的编译器都是十分复杂的。不过，考虑这些简化模型对我们没有任何坏处，它们和实际情况相差并不很大。</p>
+<h3 id="高级语言和机器语言"><a href="#高级语言和机器语言" class="headerlink" title="高级语言和机器语言"></a>高级语言和机器语言</h3><p>语言的所谓“高级”，实际上界定不是那么明确。不过我们可以确定的是：C++、Java、Python之流比汇编语言更高级，而汇编语言比机器语言更高级。</p>
+<p>这里提到一个汇编语言和机器语言的区分。可能有些读者不明白这两个概念的区别，实际上很简单，汇编语言是我们会看到的那些MOV、JMP等命令组成的语言，而机器语言则纯粹是是各种01串。我想没有人会愿意写一个机器语言的程序——实际上，我们学校的计算机组成实验都是用Verilog HDL这种高级语言来完成的，而嵌入式原理实验也是用一种汇编语言完成的；即使是做处理器和单片机，也不会有人愿意去写机器语言，毕竟一大堆01串太坑爹了。</p>
+<p>试想，让你用C++写一个从1输出到100的程序，几行代码就可以搞定；而汇编语言则可能需要几十行；机器语言呢，一大堆01000101110110101011111001……，看都看不懂。</p>
+<p>但是上面也提到了，机器语言和高级语言的区别是，它可以直接运行。比如exe程序，实际上它内部存储的就是一些机器语言的二进制码，机器可以直接阅读这些二进制码并在处理器中运行它们（这里说的不是完全准确，比如.NET编译出的exe程序实际上是一段中间代码，由CLR解释成机器代码才能运行——不过这可以暂且忽略，就当作我说的是一个简化的模型）。当然程序的运行是依赖机器架构和系统的，不然Wine什么的也就没有用了（什么是Wine？WINE = WINE Is Not an Emulator！有趣的名称递归定义还有很多，不过与本文无关，请自行Google）。</p>
+<p>而实际上，是机器架构不同还是系统不同，并不是我们考虑的问题。我们考虑的问题只是，一段代码在A机器上X系统下能否运行，换到B机器上Y系统下又能否运行。就算在A机器上X系统下能运行，如果换成了A机器和Y系统之后不能运行了，那对于我们这也可以看做两台不同的机器（也就是说，A机器和Y系统实际上就可以看做一个新的机器B）。所以之后的描述中，我们不考虑操作系统的情况，而是只考虑机器，我们编号为a、b等等，而它们上面可以运行的机器语言我们编号为A、B等等。</p>
+<p><strong>无论是机器语言还是高级语言，实际上都是代码。在之后的讨论中，我们应该将它们平等对待。</strong><br><strong>虽然机器语言的二进制码和高级语言的不同，它可以直接在机器上运行，但是对于编译过程，它们没有任何区别。</strong></p>
+<h3 id="编译器"><a href="#编译器" class="headerlink" title="编译器"></a>编译器</h3><p>首先，编译器本身的功能是，将一种语言S的代码转化为一种语言T的代码。这里稍微了解编译器的读者可能有疑问了：我用的gcc之类的编译器，明明是把C语言代码编译成了一个exe程序，并不是把S语言的代码编译成了T语言的代码啊？如果你也有这个疑问，请重新阅读以上几段——我在前面已经提过了，“任何程序本身也是一些机器语言的二进制码”。也就是说，我们这里把机器语言也看作一种语言，只不过是很低级的语言；而编译器就可以将C语言这种高级语言S转化为机器语言这种低级语言T，恰好这种低级语言还是可以在机器t上直接运行的。</p>
+<p>其次，大部分情况下，编译器自己也是一段程序，那么它也可以看做是一段代码。而编译器也会有它的源代码，这个源代码就是一种高级语言的代码，我们这时仍然叫它编译器。随便举个例子，对于gcc.exe，这个程序是一种机器语言A的代码，它可以直接在a机器上运行。而它的功能则是，将C语言的代码转化为机器语言A的代码（一个C语言的编译器），使得本身无法直接运行的C语言程序变得可以在a机器上运行。而在得到gcc.exe之前，我们一定也有一段代码，它是用来生成gcc.exe这个程序的，这段代码可能是一个高级语言的代码，比如汇编语言。那这时候，这段汇编语言的代码即使不能直接在电脑上运行，我们依然说这是一个C语言的编译器。</p>
+<p>编译器的特征：</p>
+<ol>
+<li>本身是一段代码，假设是A语言的代码，A可以是机器语言，也可以不是；</li>
+<li>可以接收一段代码，假设是S语言的代码，S一般来说是高级语言，但理论上也可以不是；</li>
+<li>可以将接收到的S语言代码在内部转换后输出一段代码，假设是T语言的代码，T有可能是机器语言，但也有可能是一种高级语言。</li>
+</ol>
+<p>这样，一个编译器就可以被表示为<code>A(S –&gt; T)</code>，表示编译器本身的代码是A语言，可以接受一个S语言代码作为输入，同时产生相同功能的T语言代码作为输出。之后我们的编译器都会这么表示，请务必牢记。</p>
+<p><strong>编译器本质上也是一段代码，而功能上可以将一段代码等价地转化为另一段代码。</strong></p>
+<p>所以，我们用<code>A(S –&gt; T)</code>表示一个编译器，这个编译器本身是由A语言写成的，它的功能是将S语言代码等价地转换为T语言代码。当A语言是机器语言的时候，这个编译器就是可以使用的。<br><img src="/images/compiler_1.png" alt=""></p>
+<h3 id="自展"><a href="#自展" class="headerlink" title="自展"></a>自展</h3><p>不知道读了之前的内容，你有没有这样一个疑问：既然编译器本身是一段代码，那么如果想编译一个编译器，就需要更早的编译器来进行编译操作。而编译这个更早的编译器还需要更更早的编译器——长此以往，第一个编译器是怎么产生的呢？难道是直接用机器语言书写的？</p>
+<p>如果能这么想，那么你就猜对了。第一个编译器一定是用机器语言写出的。实际上，很久以前的程序员还在纸带上打孔呢，他们也照样乐在其中。机器语言只是很难书写，并不是不能书写。</p>
+<p>但是，用这么难书写的语言写一个C++编译器，谁都不会愿意去干。所以，第一个编译器的功能一定是很简单的。而人们会用这很简单的编译器的语言，去写一个稍微复杂一些的编译器；然后再用这个新的编译器，去写一个更复杂的编译器；最终得到一个很复杂的编译器，比如C++编译器——好了，如果能够理解这个过程，那么你实际上几乎就理解了自展。</p>
+<p>所谓自展，实际上就是用一个功能不太完善的编译器支持的语言写代码，然后放到这个编译器上去编译，产生一个比自己更完善的编译器的过程。用一个不太恰当的例子来描述，就是我们已经有了一个C语言的编译器，然后我们用C语言写一个C++的编译器代码，并用C语言编译器编译这个代码生成可以运行的C++编译器（之所以不太恰当，是因为C语言不是C++语言的严格子集）。</p>
+<p>也就是说，我们有一个编译器<code>A(C –&gt; A)</code>，现在写一个编译器<code>C(C++ –&gt; A)</code>，将后者放入前者中进行编译，即<code>A(C(C++ –&gt; A) –&gt; A)</code>，得到一个可以执行的编译器<code>A(C++ –&gt; A)</code>。</p>
+<p><strong>自展过程，实际上就是用低级语言先实现一个简单的编译器，然后用这个编译器的语言再去编写一个更高级的编译器——这个新编译器是旧编译器的扩展——的过程。</strong></p>
+<h3 id="交叉编译"><a href="#交叉编译" class="headerlink" title="交叉编译"></a>交叉编译</h3><p>交叉编译这个概念，没有自展这个概念那么准确。所以先看一个问题：如果你想写一个手机系统上的程序，你会怎么做呢？我们可能会想到，开发一个手机上的编译器，然后把程序放到上面编译成手机可以运行的机器代码。但是这样就有一个很大的问题了，那就是手机的运行速度和电脑相比十分缓慢（虽然现在手机的CPU已经很强悍了，但是手机的内存一向很小，不太足以运行编译器）。</p>
+<p>实际上，在现实中我们的做法是，在电脑上完成编译过程，然后直接把在手机上可以运行的机器代码拷贝到手机内。这样就不受限于编译时手机的内存和CPU限制了。这样一个过程，就叫做交叉编译。</p>
+<p>当然交叉编译也有其它的应用，比如有时候我们也需要在一台电脑a上生成另外一台电脑b上同一个语言的编译器，比如在Windows下编译一个Linux的编译器。这个问题比前面的问题还要多一步编译操作，我们不妨在后面的讨论中将这两个问题称作问题1（前者）和问题2（后者）。</p>
+<p>为了方便起见，我们把这两个问题用之前的表示方法来书写一下：</p>
+<p>首先，将电脑看做是机器a，手机看作是机器b。我们现在手里拥有的是某语言S在a机器上的编译器<code>A(S –&gt; A)</code>。对于问题1，我们需要最终生成一个在a机器上编译b机器代码的编译器，即<code>A(S –&gt; B)</code>。而对于问题2，我们则是需要一个在b机器上生成b机器代码的编译器，<code>B(S –&gt; B)</code>。<br>而我们可以做到的是，用高级语言S写一个自身的编译器（可以是a机器的也可以是b机器的，不过这个问题中只有后者会被用到），即<code>S(S –&gt; B)</code>。<br>好，现在我们就有了两个代码，<code>A(S –&gt; A)</code>和<code>S(S –&gt; B)</code>，其中只有第一个代码是可以在a机器上运行的。我们要从这两个代码中得到两个新的代码，那就是<code>A(S –&gt; B)</code>和<code>B(S –&gt; B)</code>。<br><img src="/images/compiler_11.png" alt=""><br>首先先考虑如何得到一个<code>A(S –&gt; B)</code>，即一个在a机器上运行的可以将S语言代码编译为b机器代码的编译器。</p>
+<p>其实写成现在的形式，这一点如何做到已经很简单了。那就是将<code>S(S –&gt; B)</code>放入<code>A(S –&gt; A)</code>中编译，即<code>A(S(S –&gt; B) –&gt; A)</code>，这样就可以得到<code>A(S –&gt; B)</code>。这一步因为使用的编译器是<code>A(S –&gt; A)</code>，所以只需要在A机器上执行。</p>
+<p>这时，可以发现第一个问题已经解决了。我们这时就可以利用得到的<code>A(S –&gt; B)</code>在a机器（电脑）上编译b机器（手机）的代码了。<br><img src="/images/compiler_12.png" alt=""></p>
+<p>然后再考虑如何得到一个<code>B(S –&gt; B)</code>。</p>
+<p>可以看到，我们之前一步的时候有了一个<code>A(S –&gt; B)</code>，而最开始还拥有一个<code>S(S –&gt; B)</code>。这样，我们只需要将<code>S(S –&gt; B)</code>放入<code>A(S –&gt; B)</code>中编译，即<code>A(S(S –&gt; B) –&gt; B)</code>，这样就可以得到一个<code>B(S –&gt; B)</code>了。</p>
+<p>这样，我们用前一步得到的编译器<code>A(S –&gt; B)</code>，在a机器（Windows）上运行，又得到了一个新的编译器<code>B(S –&gt; B)</code>，它可以在b机器（Linux）下编译b机器（Linux）的代码。<br><img src="/images/compiler_13.png" alt=""><br>可以看到，我们从最开始的编译器<code>A(S –&gt; A)</code>和代码<code>S(S –&gt; B)</code>得到最终代码<code>B(S –&gt; B)</code>的过程中，所有的步骤都是在A机器上运行的，完全没有用到B机器。这就是交叉编译的有趣之处！使用交叉编译，可以在很多情况下省去不少的麻烦。</p>
+<p>另外解释一个问题，为什么不直接编写一个<code>A(S –&gt; B)</code>？因为A是机器代码，而之前也提到过了，“我们倾向于尽量多书写高级语言代码”，因为机器语言十分难以理解和书写。所以，我们写了一个高级语言代码<code>S(S –&gt; B)</code>，将它放到已有的<code>A(S –&gt; A)</code>上去编译（为什么是已有的？这个问题实际上不需要回答，因为这里假设a机器是一台很常用的机器（比如安装了Windows系统的PC机），所以<code>A(S –&gt; A)</code>是一个很普通的编译器，它的存在性无需证明；<code>A(S –&gt; A)</code>的书写可以利用之前提到的自展完成），最终得到了一个需要的<code>B(S –&gt; B)</code>。</p>
+<p>如果看不太懂交叉编译的过程的话，可以暂且把a机器当作一个安装了Windows的PC机，把b机器当作一台手机或者一个装了Linux的PC机，然后再带着这个理解重新阅读整个过程。</p>
+<p>实际上，交叉编译解决的两个问题分别都只需要一步操作，所以交叉编译没有听起来那么复杂！不要自己吓到自己就好了~</p>
+<p>就这些，没了。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OS/" rel="tag">#OS</a>
+          
+            <a href="/tags/Compiler/" rel="tag">#Compiler</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/18/Cache-algorithm/" rel="next" title="Cache algorithm">
+                <i class="fa fa-chevron-left"></i> Cache algorithm
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/25/Erlang-Parameterized-Modules/" rel="prev" title="Erlang Parameterized Modules">
+                Erlang Parameterized Modules <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+
+          <!-- ad start -->
+          <script data-ad-client="ca-pub-7381930582570374" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+          <!-- ad end -->
+
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/beiping96.png"
+               alt="duxingrui" />
+          <p class="site-author-name" itemprop="name">duxingrui</p>
+          <p class="site-description motion-element" itemprop="description">beiping96@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高级语言和机器语言"><span class="nav-number">2.</span> <span class="nav-text">高级语言和机器语言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译器"><span class="nav-number">3.</span> <span class="nav-text">编译器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自展"><span class="nav-number">4.</span> <span class="nav-text">自展</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#交叉编译"><span class="nav-number">5.</span> <span class="nav-text">交叉编译</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" style="text-align:center">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">Total <span id="busuanzi_value_site_pv"></span> views,</span>
+  <span id="busuanzi_container_page_pv">this page <span id="busuanzi_value_page_pv"></span> hits.</span>
+  <br/>
+  
+  &copy;
+   2016
+   - 
+  
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder"><a href="mailto:beiping96@gmail.com">duxingrui</a></span>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98210842-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'http-blog-beiping96-com';
+      var disqus_identifier = '2017/03/19/编译器和它的故事——自展与交叉编译/';
+      var disqus_title = "编译器和它的故事——自展与交叉编译";
+      var disqus_url = 'http://blog.beiping96.com/2017/03/19/%E7%BC%96%E8%AF%91%E5%99%A8%E5%92%8C%E5%AE%83%E7%9A%84%E6%95%85%E4%BA%8B%E2%80%94%E2%80%94%E8%87%AA%E5%B1%95%E4%B8%8E%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<!--
+  <script type="text/javascript" color="0,0,0" opacity='0.33' zIndex="-1" count="66" src="/js/src/canvas-nest.min.js"></script>
+-->
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+</html>

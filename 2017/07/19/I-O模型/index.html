@@ -1,0 +1,639 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="OS,I/O," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/B_favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="Unix下5种I&#x2F;O模型。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="I&#x2F;O模型">
+<meta property="og:url" content="http://blog.beiping96.com/2017/07/19/I-O%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Beiping96&#39;s Blog">
+<meta property="og:description" content="Unix下5种I&#x2F;O模型。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://blog.beiping96.com/images/IO.png">
+<meta property="article:published_time" content="2017-07-19T10:22:03.000Z">
+<meta property="article:modified_time" content="2020-03-06T05:08:09.605Z">
+<meta property="article:author" content="duxingrui">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="I&#x2F;O">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.beiping96.com/images/IO.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://blog.beiping96.com/2017/07/19/I-O模型/"/>
+
+
+  <script data-ad-client="ca-pub-7381930582570374" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <title> I/O模型 | Beiping96's Blog </title>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Beiping96's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                I/O模型
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-07-19T18:22:03+08:00" content="2017-07-19">
+              2017-07-19
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/07/19/I-O%E6%A8%A1%E5%9E%8B/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/07/19/I-O模型/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Unix下5种I/O模型。</p>
+<a id="more"></a>
+<p>There are normally two distinct phases for an input operation:<br>一个输入操作通常包含两个不同的阶段：<br>1.Waiting for the data to be ready<br>1.等待数据准备好<br>2.Copying the data from the kernel to the process<br>2.将数据从内核复制到进程</p>
+<p>For an input operation on a socket:<br>The first step normally involves waiting for data to arrive on the network. When the packet arrives, it is copied into a buffer within the kernel.<br>The second step is copying this data from the kernel’s buffer into our application buffer.<br>对于一个套接字上的输入操作而言：<br>第一步是等待数据通过网络传输到达。当数据到达后，会被复制到内核中的某个缓冲区。<br>第二步是将数据从内核缓冲区复制到应用进程缓冲区。</p>
+<h3 id="阻塞式I-O-blocking-I-O"><a href="#阻塞式I-O-blocking-I-O" class="headerlink" title="阻塞式I/O (blocking I/O)"></a>阻塞式I/O (blocking I/O)</h3><p>By default, all sockets are blocking.<br>默认情况下，所有套接字都是阻塞的。</p>
+<p>The process calls function and the system call does not return until the datagram arrives and is copied into our application buffer, or an error occurs.<br>当进程调用函数获取数据时，系统调用直到（数据到达内核并且被复制到进程缓冲区后 OR 调用发生错误时）才会返回。</p>
+<p>The process is blocked the entire time from when it calls function until it returns.<br>进程从调用函数到函数返回的整段时间内都是被阻塞的。</p>
+<h3 id="非阻塞式I-O-nonblocking-I-O"><a href="#非阻塞式I-O-nonblocking-I-O" class="headerlink" title="非阻塞式I/O (nonblocking I/O)"></a>非阻塞式I/O (nonblocking I/O)</h3><p>When we set a socket to be nonblocking, we are telling the kernel “when an I/O operation that I request cannot be completed without putting the process to sleep, do not put the process to sleep, but return an error instead.”<br>进程把一个套接字设置为非阻塞就是在通知内核：“当进程请求I/O操作且只有把进程阻塞才能完成工作时，才把进程阻塞，否则不要阻塞进程而是返回一个错误。”</p>
+<p>进程会在数据通过网络到达内核前，不断地循环调用函数（轮询(polling)），函数会立即返回，在此期间进程并不阻塞。<br>在数据到达内核缓冲区后，进程再次调用函数才会阻塞，等待数据从内核缓冲区复制到进程缓冲区。</p>
+<h3 id="I-O复用-I-O-multiplexing"><a href="#I-O复用-I-O-multiplexing" class="headerlink" title="I/O复用 (I/O multiplexing)"></a>I/O复用 (I/O multiplexing)</h3><p>I/O复用需要两个函数来完成获取数据的操作：<br>进程调用第一个函数会阻塞在等待数据通过网络到达内核时期。<br>进程调用第二个函数会阻塞在等待数据从内核缓冲区复制到进程缓冲区时期。</p>
+<h3 id="信号驱动式I-O-signal-driven-I-O"><a href="#信号驱动式I-O-signal-driven-I-O" class="headerlink" title="信号驱动式I/O (signal driven I/O)"></a>信号驱动式I/O (signal driven I/O)</h3><p>与非阻塞式I/O对比，在等待数据通过网络到达内核时期，信号驱动式I/O并不通过轮询来查询数据是否到达，而是数据到达后内核会向进程发送信号来通知进程数据已达到内核。</p>
+<p>在数据通过网络到达内核前，进程是非阻塞的。<br>在等待数据从内核复制到进程期间，进程是阻塞的。</p>
+<h3 id="异步I-O-asynchronous-I-O"><a href="#异步I-O-asynchronous-I-O" class="headerlink" title="异步I/O (asynchronous I/O)"></a>异步I/O (asynchronous I/O)</h3><p>与信号驱动式I/O相比，采用异步I/O，内核并不会在数据到达内核时通知进程，而是数据到达进程缓冲区后才会通知进程。在整个获取数据的过程中，进程都是非阻塞的。</p>
+<p>In general, these functions work by telling the kernel to start the operation and to notify us when the entire operation (including the copy of the data from the kernel to our buffer) is complete.<br>一般来说，这些函数的工作机制是：告知内核启动某个操作，并且让内核在整个操作（包括将数据从内核复制到进程缓冲区）完成后再通知调用函数的进程。</p>
+<h3 id="同步-异步"><a href="#同步-异步" class="headerlink" title="同步/异步"></a>同步/异步</h3><p>A synchronous I/O operation causes the requesting process to be blocked until that I/O operation completes.<br>“同步I/O”操作会导致请求进程阻塞，直到I/O操作完成。<br>An asynchronous I/O operation does not cause the requesting process to be blocked.<br>“异步I/O”操作不会导致请求进程阻塞。<br><img src="/images/IO.png" alt=""><br>The first four I/O models—blocking, nonblocking, I/O multiplexing, and signal-driven I/O—are all synchronous.<br>前4种I/O模型——阻塞式I/O、非阻塞式I/O、I/O复用、信号驱动式I/O均是“同步I/O”。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OS/" rel="tag">#OS</a>
+          
+            <a href="/tags/I-O/" rel="tag">#I/O</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/02/Python%E6%95%99%E7%A8%8B/" rel="next" title="Python教程">
+                <i class="fa fa-chevron-left"></i> Python教程
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/02/Internet-Protocol-Suite/" rel="prev" title="Internet Protocol Suite">
+                Internet Protocol Suite <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+
+          <!-- ad start -->
+          <script data-ad-client="ca-pub-7381930582570374" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+          <!-- ad end -->
+
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/beiping96.png"
+               alt="duxingrui" />
+          <p class="site-author-name" itemprop="name">duxingrui</p>
+          <p class="site-description motion-element" itemprop="description">beiping96@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#阻塞式I-O-blocking-I-O"><span class="nav-number">1.</span> <span class="nav-text">阻塞式I&#x2F;O (blocking I&#x2F;O)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非阻塞式I-O-nonblocking-I-O"><span class="nav-number">2.</span> <span class="nav-text">非阻塞式I&#x2F;O (nonblocking I&#x2F;O)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I-O复用-I-O-multiplexing"><span class="nav-number">3.</span> <span class="nav-text">I&#x2F;O复用 (I&#x2F;O multiplexing)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号驱动式I-O-signal-driven-I-O"><span class="nav-number">4.</span> <span class="nav-text">信号驱动式I&#x2F;O (signal driven I&#x2F;O)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步I-O-asynchronous-I-O"><span class="nav-number">5.</span> <span class="nav-text">异步I&#x2F;O (asynchronous I&#x2F;O)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步-异步"><span class="nav-number">6.</span> <span class="nav-text">同步&#x2F;异步</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" style="text-align:center">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">Total <span id="busuanzi_value_site_pv"></span> views,</span>
+  <span id="busuanzi_container_page_pv">this page <span id="busuanzi_value_page_pv"></span> hits.</span>
+  <br/>
+  
+  &copy;
+   2016
+   - 
+  
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder"><a href="mailto:beiping96@gmail.com">duxingrui</a></span>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98210842-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'http-blog-beiping96-com';
+      var disqus_identifier = '2017/07/19/I-O模型/';
+      var disqus_title = "I/O模型";
+      var disqus_url = 'http://blog.beiping96.com/2017/07/19/I-O%E6%A8%A1%E5%9E%8B/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<!--
+  <script type="text/javascript" color="0,0,0" opacity='0.33' zIndex="-1" count="66" src="/js/src/canvas-nest.min.js"></script>
+-->
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+</html>

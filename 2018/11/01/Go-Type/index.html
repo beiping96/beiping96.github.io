@@ -1,0 +1,644 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Go,Type System," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/B_favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="Overview of Go Type System https:&#x2F;&#x2F;go101.org&#x2F;article&#x2F;type-system-overview.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go Type">
+<meta property="og:url" content="http://blog.beiping96.com/2018/11/01/Go-Type/index.html">
+<meta property="og:site_name" content="Beiping96&#39;s Blog">
+<meta property="og:description" content="Overview of Go Type System https:&#x2F;&#x2F;go101.org&#x2F;article&#x2F;type-system-overview.html">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-11-01T10:01:56.000Z">
+<meta property="article:modified_time" content="2020-03-06T05:08:09.603Z">
+<meta property="article:author" content="duxingrui">
+<meta property="article:tag" content="Go">
+<meta property="article:tag" content="Type System">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://blog.beiping96.com/2018/11/01/Go-Type/"/>
+
+
+  <script data-ad-client="ca-pub-7381930582570374" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <title> Go Type | Beiping96's Blog </title>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Beiping96's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Go Type
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2018-11-01T18:01:56+08:00" content="2018-11-01">
+              2018-11-01
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/11/01/Go-Type/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/01/Go-Type/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Overview of Go Type System</p>
+<p><a href="https://go101.org/article/type-system-overview.html" target="_blank" rel="noopener">https://go101.org/article/type-system-overview.html</a></p>
+<a id="more"></a>
+
+<h3 id="Basic-Types"><a href="#Basic-Types" class="headerlink" title="Basic Types"></a>Basic Types</h3><p>Built-in string type: <code>string</code>.<br>Built-in boolean type: <code>bool</code>.<br>Built-in numeric types:<br><code>int8</code>, <code>uint8 (byte)</code>, <code>int16</code>, <code>uint16</code>, <code>int32 (rune)</code>, <code>uint32</code>, <code>int64</code>, <code>uint64</code>, <code>int</code>, <code>uint</code>, <code>uintptr</code>.<br><code>float32</code>, <code>float64</code>.<br><code>complex64</code>, <code>complex128</code>.<br>Note, <code>byte</code> is a built-in alias of <code>uint8</code>, and <code>rune</code> is a built-in alias of <code>int32</code>. We can also declare custom type aliases (see below).</p>
+<h3 id="Composite-Types"><a href="#Composite-Types" class="headerlink" title="Composite Types"></a>Composite Types</h3><p>pointer types - C pointer alike.<br>struct types - C struct alike.<br>function types - functions are first-class types in Go.<br>container types:</p>
+<ol>
+<li>array types - fixed-length container types.</li>
+<li>slice type - dynamic-length and dynamic-capacity container types.</li>
+<li>map types - maps are associative arrays (or dictionaries). The standard Go compiler implements maps as hashtables.</li>
+</ol>
+<p>channel types - channels are used to synchronize data among goroutines (the green threads in Go).<br>interface types - interfaces play a key role in reflection and polymorphism.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Assume T is an arbitrary type and Tkey is</span></span><br><span class="line"><span class="comment">// a type supporting comparison (== and !=).</span></span><br><span class="line"></span><br><span class="line">*T         <span class="comment">// a pointer type</span></span><br><span class="line">[<span class="number">5</span>]T       <span class="comment">// an array type</span></span><br><span class="line">[]T        <span class="comment">// a slice type</span></span><br><span class="line"><span class="keyword">map</span>[Tkey]T <span class="comment">// a map type</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// a struct type</span></span><br><span class="line"><span class="keyword">struct</span> &#123;</span><br><span class="line">	name <span class="keyword">string</span></span><br><span class="line">	age  <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// a function type</span></span><br><span class="line"><span class="function"><span class="keyword">func</span><span class="params">(<span class="keyword">int</span>)</span> <span class="params">(<span class="keyword">bool</span>, <span class="keyword">string</span>)</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// an interface type</span></span><br><span class="line"><span class="keyword">interface</span> &#123;</span><br><span class="line">	Method0(<span class="keyword">string</span>) <span class="keyword">int</span></span><br><span class="line">	Method1() (<span class="keyword">int</span>, <span class="keyword">bool</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// some channel types</span></span><br><span class="line"><span class="keyword">chan</span> T</span><br><span class="line"><span class="keyword">chan</span>&lt;- T</span><br><span class="line">&lt;-<span class="keyword">chan</span> T</span><br></pre></td></tr></table></figure>
+
+<h3 id="Type-Definitions"><a href="#Type-Definitions" class="headerlink" title="Type Definitions"></a>Type Definitions</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Define a solo new type.</span></span><br><span class="line"><span class="keyword">type</span> NewTypeName SourceType</span><br><span class="line"></span><br><span class="line"><span class="comment">// Define multiple new types together.</span></span><br><span class="line"><span class="keyword">type</span> (</span><br><span class="line">	NewTypeName1 SourceType1</span><br><span class="line">	NewTypeName2 SourceType2</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// The following new defined and source types</span></span><br><span class="line"><span class="comment">// are all basic types.</span></span><br><span class="line"><span class="keyword">type</span> (</span><br><span class="line">	MyInt <span class="keyword">int</span></span><br><span class="line">	Age   <span class="keyword">int</span></span><br><span class="line">	Text  <span class="keyword">string</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// The following new defined and source types are</span></span><br><span class="line"><span class="comment">// all composite types.</span></span><br><span class="line"><span class="keyword">type</span> IntPtr *<span class="keyword">int</span></span><br><span class="line"><span class="keyword">type</span> Book <span class="keyword">struct</span>&#123;author, title <span class="keyword">string</span>; pages <span class="keyword">int</span>&#125;</span><br><span class="line"><span class="keyword">type</span> Convert <span class="function"><span class="keyword">func</span><span class="params">(in0 <span class="keyword">int</span>, in1 <span class="keyword">bool</span>)</span><span class="params">(out0 <span class="keyword">int</span>, out1 <span class="keyword">string</span>)</span></span></span><br><span class="line"><span class="keyword">type</span> StringArray [<span class="number">5</span>]<span class="keyword">string</span></span><br><span class="line"><span class="keyword">type</span> StringSlice []<span class="keyword">string</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">f</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// The names of the three defined types</span></span><br><span class="line">	<span class="comment">// can be only used within the function.</span></span><br><span class="line">	<span class="keyword">type</span> PersonAge <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span></span><br><span class="line">	<span class="keyword">type</span> MessageQueue <span class="keyword">chan</span> <span class="keyword">string</span></span><br><span class="line">	<span class="keyword">type</span> Reader <span class="keyword">interface</span>&#123;Read([]<span class="keyword">byte</span>) <span class="keyword">int</span>&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Type-Alias-Declarations"><a href="#Type-Alias-Declarations" class="headerlink" title="Type Alias Declarations"></a>Type Alias Declarations</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> (</span><br><span class="line">	Name = <span class="keyword">string</span></span><br><span class="line">	Age  = <span class="keyword">int</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> table = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span></span><br><span class="line"><span class="keyword">type</span> Table = <span class="keyword">map</span>[Name]Age</span><br></pre></td></tr></table></figure>
+
+<h3 id="Defined-Types-vs-Non-Defined-Types"><a href="#Defined-Types-vs-Non-Defined-Types" class="headerlink" title="Defined Types vs. Non-Defined Types"></a>Defined Types vs. Non-Defined Types</h3><p>A defined type is a type defined in a type definition.</p>
+<p>All basic types are defined. A non-defined type must be a composite type.</p>
+<p>In the following example. type alias C and type literal []string both represent the same non-defined types, but type A and type alias B both represent the same defined type.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> A []<span class="keyword">string</span></span><br><span class="line"><span class="keyword">type</span> B = A</span><br><span class="line"><span class="keyword">type</span> C = []<span class="keyword">string</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Type A has String method</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a A)</span> <span class="title">String</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="string">"a"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Nope: can not declare method for alias-type</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b B)</span> <span class="title">String</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="string">"b"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Nope: can not declare method for alias-type</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c C)</span> <span class="title">String</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="string">"c"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Go/" rel="tag">#Go</a>
+          
+            <a href="/tags/Type-System/" rel="tag">#Type System</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/01/Go-Mod/" rel="next" title="Go Mod">
+                <i class="fa fa-chevron-left"></i> Go Mod
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/01/Go-Is-the-encoding-json-Package-Really-Slow/" rel="prev" title="Go: Is the encoding/json Package Really Slow?">
+                Go: Is the encoding/json Package Really Slow? <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+
+          <!-- ad start -->
+          <script data-ad-client="ca-pub-7381930582570374" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+          <!-- ad end -->
+
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/beiping96.png"
+               alt="duxingrui" />
+          <p class="site-author-name" itemprop="name">duxingrui</p>
+          <p class="site-description motion-element" itemprop="description">beiping96@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic-Types"><span class="nav-number">1.</span> <span class="nav-text">Basic Types</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Composite-Types"><span class="nav-number">2.</span> <span class="nav-text">Composite Types</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Type-Definitions"><span class="nav-number">3.</span> <span class="nav-text">Type Definitions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Type-Alias-Declarations"><span class="nav-number">4.</span> <span class="nav-text">Type Alias Declarations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Defined-Types-vs-Non-Defined-Types"><span class="nav-number">5.</span> <span class="nav-text">Defined Types vs. Non-Defined Types</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" style="text-align:center">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">Total <span id="busuanzi_value_site_pv"></span> views,</span>
+  <span id="busuanzi_container_page_pv">this page <span id="busuanzi_value_page_pv"></span> hits.</span>
+  <br/>
+  
+  &copy;
+   2016
+   - 
+  
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder"><a href="mailto:beiping96@gmail.com">duxingrui</a></span>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98210842-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'http-blog-beiping96-com';
+      var disqus_identifier = '2018/11/01/Go-Type/';
+      var disqus_title = "Go Type";
+      var disqus_url = 'http://blog.beiping96.com/2018/11/01/Go-Type/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<!--
+  <script type="text/javascript" color="0,0,0" opacity='0.33' zIndex="-1" count="66" src="/js/src/canvas-nest.min.js"></script>
+-->
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+</html>

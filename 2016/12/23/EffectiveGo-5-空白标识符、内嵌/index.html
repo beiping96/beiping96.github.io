@@ -1,0 +1,647 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Go,Effective Go," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/B_favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="Parts of Effective Go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EffectiveGo-5-空白标识符、内嵌">
+<meta property="og:url" content="http://blog.beiping96.com/2016/12/23/EffectiveGo-5-%E7%A9%BA%E7%99%BD%E6%A0%87%E8%AF%86%E7%AC%A6%E3%80%81%E5%86%85%E5%B5%8C/index.html">
+<meta property="og:site_name" content="Beiping96&#39;s Blog">
+<meta property="og:description" content="Parts of Effective Go">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2016-12-22T19:12:39.000Z">
+<meta property="article:modified_time" content="2020-03-06T05:08:09.601Z">
+<meta property="article:author" content="duxingrui">
+<meta property="article:tag" content="Go">
+<meta property="article:tag" content="Effective Go">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://blog.beiping96.com/2016/12/23/EffectiveGo-5-空白标识符、内嵌/"/>
+
+
+  <script data-ad-client="ca-pub-7381930582570374" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <title> EffectiveGo-5-空白标识符、内嵌 | Beiping96's Blog </title>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Beiping96's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                EffectiveGo-5-空白标识符、内嵌
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-12-23T03:12:39+08:00" content="2016-12-23">
+              2016-12-23
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/12/23/EffectiveGo-5-%E7%A9%BA%E7%99%BD%E6%A0%87%E8%AF%86%E7%AC%A6%E3%80%81%E5%86%85%E5%B5%8C/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/12/23/EffectiveGo-5-空白标识符、内嵌/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Parts of <code>Effective Go</code></p>
+<a id="more"></a>
+<h3 id="空白标识符"><a href="#空白标识符" class="headerlink" title="空白标识符"></a>空白标识符</h3><p>空白标识符可以被赋予或声明为任何类型的任何值，其值会被无害的丢弃<br>类似于<code>Unix</code>中的<code>/dev/null</code>，表示只写的值，在需要变量但不需要实际值的地方用作占位符<br>可使用空白标识符来丢弃无关的值</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> _, err := os.Stat(path); os.IsNotExist(err) &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"%s does not exist\n"</span>, path)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 错误的方式</span></span><br><span class="line"><span class="comment">// 使用空白标识符忽略错误而丢弃错误值的代码</span></span><br><span class="line">fi, _ := os.Stat(path)</span><br><span class="line"><span class="keyword">if</span> fi.IsDir() &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"%s is a directory\n"</span>, path)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="未使用的导入和变量"><a href="#未使用的导入和变量" class="headerlink" title="未使用的导入和变量"></a>未使用的导入和变量</h4><p>若导入某个包或声明某个变量而不使用它就会产生错误<br>未使用的包会让程序膨胀并拖慢编译速度<br>已初始化但未使用的变量不仅会浪费计算能力，还可能暗藏更大的Bug<br>在开发过程中，经常会产生未使用的导入和变量<br>空白标识符可以忽略编译报错</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"io"</span></span><br><span class="line">	<span class="string">"log"</span></span><br><span class="line">	<span class="string">"os"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// For debugging; delete when done.</span></span><br><span class="line"><span class="keyword">var</span> _ = fmt.Printf</span><br><span class="line"><span class="keyword">var</span> _ io.Reader</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fd, err := os.Open(<span class="string">"test.go"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> use fd.</span></span><br><span class="line">	_ = fd</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="为副作用而导入"><a href="#为副作用而导入" class="headerlink" title="为副作用而导入"></a>为副作用而导入</h4><p>前例中<code>fmt</code>和<code>io</code>这种未使用的导入总应在最后被使用或者移除<br>但有时导入某个包只是为了其副作用，而没有任何明确的使用<br>例如，在<code>net/http/pprof</code>包的<code>init</code>函数中记录了<code>HTTP</code>处理程序的调试信息，它有个可导出的<code>API</code>，但大部分客户端只需要该处理程序的记录和通过<code>Web</code>页面访问数据<br>只为了其副作用来导入该包，只需将包重命名为空白标识符<br><code>import _ &quot;net/http/pprof&quot;</code><br>这中导入格式能明确表示该包是为其副作用而导入的，没有其它使用该包的可能，在这个源文件中，它没有名字（如果它有名字却没有使用，编译器就会拒绝该程序）</p>
+<h4 id="接口检查"><a href="#接口检查" class="headerlink" title="接口检查"></a>接口检查</h4><p>一个类型无需显式地声明它实现了某些接口<br>该类型只要实现了某个接口的方法，其实就实现了该接口<br>大部分接口转换都是静态的，会在编译时检测<br>例如，将一个<code>*os.File</code>传入一个预期的<code>io.Reader</code>函数将不会被编译，除非<code>*os.File</code>实现了<code>io.Reader</code>接口</p>
+<p>部分接口检查会在运行时进行<br><code>encoding/json</code>包中有一个实例定义了一个<code>Marshaler</code>接口，当<code>JSON</code>编码器接收到一个实现了该接口的值，该编码器就会调用该值的编组方法，将其转换为<code>JSON</code>，而不是进行标准的类型转换<br>编码器在运行是通过类型断言检查其属性<code>m, ok := val.(json.Marshsler)</code><br>若只需要判断某个类型是否实现了某个接口，而不需要实际使用接口本身（可能是错误检查部分），就使用空白标识符来忽略类型断言的值</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> _, ok := val.(json.Marshaler); ok &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"value %v of type %T implements json.Marshaler\n"</span>, val, val)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当明确需要确保某个包中实现的类型一定满足该接口时，例如 <code>类型json.RawMessage</code>需要一种定制的<code>JSON</code>表现时，它应当实现<code>json.Marshaler</code>,不过现在没有静态转换可以让编译器去自动验证它，若该类型通过忽略转换失败来满足该接口，那么<code>JSON</code>编码器仍可工作，但它却不会使用定制的实现，为保证其实现正确，可在该包中用空白标识符声明一个全局变量<br><code>var _ json.Marshaler = (*RawMessage)(nil)</code><br>在此声明中，调用了一个<code>*RawMessage</code>转换并将其赋予了<code>Marshaler</code>，以此来要求<code>*RawMessage</code>实现<code>Marshaler</code>，这时其属性就会在编译时被检测<br>若<code>json.Marshaler</code>接口被更改，此包将无法通过编译，从而提示开发者注意到它需要更新</p>
+<p>在这种结构中出现空白标识符，即表示该声明的存在只是为了类型检查<br>不要为满足接口就将它用于任何类型，作为约定，仅当代码中不存在静态类型转换时才能用这种声明，毕竟这是种罕见的情况</p>
+<h3 id="内嵌"><a href="#内嵌" class="headerlink" title="内嵌"></a>内嵌</h3><p><code>Go</code>并不提供典型的、类型驱动的子类化概念，但通过将类型内嵌到结构体或接口中，它就能“借鉴”部分实现</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// io.Reader</span></span><br><span class="line"><span class="keyword">type</span> Reader <span class="keyword">interface</span> &#123;</span><br><span class="line">	Read(p []<span class="keyword">byte</span>) (n <span class="keyword">int</span>, err error)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// io.Writer</span></span><br><span class="line"><span class="keyword">type</span> Writer <span class="keyword">interface</span> &#123;</span><br><span class="line">	Write(p []<span class="keyword">byte</span>) (n <span class="keyword">int</span>, err error)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// io包也导出了一些其它接口，以此说明对象所需实现的方法</span></span><br><span class="line"><span class="comment">// io.ReadWriter 就是个包含了 Reader接口 和 Writer接口 的接口</span></span><br><span class="line"><span class="keyword">type</span> ReadWriter <span class="keyword">interface</span> &#123;</span><br><span class="line">	Reader</span><br><span class="line">	Writer</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>ReadWriter</code>能够做任何<code>Reader</code>和<code>Writer</code>可以做到的事情，它的内嵌接口的联合体（它们必须是不相交的方法集）<br><strong>只有接口能被嵌入到接口中</strong></p>
+<p>同样的思考方法可以应用在结构体中，但其意义更加深远<br><code>bufio</code>包中有<code>bufio.Reader</code>和<code>bufio.Writer</code>这两个结构体类型，它们每一个都实现了与<code>io</code>包中相同意义的接口<br>此外，<code>bufio</code>还通过结合<code>reader/writer</code>并将其内嵌到结构体中，实现了带缓冲的<code>reader/writer</code></p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ReadWriter 存储了指向 Reader 和 Writer 的指针</span></span><br><span class="line"><span class="keyword">type</span> ReadWriter <span class="keyword">struct</span> &#123;</span><br><span class="line">	*Reader	<span class="comment">// *bufio.Reader</span></span><br><span class="line">	*Writer	<span class="comment">// *bufio.Writer</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 内嵌的元素为指向结构体的指针</span></span><br><span class="line"><span class="comment">// 它们在使用前必须被初始化为指向有效结构体的指针</span></span><br><span class="line"><span class="keyword">type</span> ReadWriter <span class="keyword">struct</span> &#123;</span><br><span class="line">	reader *Reader</span><br><span class="line">	writer *Writer</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为了满足io接口</span></span><br><span class="line"><span class="comment">// 需要提供转发的方式</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(rw *ReadWriter)</span> <span class="title">Read</span><span class="params">(p []<span class="keyword">byte</span>)</span> <span class="params">(n <span class="keyword">int</span>, err error)</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> rw.reader.Read(p)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>内嵌类型的方法可以直接引用<br>这意味着<code>bufio.ReadWriter</code>不仅包括<code>bufio.Reader</code>和<code>bufio.Writer</code>的方法，还同时满足下列三个接口<code>io.Reader io.Writer io.ReadWriter</code></p>
+<p>当内嵌一个类型时，该类型的方法会成为外部类型的方法，但当它们被调用时，该方法的接收者是内部类型，而不是外部类型<br>当<code>bufio.ReadWriter</code>的<code>Read</code>方法被调用时，接收者是<code>ReadWriter</code>的<code>reader</code>字段，而不是<code>ReadWriter</code>本身</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Job <span class="keyword">struct</span> &#123;</span><br><span class="line">	Command <span class="keyword">string</span></span><br><span class="line">	*log.Logger</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Job 类型现在有了 Log  Logf  *log.Logger</span></span><br><span class="line"><span class="comment">// 一旦初始化后，就能记录Job了</span></span><br><span class="line">job.Log(<span class="string">"starting now..."</span>) </span><br><span class="line"><span class="comment">// Logger 是 Job 结构体的常规字段</span></span><br><span class="line"><span class="comment">// 可在 Job 的构造函数中，通过一般方式来初始化</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewJob</span><span class="params">(command <span class="keyword">string</span>, logger *log.Logger)</span> *<span class="title">Job</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;Job&#123;command, logger&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 或者通过复合字段</span></span><br><span class="line">job := &amp;Job&#123;command, log.New(os.Stderr, <span class="string">"Job: "</span>, log.Ldate)&#125;</span><br><span class="line"><span class="comment">// 若要直接引用内嵌字段</span></span><br><span class="line"><span class="comment">// 可以忽略包限定名</span></span><br><span class="line"><span class="comment">// 直接将该字段的类型名作为字段名</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(job *Job)</span> <span class="title">Logf</span><span class="params">(format <span class="keyword">string</span>, args... <span class="keyword">interface</span>)</span></span> &#123;</span><br><span class="line">	job.Logger.Logf(<span class="string">"%q: %s"</span>, job.Command, fmt.Sprintf(format, args...))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>内嵌类型会引入命名冲突的问题<br>字段或方法<code>X</code>会隐藏该类型中更深层嵌套的其它项<code>X</code><br>若<code>log.Logger</code>包含一个名为<code>Command</code>的字段或方法，<code>Job</code>的<code>Command</code>字段会覆盖它<br>若相同的嵌套层级上出现同名冲突，通常会产生一个错误<br>若<code>Job</code>结构体中包含为<code>Logger</code>的字段或方法，再将<code>log.Logger</code>内嵌到其中的话就会产生错误<br>若重名永远不会在该类型定义之外的程序中使用，那就不会出错<br>这种限定能够在外部嵌套类型发生修改时提供保护<br>因此，就算添加的字段与相同嵌套层级上的字段相冲突，只要这两个相同的字段永远不会被使用就没问题</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Go/" rel="tag">#Go</a>
+          
+            <a href="/tags/Effective-Go/" rel="tag">#Effective Go</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/16/EffectiveGo-4-%E6%96%B9%E6%B3%95%E3%80%81%E6%8E%A5%E5%8F%A3%E5%92%8C%E5%85%B6%E5%AE%83%E7%B1%BB%E5%9E%8B/" rel="next" title="EffectiveGo-4-方法、接口和其它类型">
+                <i class="fa fa-chevron-left"></i> EffectiveGo-4-方法、接口和其它类型
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/30/EffectiveGo-6-%E5%B9%B6%E5%8F%91%E3%80%81%E9%94%99%E8%AF%AF/" rel="prev" title="EffectiveGo-6-并发、错误">
+                EffectiveGo-6-并发、错误 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+
+          <!-- ad start -->
+          <script data-ad-client="ca-pub-7381930582570374" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+          <!-- ad end -->
+
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/beiping96.png"
+               alt="duxingrui" />
+          <p class="site-author-name" itemprop="name">duxingrui</p>
+          <p class="site-description motion-element" itemprop="description">beiping96@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#空白标识符"><span class="nav-number">1.</span> <span class="nav-text">空白标识符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#未使用的导入和变量"><span class="nav-number">1.1.</span> <span class="nav-text">未使用的导入和变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为副作用而导入"><span class="nav-number">1.2.</span> <span class="nav-text">为副作用而导入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接口检查"><span class="nav-number">1.3.</span> <span class="nav-text">接口检查</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内嵌"><span class="nav-number">2.</span> <span class="nav-text">内嵌</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" style="text-align:center">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">Total <span id="busuanzi_value_site_pv"></span> views,</span>
+  <span id="busuanzi_container_page_pv">this page <span id="busuanzi_value_page_pv"></span> hits.</span>
+  <br/>
+  
+  &copy;
+   2016
+   - 
+  
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder"><a href="mailto:beiping96@gmail.com">duxingrui</a></span>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98210842-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'http-blog-beiping96-com';
+      var disqus_identifier = '2016/12/23/EffectiveGo-5-空白标识符、内嵌/';
+      var disqus_title = "EffectiveGo-5-空白标识符、内嵌";
+      var disqus_url = 'http://blog.beiping96.com/2016/12/23/EffectiveGo-5-%E7%A9%BA%E7%99%BD%E6%A0%87%E8%AF%86%E7%AC%A6%E3%80%81%E5%86%85%E5%B5%8C/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<!--
+  <script type="text/javascript" color="0,0,0" opacity='0.33' zIndex="-1" count="66" src="/js/src/canvas-nest.min.js"></script>
+-->
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+</html>

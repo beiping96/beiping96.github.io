@@ -1,0 +1,684 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Go,A Tour Of Go," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/B_favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="Parts of A Tour Of Go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang-4-方法和接口">
+<meta property="og:url" content="http://blog.beiping96.com/2016/10/18/Golang-4-%E6%96%B9%E6%B3%95%E5%92%8C%E6%8E%A5%E5%8F%A3/index.html">
+<meta property="og:site_name" content="Beiping96&#39;s Blog">
+<meta property="og:description" content="Parts of A Tour Of Go">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2016-10-18T05:39:41.000Z">
+<meta property="article:modified_time" content="2020-03-06T05:08:09.605Z">
+<meta property="article:author" content="duxingrui">
+<meta property="article:tag" content="Go">
+<meta property="article:tag" content="A Tour Of Go">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://blog.beiping96.com/2016/10/18/Golang-4-方法和接口/"/>
+
+
+  <script data-ad-client="ca-pub-7381930582570374" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <title> Golang-4-方法和接口 | Beiping96's Blog </title>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Beiping96's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Golang-4-方法和接口
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-10-18T13:39:41+08:00" content="2016-10-18">
+              2016-10-18
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/18/Golang-4-%E6%96%B9%E6%B3%95%E5%92%8C%E6%8E%A5%E5%8F%A3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/10/18/Golang-4-方法和接口/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Parts of <code>A Tour Of Go</code></p>
+<a id="more"></a>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p><code>Go</code>没有类。<br><code>Go</code>可以为结构体类型定义方法。<br>方法就是一类带特殊的接收者参数的函数。<br>方法接收者在它自己的参数列表内，位于<code>func</code>关键字和方法名之间。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Vertex <span class="keyword">struct</span> &#123;</span><br><span class="line">	X, Y <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Abs 方法拥有一个名为 v 类型为 Vertex 的接收者</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(v Vertex)</span> <span class="title">Abs</span><span class="params">()</span> <span class="title">float64</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> math.Sqrt(v.X*v.X + v.Y*v.Y)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	v := Vertex&#123;<span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line">	fmt.Println(v.Abs()) <span class="comment">// 5</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="方法即函数"><a href="#方法即函数" class="headerlink" title="方法即函数"></a>方法即函数</h4><p>方法只是个带接收者参数的函数。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Vertex <span class="keyword">struct</span> &#123;</span><br><span class="line">	X, Y <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 这个 Abs 就是个正常的函数</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Abs</span><span class="params">(v Vertex)</span> <span class="title">float64</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> math.Sqrt(v.X*v.X + v.Y*v.Y)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	v := Vertex&#123;<span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line">	fmt.Println(Abs(v)) <span class="comment">// 5</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="为非结构体类型声明方法"><a href="#为非结构体类型声明方法" class="headerlink" title="为非结构体类型声明方法"></a>为非结构体类型声明方法</h4><p>接收者的类型定义和方法声明必须在同一个包内。<br>不能为内建类型声明方法。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MyFloat <span class="keyword">float64</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Abs 方法的接收者类型为 MyFloat</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(f MyFloat)</span> <span class="title">Abs</span><span class="params">()</span> <span class="title">float64</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> f &lt; <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">float64</span>(-f)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">float64</span>(f)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	f := MyFloat(-math.Sqrt2)</span><br><span class="line">	fmt.Println(f.Abs())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="为指针接收者声明方法"><a href="#为指针接收者声明方法" class="headerlink" title="为指针接收者声明方法"></a>为指针接收者声明方法</h4><p>对于某类型<code>T</code>，接收者的类型可以使用<code>*T</code>文法。<br><code>*T</code>不能是像<code>*int</code>这样的指针(不能为内建类型声明方法)。<br>指针接收者的方法可以修改接收者指向的值。<br>由于方法经常需要修改它的接收者，指针接收者比值接收者更常用。<br>若使用值接收者，那么方法会对原始值的副本进行操作。<br>修改原始值的方法要使用指针接收者。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Vertex <span class="keyword">struct</span> &#123;</span><br><span class="line">	X, Y <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Abs 方法 接收者类型为 Vertex</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(v Vertex)</span> <span class="title">Abs</span><span class="params">()</span> <span class="title">float64</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> math.Sqrt(v.X*v.X + v.Y*v.Y)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 为 *Vertex 定义了 Scale 方法</span></span><br><span class="line"><span class="comment">// 以指针为接收者的方法</span></span><br><span class="line"><span class="comment">// Scale 方法 接收者为 指针 *Vertex</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(v *Vertex)</span> <span class="title">Scale</span><span class="params">(f <span class="keyword">float64</span>)</span></span> &#123;</span><br><span class="line">	v.X = v.X * f</span><br><span class="line">	v.Y = v.Y * f</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 初始化 X, Y = 3, 4</span></span><br><span class="line">	v := Vertex&#123;<span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line">	<span class="comment">// 通过方法直接修改了 v.X, v.Y = 30, 40</span></span><br><span class="line">	v.Scale(<span class="number">10</span>)</span><br><span class="line">	<span class="comment">// 输出 math.Sqrt(30 * 30 + 40 * 40)</span></span><br><span class="line">	fmt.Println(v.Abs())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="指针与函数"><a href="#指针与函数" class="headerlink" title="指针与函数"></a>指针与函数</h4><p>以指针作为接收者的方法 可以修改原值；<br>以非指针为接收者的方法 修改的是原值的副本。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Vertex <span class="keyword">struct</span> &#123;</span><br><span class="line">	X, Y <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Abs</span><span class="params">(v Vertex)</span> <span class="title">float64</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> math.Sqrt(v.X*v.X + v.Y*v.Y)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Scale</span><span class="params">(v Vertex, f <span class="keyword">float64</span>)</span></span> &#123;</span><br><span class="line">	v.X = v.X * f</span><br><span class="line">	v.Y = v.Y * f</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 初始化 x, y = 3, 4</span></span><br><span class="line">	v := Vertex&#123;<span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line">	<span class="comment">// 这里只是操作了 v.X 和 v.Y 的副本，实际上 v.X v.Y 并没有被改变</span></span><br><span class="line">	Scale(v, <span class="number">10</span>)</span><br><span class="line">	<span class="comment">// 输出 math.Sqrt(3 * 3 + 4 * 4)</span></span><br><span class="line">	fmt.Println(Abs(v))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="方法与指针重定向"><a href="#方法与指针重定向" class="headerlink" title="方法与指针重定向"></a>方法与指针重定向</h4><p>含有指针参数的函数必须接受一个指针。<br>而以指针为接收者的方法被调用时，接收者既能是值又能是指针。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Vertex <span class="keyword">struct</span> &#123;</span><br><span class="line">	X, Y <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Scale 方法 接收者为指针类型 *Vertex</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(v *Vertex)</span> <span class="title">Scale</span><span class="params">(f <span class="keyword">float64</span>)</span></span> &#123;</span><br><span class="line">	v.X = v.X * f</span><br><span class="line">	v.Y = v.Y * f</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 含有指针参数的 ScaleFunc 函数</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ScaleFunc</span><span class="params">(v *Vertex, f <span class="keyword">float64</span>)</span></span> &#123;</span><br><span class="line">	v.X = v.X * f</span><br><span class="line">	v.Y = v.Y * f</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// v 为值类型</span></span><br><span class="line">	v := Vertex&#123;<span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line">	<span class="comment">// 值调用方法 Go会将 v.Scale(2) 解释成 (&amp;v).Scale(2)</span></span><br><span class="line">	v.Scale(<span class="number">2</span>)</span><br><span class="line">	<span class="comment">// 必须传递指针参数</span></span><br><span class="line">	ScaleFunc(&amp;v, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// p 为指针类型</span></span><br><span class="line">	p := &amp;Vertex&#123;<span class="number">4</span>, <span class="number">3</span>&#125;</span><br><span class="line">	<span class="comment">// 指针调用方法</span></span><br><span class="line">	p.Scale(<span class="number">3</span>)</span><br><span class="line">	<span class="comment">// 以指针为参数调用函数</span></span><br><span class="line">	ScaleFunc(p, <span class="number">8</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// &#123;60 80&#125; &amp;&#123;96 72&#125;</span></span><br><span class="line">	fmt.Println(v, p)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接受一个值作为参数的函数必须接受一个指定类型的值。<br>而以值为接收者的方法被调用时，接收者既能为值又能为指针。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Vertex <span class="keyword">struct</span> &#123;</span><br><span class="line">	X, Y <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(v Vertex)</span> <span class="title">Abs</span><span class="params">()</span> <span class="title">float64</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> math.Sqrt(v.X*v.X + v.Y*v.Y)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 以值为参数的函数</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">AbsFunc</span><span class="params">(v Vertex)</span> <span class="title">float64</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> math.Sqrt(v.X*v.X + v.Y*v.Y)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 值类型</span></span><br><span class="line">	v := Vertex&#123;<span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line">	<span class="comment">// 直接调用方法</span></span><br><span class="line">	fmt.Println(v.Abs())</span><br><span class="line">	<span class="comment">// 直接调用以值类型为参数的函数</span></span><br><span class="line">	fmt.Println(AbsFunc(v))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 指针类型</span></span><br><span class="line">	p := &amp;Vertex&#123;<span class="number">4</span>, <span class="number">3</span>&#125;</span><br><span class="line">	<span class="comment">// 直接调用方法</span></span><br><span class="line">	fmt.Println(p.Abs())</span><br><span class="line">	<span class="comment">// 用值才可以调用以值类型为参数的函数</span></span><br><span class="line">	fmt.Println(AbsFunc(*p))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="选择值或指针作为方法的接收者"><a href="#选择值或指针作为方法的接收者" class="headerlink" title="选择值或指针作为方法的接收者"></a>选择值或指针作为方法的接收者</h4><p>使用指针接收者的原因:</p>
+<ul>
+<li>方法能够修改其接收者指向的值(原值)。</li>
+<li>可以避免每次调用方法时复制该值(若值较大时，可避免额外的内存开销)。</li>
+</ul>
+<p>通常来说，所有给定类型的方法都应该有值或指针接收者，但并不应该二者混用。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 结构体声明 Vertex</span></span><br><span class="line"><span class="keyword">type</span> Vertex <span class="keyword">struct</span> &#123;</span><br><span class="line">	X, Y <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Scale 方法 接收者为指针类型 *Vertex</span></span><br><span class="line"><span class="comment">// 含有一个 float64 参数</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(v *Vertex)</span> <span class="title">Scale</span><span class="params">(f <span class="keyword">float64</span>)</span></span> &#123;</span><br><span class="line">	v.X = v.X * f</span><br><span class="line">	v.Y = v.Y * f</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Abs 方法 接收者为指针类型 *Vertex</span></span><br><span class="line"><span class="comment">// 返回值为一个 float64</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(v *Vertex)</span> <span class="title">Abs</span><span class="params">()</span> <span class="title">float64</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> math.Sqrt(v.X*v.X + v.Y*v.Y)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 声明一个指针 v 指向一个 Vertex 结构体</span></span><br><span class="line">	v := &amp;Vertex&#123;<span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line">	<span class="comment">// Before scaling: &amp;&#123;X:3 Y:4&#125;, Abs: 5</span></span><br><span class="line">	fmt.Printf(<span class="string">"Before scaling: %+v, Abs: %v\n"</span>, v, v.Abs())</span><br><span class="line">	<span class="comment">// 指针类型 v 调用方法，直接修改原值</span></span><br><span class="line">	v.Scale(<span class="number">5</span>)</span><br><span class="line">	<span class="comment">// After scaling: &amp;&#123;X:15 Y:20&#125;, Abs: 25</span></span><br><span class="line">	fmt.Printf(<span class="string">"After scaling: %+v, Abs: %v\n"</span>, v, v.Abs())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h3><p><code>接口类型</code>是由一组方法签名定义的集合。<br>接口类型的值可以是任何实现了这些方法的值。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 接口声明</span></span><br><span class="line"><span class="comment">// 无参 Abs 方法 返回一个 float64</span></span><br><span class="line"><span class="keyword">type</span> Abser <span class="keyword">interface</span> &#123;</span><br><span class="line">	Abs() <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MyFloat <span class="keyword">float64</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Abs 方法 接收者为 MyFloat 类型</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(f MyFloat)</span> <span class="title">Abs</span><span class="params">()</span> <span class="title">float64</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> f &lt; <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">float64</span>(-f)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">float64</span>(f)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Vertex <span class="keyword">struct</span> &#123;</span><br><span class="line">	X, Y <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Abs 方法 接收者为 *Vertex 指针类型</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(v *Vertex)</span> <span class="title">Abs</span><span class="params">()</span> <span class="title">float64</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> math.Sqrt(v.X*v.X + v.Y*v.Y)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a Abser</span><br><span class="line">	f := MyFloat(-math.Sqrt2)</span><br><span class="line">	v := Vertex&#123;<span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// a MyFloat 实现了 Abser</span></span><br><span class="line">	a = f</span><br><span class="line">	<span class="comment">// a *MyFloat 实现了 Abser </span></span><br><span class="line">	<span class="comment">//   *MyFloat 可隐式转换为 MyFloat</span></span><br><span class="line">	a = &amp;f</span><br><span class="line">	<span class="comment">// a *Vertex 实现了 Abser</span></span><br><span class="line">	a = &amp;v</span><br><span class="line">	<span class="comment">// a Vertex 未实现 Abser (报错)</span></span><br><span class="line">	<span class="comment">//   Vertex 不可隐式转换为 *Vertex (不是所有的值都可以取址)</span></span><br><span class="line">	a = v</span><br><span class="line"></span><br><span class="line">	fmt.Println(a.Abs())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="接口与隐式实现"><a href="#接口与隐式实现" class="headerlink" title="接口与隐式实现"></a>接口与隐式实现</h4><p>类型通过实现一个接口的所有方法来实现该接口。<br>隐式接口从接口的实现中解耦了定义，这样的接口可以出现在任何包中，无需提前准备。<br>也就无需在每个实现上增加新的接口名称，同时也鼓励粒度明确的接口定义。</p>
+<h4 id="接口值"><a href="#接口值" class="headerlink" title="接口值"></a>接口值</h4><p>接口值可以看做包含值和具体类型的元组。<br>接口值保存了一个具体底层类型的具体值。<br>接口值调用方法时会执行其底层类型的同名方法。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 接口声明</span></span><br><span class="line"><span class="keyword">type</span> I <span class="keyword">interface</span> &#123;</span><br><span class="line">	<span class="comment">// 无参 M 方法</span></span><br><span class="line">	M()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> T <span class="keyword">struct</span> &#123;</span><br><span class="line">	S <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// *T 类型的 M 方法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(t *T)</span> <span class="title">M</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(t.S)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> F <span class="keyword">float64</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// F 类型的 M 方法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(f F)</span> <span class="title">M</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(f)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 接口实现</span></span><br><span class="line">	<span class="keyword">var</span> i I</span><br><span class="line"></span><br><span class="line">	<span class="comment">// *T 类型实现了 M</span></span><br><span class="line">	i = &amp;T&#123;<span class="string">"Hello"</span>&#125;</span><br><span class="line">	<span class="comment">// 指针类型 =&gt; main包T类型</span></span><br><span class="line">	<span class="comment">// (&amp;&#123;Hello&#125;, *main.T)</span></span><br><span class="line">	describe(i)</span><br><span class="line">	<span class="comment">// 调用 *T类型的M方法</span></span><br><span class="line">	<span class="comment">// Hello</span></span><br><span class="line">	i.M()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// F 类型实现了 M</span></span><br><span class="line">	i = F(math.Pi)</span><br><span class="line">	<span class="comment">// main包F类型</span></span><br><span class="line">	<span class="comment">// (3.141592653589793, main.F)</span></span><br><span class="line">	describe(i)</span><br><span class="line">	<span class="comment">// 调用 F类型的M方法</span></span><br><span class="line">	<span class="comment">// 3.141592653589793</span></span><br><span class="line">	i.M()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">describe</span><span class="params">(i I)</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"(%v, %T)\n"</span>, i, i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="底层值为nil的接口值"><a href="#底层值为nil的接口值" class="headerlink" title="底层值为nil的接口值"></a>底层值为<code>nil</code>的接口值</h4><p>即便接口内的具体值为<code>nil</code>，方法仍然会被<code>nil</code>接收者调用。<br>在一些语言中，这会触发一个空指针异常，<code>Go</code>中通常会写一些方法来优雅的处理它。<br>注意：保存了<code>nil</code>具体值的接口其自身并不为<code>nil</code></p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> I <span class="keyword">interface</span> &#123;</span><br><span class="line">	M()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> T <span class="keyword">struct</span> &#123;</span><br><span class="line">	S <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(t *T)</span> <span class="title">M</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> t == <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"&lt;nil&gt;"</span>)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(t.S)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> i I</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> t *T</span><br><span class="line">	<span class="comment">// 保存了nil具体值的接口</span></span><br><span class="line">	i = t</span><br><span class="line">	<span class="comment">// (&lt;nil&gt;, *main.T)</span></span><br><span class="line">	describe(i)</span><br><span class="line">	<span class="comment">// &lt;nil&gt;</span></span><br><span class="line">	i.M()</span><br><span class="line"></span><br><span class="line">	i = &amp;T&#123;<span class="string">"Hello"</span>&#125;</span><br><span class="line">	<span class="comment">// (&amp;&#123;Hello&#125;, *main.T)</span></span><br><span class="line">	describe(i)</span><br><span class="line">	<span class="comment">// Hello</span></span><br><span class="line">	i.M()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">describe</span><span class="params">(i I)</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"(%v, %T)\n"</span>, i, i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="nil接口值"><a href="#nil接口值" class="headerlink" title="nil接口值"></a><code>nil</code>接口值</h4><p><code>nil</code>接口值既不保存值也不保存具体的类型。<br>为<code>nil</code>接口调用方法会产生运行时错误，因为接口的元组内并未包含能够指明该调用哪个具体方法的类型。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// build通过，run报错</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> I <span class="keyword">interface</span> &#123;</span><br><span class="line">	M()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> i I</span><br><span class="line">	<span class="comment">// (&lt;nil&gt;, &lt;nil&gt;)</span></span><br><span class="line">	describe(i)</span><br><span class="line">	<span class="comment">// panic: runtime error: invalid memory address or nil pointer dereference</span></span><br><span class="line">	i.M()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">describe</span><span class="params">(i I)</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"(%v, %T)\n"</span>, i, i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="空接口"><a href="#空接口" class="headerlink" title="空接口"></a>空接口</h4><p>指定了零个方法的接口值被称为空接口:<code>interface{}</code>。<br>空接口可保存任何类型的值。(因为每个类型都至少实现了零个方法)<br>空接口被用来处理未知类型的值。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> i <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">	<span class="comment">// (&lt;nil&gt;, &lt;nil&gt;)</span></span><br><span class="line">	describe(i)</span><br><span class="line"></span><br><span class="line">	i = <span class="number">18</span></span><br><span class="line">	<span class="comment">// (18, int)</span></span><br><span class="line">	describe(i)</span><br><span class="line"></span><br><span class="line">	i = <span class="string">"Hello"</span></span><br><span class="line">	<span class="comment">// (Hell0, string)</span></span><br><span class="line">	describe(i)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">describe</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"(%v, %T)\n"</span>, i, i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="类型断言"><a href="#类型断言" class="headerlink" title="类型断言"></a>类型断言</h4><p><code>类型断言</code>提供了访问接口值底层具体值的方式。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> i <span class="keyword">interface</span>&#123;&#125; = <span class="string">"Hello"</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 该语句断言接口值 i 保存了具体类型 string</span></span><br><span class="line">	<span class="comment">// 并将其底层类型为 string 的值赋予变量 s</span></span><br><span class="line">	s := i.(<span class="keyword">string</span>)</span><br><span class="line">	<span class="comment">// Hello</span></span><br><span class="line">	fmt.Println(s)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 为了判断一个接口值是否保存了一个特定的类型</span></span><br><span class="line">	<span class="comment">// 类型断言可以返回两个值</span></span><br><span class="line">	<span class="comment">// 其底层值以及一个报告断言是否成功的布尔值</span></span><br><span class="line">	<span class="comment">// 这种语法与读取一个映射时有相同之处</span></span><br><span class="line">	s, ok := i.(<span class="keyword">string</span>)</span><br><span class="line">	<span class="comment">// Hello true</span></span><br><span class="line">	fmt.Println(s, ok)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// i 未保存 float64 类型的值</span></span><br><span class="line">	<span class="comment">// f 是 float64 类型的零值</span></span><br><span class="line">	<span class="comment">// ok 是 false</span></span><br><span class="line">	f, ok := i.(<span class="keyword">float64</span>)</span><br><span class="line">	<span class="comment">// 0 false</span></span><br><span class="line">	fmt.Println(f, ok)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// i 未保存 float64 类型的值 报错</span></span><br><span class="line">	<span class="comment">// panic: interface conversion: interface &#123;&#125; is string, not float64</span></span><br><span class="line">	f = i.(<span class="keyword">float64</span>)</span><br><span class="line">	fmt.Println(f)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="类型选择"><a href="#类型选择" class="headerlink" title="类型选择"></a>类型选择</h4><p><code>类型选择</code>是一种顺序从几个类型断言中选择分支的结构。<br>类型选择与一般的<code>switch</code>语句相似，不过类型选择中的<code>case</code>为为类型(而非值)，它们针对给定接口值所存储的值的类型进行比较。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">do</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 类型选择中的声明与类型断言 i.(T) 的语法相同</span></span><br><span class="line">	<span class="comment">// 只是具体类型 T 被替换成了关键字 type</span></span><br><span class="line">	<span class="keyword">switch</span> v := i.(<span class="keyword">type</span>) &#123;</span><br><span class="line">	<span class="comment">// v 的类型为 int</span></span><br><span class="line">	<span class="keyword">case</span> <span class="keyword">int</span>:</span><br><span class="line">		fmt.Printf(<span class="string">"Twice %v is %v\n"</span>, v, v*<span class="number">2</span>)</span><br><span class="line">	<span class="comment">// v 的类型为 string</span></span><br><span class="line">	<span class="keyword">case</span> <span class="keyword">string</span>:</span><br><span class="line">		fmt.Printf(<span class="string">"%q is %v bytes long\n"</span>, v, <span class="built_in">len</span>(v))</span><br><span class="line">	<span class="comment">// 没有匹配！！！</span></span><br><span class="line">	<span class="comment">// v 的类型与 i 的类型相同</span></span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		fmt.Printf(<span class="string">"I don't know about type %T!\n"</span>, v)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// Twice 19 is 38</span></span><br><span class="line">	do(<span class="number">19</span>)</span><br><span class="line">	<span class="comment">// "Hello" is 5 bytes long</span></span><br><span class="line">	do(<span class="string">"Hello"</span>)</span><br><span class="line">	<span class="comment">// I don't know about type bool!</span></span><br><span class="line">	do(<span class="literal">true</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Stringer"><a href="#Stringer" class="headerlink" title="Stringer"></a><code>Stringer</code></h3><p><code>fmt</code>包中定义的<code>Stringer</code>是最普遍的接口之一。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Stringer <span class="keyword">interface</span> &#123;</span><br><span class="line">	String() <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>Stringer</code>是一个可以用字符串描述自己的类型。<br><code>fmt</code>包(还有很多包)都通过此接口来打印值。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Person <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age  <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p Person)</span> <span class="title">String</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> fmt.Sprintf(<span class="string">"%v (%v years)"</span>, p.Name, p.Age)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := Person&#123;<span class="string">"SB_NO1"</span>, <span class="number">18</span>&#125;</span><br><span class="line">	b := Person&#123;<span class="string">"SB_NO2"</span>, <span class="number">17</span>&#125;</span><br><span class="line">	<span class="comment">// SB_NO1 (18 years) SB_NO2 (17 years)</span></span><br><span class="line">	fmt.Println(a, b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="练习-Stringer"><a href="#练习-Stringer" class="headerlink" title="练习: Stringer"></a>练习: <code>Stringer</code></h4><p>通过让<code>IPAddr</code>类型实现<code>fmt.Stringer</code>来打印点号分隔地址。<br>例如，<code>IPAddr{127, 0, 0, 1}</code>应当打印为<code>127.0.0.1</code>。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> IPAddr [<span class="number">4</span>]<span class="keyword">byte</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// <span class="doctag">TODO:</span> Add a "String() string" method to IPAddr.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a IPAddr)</span> <span class="title">String</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> fmt.Sprintf(<span class="string">"%v.%v.%v.%v"</span>, a[<span class="number">0</span>], a[<span class="number">1</span>], a[<span class="number">2</span>], a[<span class="number">3</span>])</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	hosts := <span class="keyword">map</span>[<span class="keyword">string</span>]IPAddr&#123;</span><br><span class="line">		<span class="string">"localhost"</span>: &#123;<span class="number">127</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>&#125;,</span><br><span class="line">		<span class="string">"googleDNS"</span>: &#123;<span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>&#125;,</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> name, ip := <span class="keyword">range</span> hosts &#123;</span><br><span class="line">		fmt.Printf(<span class="string">"%v: %v\n"</span>, name, ip)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="错误"><a href="#错误" class="headerlink" title="错误"></a>错误</h3><p><code>Go</code>使用<code>error</code>值来表示错误状态。<br>与<code>fmt.Stringer</code>类似，<code>error</code>类型是一个内建接口。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> error <span class="keyword">interface</span> &#123;</span><br><span class="line">	Error() <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与<code>fmt.Stringer</code>类型，<code>fmt</code>包在打印值时也会满足<code>error</code>。<br>通常函数会返回一个<code>error</code>值，调用该函数的代码应当判断这个错误是否等于<code>nil</code>来进行错误处理。<br><code>error</code>等于<code>nil</code>时表示成功，非<code>nil</code>的<code>error</code>表示失败。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MyError <span class="keyword">struct</span> &#123;</span><br><span class="line">	When time.Time</span><br><span class="line">	What <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e *MyError)</span> <span class="title">Error</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> fmt.Sprintf(<span class="string">"at %v, %s"</span>, e.When, e.What)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">run</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;MyError&#123;</span><br><span class="line">		time.Now(),</span><br><span class="line">		<span class="string">"it didn't work"</span>,</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> err := run(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="comment">// at 2016-10-18 11:30:14.002074 +0800 DST, it didn't work</span></span><br><span class="line">		fmt.Println(err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="练习-错误"><a href="#练习-错误" class="headerlink" title="练习: 错误"></a>练习: 错误</h4><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> ErrNegativeSqrt <span class="keyword">struct</span> &#123;</span><br><span class="line">	Num <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e ErrNegativeSqrt)</span> <span class="title">Error</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> fmt.Sprintf(<span class="string">"cannot Sqrt negative number: %v\n"</span>, e.Num)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Sqrt</span><span class="params">(x <span class="keyword">float64</span>)</span> <span class="params">(<span class="keyword">float64</span>, error)</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> x &lt; <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>, &amp;ErrNegativeSqrt&#123;x&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">var</span> temp <span class="keyword">float64</span> = <span class="number">10</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		temp = (temp + x/temp) / <span class="number">2</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> temp, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 1.414213562373095 &lt;nil&gt;</span></span><br><span class="line">	fmt.Println(Sqrt(<span class="number">2</span>))</span><br><span class="line">	<span class="comment">// 0 cannot Sqrt negative number: -2</span></span><br><span class="line">	fmt.Println(Sqrt(<span class="number">-2</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Reader"><a href="#Reader" class="headerlink" title="Reader"></a><code>Reader</code></h3><p><code>io</code>包指定了<code>io.Reader</code>接口，它表示从数据流的末尾进行读取。<br><code>Go</code>标准库包含了该接口的许多实现，包括文件、网络连接、压缩和加密等等。<br><code>io.Reader</code>接口有一个<code>Read</code>方法:</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(T)</span> <span class="title">Read</span><span class="params">(b []<span class="keyword">byte</span>)</span> <span class="params">(n <span class="keyword">int</span>, err error)</span></span></span><br></pre></td></tr></table></figure>
+<p><code>Read</code>用数据填充给定的字节切片并返回填充的字节数和错误值。<br>在遇到数据流的结尾时，它会返回一个<code>io.EOF</code>错误。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 示例代码创建了一个 strings.Reader</span></span><br><span class="line"><span class="comment">// 并以每次 8 字节的速度读取它的输出</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"io"</span></span><br><span class="line">	<span class="string">"strings"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// n = 8 err = &lt;nil&gt; b = [72 101 108 108 111 44 32 82]</span></span><br><span class="line"><span class="comment">// b[:n] = "Hello, R"</span></span><br><span class="line"><span class="comment">// n = 6 err = &lt;nil&gt; b = [101 97 100 101 114 33 32 82]</span></span><br><span class="line"><span class="comment">// b[:n] = "eader!"</span></span><br><span class="line"><span class="comment">// n = 0 err = EOF b = [101 97 100 101 114 33 32 82]</span></span><br><span class="line"><span class="comment">// b[:n] = ""</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	r := strings.NewReader(<span class="string">"Hello, Reader!"</span>)</span><br><span class="line"></span><br><span class="line">	b := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="number">8</span>)</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		n, err := r.Read(b)</span><br><span class="line">		fmt.Printf(<span class="string">"n = %v err = %v b = %v\n"</span>, n, err, b)</span><br><span class="line">		fmt.Printf(<span class="string">"b[:n] = %q\n"</span>, b[:n])</span><br><span class="line">		<span class="keyword">if</span> err == io.EOF &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="练习-Reader"><a href="#练习-Reader" class="headerlink" title="练习: Reader"></a>练习: <code>Reader</code></h4><p>实现一个<code>Reader</code>类型，它产生一个<code>ASCII</code>字符<code>A</code>的无限流。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"github.com/Go-zh/tour/reader"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MyReader <span class="keyword">struct</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Add a Read([]byte) (int, error) method to MyReader.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r MyReader)</span> <span class="title">Read</span><span class="params">(b []<span class="keyword">byte</span>)</span> <span class="params">(n <span class="keyword">int</span>, err error)</span></span> &#123;</span><br><span class="line">	b[<span class="number">0</span>] = <span class="string">'A'</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">1</span>, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	reader.Validate(MyReader&#123;&#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Source</span></span><br><span class="line"><span class="comment">// func Validate(r io.Reader) &#123;</span></span><br><span class="line"><span class="comment">// 	b := make([]byte, 1024, 2048)</span></span><br><span class="line"><span class="comment">// 	i, o := 0, 0</span></span><br><span class="line"><span class="comment">// 	for ; i &lt; 1&lt;&lt;20 &amp;&amp; o &lt; 1&lt;&lt;20; i++ &#123; // test 1mb</span></span><br><span class="line"><span class="comment">// 		n, err := r.Read(b)</span></span><br><span class="line"><span class="comment">// 		for i, v := range b[:n] &#123;</span></span><br><span class="line"><span class="comment">// 			if v != 'A' &#123;</span></span><br><span class="line"><span class="comment">// 				fmt.Fprintf(os.Stderr, "got byte %x at offset %v, want 'A'\n", v, o+i)</span></span><br><span class="line"><span class="comment">// 				return</span></span><br><span class="line"><span class="comment">// 			&#125;</span></span><br><span class="line"><span class="comment">// 		&#125;</span></span><br><span class="line"><span class="comment">// 		o += n</span></span><br><span class="line"><span class="comment">// 		if err != nil &#123;</span></span><br><span class="line"><span class="comment">// 			fmt.Fprintf(os.Stderr, "read error: %v\n", err)</span></span><br><span class="line"><span class="comment">// 			return</span></span><br><span class="line"><span class="comment">// 		&#125;</span></span><br><span class="line"><span class="comment">// 	&#125;</span></span><br><span class="line"><span class="comment">// 	if o == 0 &#123;</span></span><br><span class="line"><span class="comment">// 		fmt.Fprintf(os.Stderr, "read zero bytes after %d Read calls\n", i)</span></span><br><span class="line"><span class="comment">// 		return</span></span><br><span class="line"><span class="comment">// 	&#125;</span></span><br><span class="line"><span class="comment">// 	fmt.Println("OK!")</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br></pre></td></tr></table></figure>
+<h4 id="练习-rot13Reader"><a href="#练习-rot13Reader" class="headerlink" title="练习: rot13Reader"></a>练习: <code>rot13Reader</code></h4><p>有种常见的模式是一个<code>io.Reader</code>包装另一个<code>io.Reader</code>，然后通过某种方式修改其数据流。<br>例如，<code>gzip.NewReader</code>函数接受一个<code>io.Reader</code>(已压缩的数据流)并返回一个同样实现了<code>io.Reader</code>的<code>*gzip.Reader</code>(解压后的数据流)。<br>编写一个实现了<code>io.Reader</code>并从另一个<code>io.Reader</code>中读取数据的<code>rot13Reader</code>，通过应用<code>rot13</code>代换密码对数据流进行修改。<br><code>rot13Reader</code>类型已经提供。<br>实现<code>Read</code>方法以满足<code>io.Reader</code>。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"io"</span></span><br><span class="line">	<span class="string">"os"</span></span><br><span class="line">	<span class="string">"strings"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> rot13Reader <span class="keyword">struct</span> &#123;</span><br><span class="line">	r io.Reader</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(rot *rot13Reader)</span> <span class="title">Read</span><span class="params">(b []<span class="keyword">byte</span>)</span> <span class="params">(n <span class="keyword">int</span>, err error)</span></span> &#123;</span><br><span class="line">	n, err = rot.r.Read(b)</span><br><span class="line">	<span class="comment">// ROT-13 回转13位</span></span><br><span class="line">	<span class="comment">// 一种简单的加密解密方式</span></span><br><span class="line">	<span class="comment">// a-m 一一对应 n-z</span></span><br><span class="line">	<span class="comment">// n-z 一一对应 a-m</span></span><br><span class="line">	<span class="comment">// 加密和解密使用同一种方式</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(b); i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> (b[i] &gt;= <span class="string">'A'</span> &amp;&amp; b[i] &lt;= <span class="string">'M'</span>) || (b[i] &gt;= <span class="string">'a'</span> &amp;&amp; b[i] &lt;= <span class="string">'m'</span>) &#123;</span><br><span class="line">			b[i] += <span class="number">13</span></span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (b[i] &gt;= <span class="string">'N'</span> &amp;&amp; b[i] &lt;= <span class="string">'Z'</span>) || (b[i] &gt;= <span class="string">'n'</span> &amp;&amp; b[i] &lt;= <span class="string">'z'</span>) &#123;</span><br><span class="line">			b[i] -= <span class="number">13</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s := strings.NewReader(<span class="string">"Lbh penpxrq gur pbqr!"</span>)</span><br><span class="line">	r := rot13Reader&#123;s&#125;</span><br><span class="line">	<span class="comment">// You cracked the code!</span></span><br><span class="line">	io.Copy(os.Stdout, &amp;r)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="图像"><a href="#图像" class="headerlink" title="图像"></a>图像</h3><p><code>image</code>包定义了<code>Image</code>接口:</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> image</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Image <span class="keyword">interface</span> &#123;</span><br><span class="line">	ColorModel() color.Model</span><br><span class="line">	Bounds() Rectangle</span><br><span class="line">	At(x, y <span class="keyword">int</span>) color.Color</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意: <code>Bounds</code>方法的返回值<code>Rectangle</code>实际上是一个<code>image.Rectangle</code>，它在<code>image</code>包中声明。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"image"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	m := image.NewRGBA(image.Rect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>, <span class="number">100</span>))</span><br><span class="line">	<span class="comment">// (0,0)-(100,100)</span></span><br><span class="line">	fmt.Println(m.Bounds())</span><br><span class="line">	<span class="comment">// 0 0 0 0</span></span><br><span class="line">	fmt.Println(m.At(<span class="number">0</span>, <span class="number">0</span>).RGBA())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="练习-图像"><a href="#练习-图像" class="headerlink" title="练习: 图像"></a>练习: 图像</h4><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"golang.org/x/tour/pic"</span></span><br><span class="line">	<span class="string">"image"</span></span><br><span class="line">	<span class="string">"image/color"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Image <span class="keyword">struct</span> &#123;</span><br><span class="line">	Width, Height <span class="keyword">int</span></span><br><span class="line">	color         <span class="keyword">uint8</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(i *Image)</span> <span class="title">Bounds</span><span class="params">()</span> <span class="title">image</span>.<span class="title">Rectangle</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> image.Rect(<span class="number">0</span>, <span class="number">0</span>, i.Width, i.Height)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(i *Image)</span> <span class="title">ColorModel</span><span class="params">()</span> <span class="title">color</span>.<span class="title">Model</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> color.RGBAModel</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(i *Image)</span> <span class="title">At</span><span class="params">(x, y <span class="keyword">int</span>)</span> <span class="title">color</span>.<span class="title">Color</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> color.RGBA&#123;i.color + <span class="keyword">uint8</span>(x), i.color + <span class="keyword">uint8</span>(y), <span class="number">255</span>, <span class="number">255</span>&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	m := Image&#123;<span class="number">100</span>, <span class="number">100</span>, <span class="number">128</span>&#125;</span><br><span class="line">	pic.ShowImage(&amp;m)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Go/" rel="tag">#Go</a>
+          
+            <a href="/tags/A-Tour-Of-Go/" rel="tag">#A Tour Of Go</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/11/Golang-3-struct%E3%80%81slice%E3%80%81%E6%98%A0%E5%B0%84/" rel="next" title="Golang-3-struct、slice、映射">
+                <i class="fa fa-chevron-left"></i> Golang-3-struct、slice、映射
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/19/Count-Primes/" rel="prev" title="Count Primes">
+                Count Primes <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+
+          <!-- ad start -->
+          <script data-ad-client="ca-pub-7381930582570374" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+          <!-- ad end -->
+
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/beiping96.png"
+               alt="duxingrui" />
+          <p class="site-author-name" itemprop="name">duxingrui</p>
+          <p class="site-description motion-element" itemprop="description">beiping96@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法"><span class="nav-number">1.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方法即函数"><span class="nav-number">1.1.</span> <span class="nav-text">方法即函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为非结构体类型声明方法"><span class="nav-number">1.2.</span> <span class="nav-text">为非结构体类型声明方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为指针接收者声明方法"><span class="nav-number">1.3.</span> <span class="nav-text">为指针接收者声明方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指针与函数"><span class="nav-number">1.4.</span> <span class="nav-text">指针与函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法与指针重定向"><span class="nav-number">1.5.</span> <span class="nav-text">方法与指针重定向</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#选择值或指针作为方法的接收者"><span class="nav-number">1.6.</span> <span class="nav-text">选择值或指针作为方法的接收者</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接口"><span class="nav-number">2.</span> <span class="nav-text">接口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#接口与隐式实现"><span class="nav-number">2.1.</span> <span class="nav-text">接口与隐式实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接口值"><span class="nav-number">2.2.</span> <span class="nav-text">接口值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#底层值为nil的接口值"><span class="nav-number">2.3.</span> <span class="nav-text">底层值为nil的接口值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nil接口值"><span class="nav-number">2.4.</span> <span class="nav-text">nil接口值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#空接口"><span class="nav-number">2.5.</span> <span class="nav-text">空接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类型断言"><span class="nav-number">2.6.</span> <span class="nav-text">类型断言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类型选择"><span class="nav-number">2.7.</span> <span class="nav-text">类型选择</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stringer"><span class="nav-number">3.</span> <span class="nav-text">Stringer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#练习-Stringer"><span class="nav-number">3.1.</span> <span class="nav-text">练习: Stringer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误"><span class="nav-number">4.</span> <span class="nav-text">错误</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#练习-错误"><span class="nav-number">4.1.</span> <span class="nav-text">练习: 错误</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reader"><span class="nav-number">5.</span> <span class="nav-text">Reader</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#练习-Reader"><span class="nav-number">5.1.</span> <span class="nav-text">练习: Reader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#练习-rot13Reader"><span class="nav-number">5.2.</span> <span class="nav-text">练习: rot13Reader</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图像"><span class="nav-number">6.</span> <span class="nav-text">图像</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#练习-图像"><span class="nav-number">6.1.</span> <span class="nav-text">练习: 图像</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" style="text-align:center">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_pv">Total <span id="busuanzi_value_site_pv"></span> views,</span>
+  <span id="busuanzi_container_page_pv">this page <span id="busuanzi_value_page_pv"></span> hits.</span>
+  <br/>
+  
+  &copy;
+   2016
+   - 
+  
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love"><i class="fa fa-heart"></i></span>
+  <span class="author" itemprop="copyrightHolder"><a href="mailto:beiping96@gmail.com">duxingrui</a></span>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98210842-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'http-blog-beiping96-com';
+      var disqus_identifier = '2016/10/18/Golang-4-方法和接口/';
+      var disqus_title = "Golang-4-方法和接口";
+      var disqus_url = 'http://blog.beiping96.com/2016/10/18/Golang-4-%E6%96%B9%E6%B3%95%E5%92%8C%E6%8E%A5%E5%8F%A3/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<!--
+  <script type="text/javascript" color="0,0,0" opacity='0.33' zIndex="-1" count="66" src="/js/src/canvas-nest.min.js"></script>
+-->
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+</html>
