@@ -128,15 +128,6 @@
   </url>
   
   <url>
-    <loc>http://blog.beiping96.com/2018/05/01/Linux-umask/</loc>
-    
-    <lastmod>2020-03-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://blog.beiping96.com/2016/09/18/LF%EF%BC%8CCR%EF%BC%8CCRLF%E6%8D%A2%E8%A1%8C%E7%AC%A6%E6%AF%94%E8%BE%83/</loc>
     
     <lastmod>2020-03-06</lastmod>
@@ -146,7 +137,7 @@
   </url>
   
   <url>
-    <loc>http://blog.beiping96.com/2016/10/20/Golang-5-%E5%B9%B6%E5%8F%91/</loc>
+    <loc>http://blog.beiping96.com/2018/05/01/Linux-umask/</loc>
     
     <lastmod>2020-03-06</lastmod>
     
@@ -156,6 +147,15 @@
   
   <url>
     <loc>http://blog.beiping96.com/2016/10/18/Golang-4-%E6%96%B9%E6%B3%95%E5%92%8C%E6%8E%A5%E5%8F%A3/</loc>
+    
+    <lastmod>2020-03-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.beiping96.com/2016/10/20/Golang-5-%E5%B9%B6%E5%8F%91/</loc>
     
     <lastmod>2020-03-06</lastmod>
     
@@ -344,7 +344,7 @@
   </url>
   
   <url>
-    <loc>http://blog.beiping96.com/2017/03/03/Erlang-Dialyzer/</loc>
+    <loc>http://blog.beiping96.com/2017/02/17/Erlang-EDoc/</loc>
     
     <lastmod>2020-03-06</lastmod>
     
@@ -353,7 +353,7 @@
   </url>
   
   <url>
-    <loc>http://blog.beiping96.com/2017/02/17/Erlang-EDoc/</loc>
+    <loc>http://blog.beiping96.com/2017/03/03/Erlang-Dialyzer/</loc>
     
     <lastmod>2020-03-06</lastmod>
     
@@ -436,7 +436,7 @@
 
   <url>
     <loc>http://blog.beiping96.com/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -444,217 +444,217 @@
   
   <url>
     <loc>http://blog.beiping96.com/tags/Cache/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Algorithm/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/System-Design/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Go/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Runtime/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/GopherCon-2019/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Performance/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/ID-Generator/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Distributed-System/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Effective-Go/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Erlang/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Json/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/GCTT/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Type-System/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/A-Tour-Of-Go/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/HelloWorld/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/OS/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/I-O/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Internet-Protocol-Suite/</loc>
-    <lastmod>2023-06-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://blog.beiping96.com/tags/File-s-Permissions/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/File-Format/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.beiping96.com/tags/File-s-Permissions/</loc>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Redis/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Regular-Expression/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Shell-Script/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Encoding/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Counter/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Web/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/DNS/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/GFW/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Compiler/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://blog.beiping96.com/tags/Python/</loc>
-    <lastmod>2023-06-05</lastmod>
+    <lastmod>2023-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
