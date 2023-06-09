@@ -84,15 +84,15 @@
 
 
 
-<meta name="description" content="无法避免的复杂性">
+<meta name="description" content="直面无法避免的复杂性">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Complexity Has to Live Somewhere">
 <meta property="og:url" content="http://blog.beiping96.com/2022/05/01/Complexity-Has-to-Live-Somewhere/index.html">
 <meta property="og:site_name" content="Softly, softly,">
-<meta property="og:description" content="无法避免的复杂性">
+<meta property="og:description" content="直面无法避免的复杂性">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-05-01T07:51:51.000Z">
-<meta property="article:modified_time" content="2022-04-28T02:38:32.466Z">
+<meta property="article:modified_time" content="2023-06-09T09:59:44.483Z">
 <meta property="article:author" content="Du Xingrui">
 <meta property="article:tag" content="System Design">
 <meta name="twitter:card" content="summary">
@@ -287,24 +287,42 @@
       
 
       
-        <p>无法避免的复杂性</p>
+        <p>直面无法避免的复杂性</p>
 <a id="more"></a>
 <p><a href="https://ferd.ca/complexity-has-to-live-somewhere.html" target="_blank" rel="noopener">https://ferd.ca/complexity-has-to-live-somewhere.html</a></p>
 <p>Fighting complexity is a recurring theme of software development I’ve seen repeat itself over and over again. It’s something I keep seeing debated at all levels: just how much commenting should go on in functions and methods? What’s the ideal amount of abstraction? When does a framework start having “too much magic”? When are there too many languages in an organization?</p>
+<p>在软件开发过程中，我们曾一次又一次的经历关于降低复杂的讨论。我们曾尝试通过多个角度、多个纬度来降低复杂，包括：函数/方法该有多少注释？最理想的抽象程度？有多少特性的框架被称为“玩得太花”？一个项目该使用多少种编程语言？</p>
 <p>We try to get rid of the complexity, control it, and seek simplicity. I think framing things that way is misguided. Complexity has to live somewhere.</p>
+<p>我们尝试驱赶复杂，控制复杂，降低复杂。我想现在是时候认清真相了，复杂无法避免。</p>
 <p>One thing Resilience Engineering has taught me is the concept of Requisite Variety from cybernetics: only complexity can handle complexity.</p>
+<p>控制论曾教过：只有复杂才能打败复杂。</p>
 <p>When dealing with build tools, a few things become apparent:</p>
+<p>当我在构建<a href="https://github.com/erlang/rebar3" target="_blank" rel="noopener">Rebar3</a>项目时，有些想法浮出水面：</p>
 <p>if you make the build tool simple, it won’t handle all the weird edge cases that exist out there<br>if you want to handle the weird edge cases, you need to deviate from whatever norm you wanted to establish<br>if you want ease of use for common defaults, the rules for common defaults must be shared between the tool and the users, who shape their systems to fit the tool’s expectations<br>if you allow configuration or scripting, you give the users a way to specify the rules that must be shared, so the tool fits their systems<br>if you want to keep the tool simple, you have to force your users to only play within the parameters that fit this simplicity<br>if your users’ use cases don’t map well to your simplicity, they will build shims around your tool to attain their objectives<br>This cannot be avoided. Complexity has to live somewhere. It’s always a part of people solving problems, whether you realize it or not.</p>
+<p>如果你把项目做得很简洁，它就不能处理所有奇怪的边缘场景；<br>如果你想让它能处理所有的边缘场景，你就不能墨守简洁的规范；</p>
+<p>如果你想让用户可以自由配置，那用户必须学习配置的规则，让工具去适配用户的需求；<br>如果你要想默认的配置就很好用，那你必须告知用户默认配置中的一些条件/限制，要求用户去适配这些条件/限制；</p>
+<p>如果你想让项目易上手，你就得建立一个简单的“游乐场”，并把用户困在这个“游乐场”里；<br>如果你的“游乐场”不能满足用户的需求，他们就会去打各种“补丁”，以拓展项目的能力；</p>
+<p>复杂根本无法避免，它从始至终都存在。只是有些人意识到了，有些人没有意识到而已。</p>
 <p>Unfortunately, if we make it to the last point of the list (we always do in some way), the shims become part of the landscape. Complexity doesn’t lay dormant. It is part of everyone’s learning experience, and they adapt to it.</p>
+<p>“补丁”是永远都打不完的，复杂永远也不会被消灭。学会适应它将是每个人成长的必经之路。</p>
 <p>They work around it, see the mismatch between two clashing concepts. That necessary complexity may move around—back into the tool (or a new tool)—or be removed by re-structuring things. Each such change requires an effort and more adjustments, and for people to see the complexity, understand the complexity, and tackle the complexity. And in some cases, changes will not simplify things, they will complexity them by creating new mismatches between assumptions various people had, which will require new shims. Accidental complexity is just essential complexity that shows its age. It cannot be avoided, and it keeps changing. Complexity has to live somewhere.</p>
+<p>当尝试规避复杂时，每次修改/重构都是将复杂从项目中的一个地方驱赶到另外一个地方，而且由于每个人对于复杂本身的理解是不一致的，在一次次的修改/重构过程中，可能会使复杂变得更加复杂。正确的做法应当是帮忙人们去理解复杂本身，而不是去规避复杂。因为它无法规避。</p>
 <p>In The Design of Everyday Things, Don Norman mentions the concept of “Knowledge in the head” and “knowledge in the world” (similar concepts are more academically presented in Roesler &amp; Woods’ Designing for Expertise). Knowledge in the head are things you know, that you have learned, that are in your memory. Knowledge in the world is everything else: information written down, cues in design (you know the power button by looking at its symbol, and you know it can be pressed because it looks like a button). One tricky thing is that interpretation of knowledge in the world is both cultural and contextual, and relies on knowledge in the head (you know the power button can be pressed because you know what a button is in the first place).</p>
+<p>在The Design of Everyday Things中，提到了”Knowledge in the head”主观知识和”Knowledge in the world”客观知识。主观知识是你知道的，你学过的，和在你的记忆中的。而客观知识是写在纸上的，刻在石头上的，和系统本身所表达/传递的（你在页面上看到了一个按钮的标志，你就知道它是可以点击的）。这里最奇怪的是，客观知识反而依赖于主观知识（你知道按钮可以点击，但你首先得知道什么是按钮）。</p>
 <p>In some ways, expertise is having knowledge in your head that allows you to better read the world.</p>
+<p>所以，专业知识可以被狭隘地解释为主观知识，它可以帮助你理解世界。</p>
 <p>A common trap we have in software design comes from focusing on how “simple” we find it to read and interpret a given piece of code. Focusing on simplicity is fraught with peril because complexity can’t be removed: it can just be shifted around. If you move it out of your code, where does it go?</p>
+<p>在软件开发过程中，我们常会陷入一种追求“简洁的陷阱”中，当我们尝试保持逻辑简洁时，我们是在将复杂驱赶出去，如果它不在我们现在的设计/代码中，那么它去哪里了？</p>
 <p>When we designed Rebar3, we felt the tool could be simple. The condition for its simplicity is that you have a basic understanding of the expected structure of Erlang/OTP projects. As long as you follow these rules, things will go well. We externalized some of the complexity into the broader ecosystem. The rules always needed to be learned (so we assumed), but the tool now depended on them being understood. In simplifying tool usage for people who knew the rules, we made it harder for those who were still learning them. Other tools for other purposes in other ecosystems all juggle similar tradeoffs.</p>
+<p>当我一开始做Rebar3时，认为它会很简单。因为Erlang/OTP有一套推荐的规则，如果用户遵守这些规则，一切都会很顺利。我们实际上是将复杂驱赶到了我们的系统之外，因为我们假定了用户都已经完全理解了这些规则。Rebar3对于已经理解规则的用户会是一个非常简单的工具，而对于还在学习过程中的用户，我们无疑使他们的学习曲线变得更陡峭了。</p>
 <p>The trap is insidious in software architecture. When we adopt something like microservice, we try to make it so that each service is individually simple. But unless this simplicity is so constraining that your actual application inherits it and is forced into simplicity, it still has to go somewhere. If it’s not in the individual microservice, then where is it?</p>
+<p>“简洁的陷阱”几乎无处不在。当我们构建微服务时，我们会尝试保持每个子服务的简洁。除非整个项目只解决一个简洁的问题，否则复杂依旧存在于项目中，如果它不在某个具体的子服务中，那么它在哪呢？</p>
 <p>Complexity has to live somewhere. If you are lucky, it lives in well-defined places. In code where you decided a bit of complexity should go, in documentation that supports the code, in training sessions for your engineers. You give it a place without trying to hide all of it. You create ways to manage it. You know where to go to meet it when you need it. If you’re unlucky and you just tried to pretend complexity could be avoided altogether, it has no place to go in this world. But it still doesn’t stop existing.</p>
+<p>比较好的情况是，我们把复杂安置于某个明确的位置：某段代码里、某个文档中、某次分享的PPT里。由于它有一个明确的位置，而不是隐藏起来，当问题发生时，我们知道去哪里找到它。比较差的情况是，我们假装规避了复杂，由于它无处可去，所以它会找个地方藏起来。</p>
 <p>With nowhere to go, it has to roam everywhere in your system, both in your code and in people’s heads. And as people shift around and leave, our understanding of it erodes.</p>
+<p>由于复杂无处可去，它可能会在系统中四处乱逛，藏在某段逻辑中，或者某个人的大脑中。当这个人转身离开时，Only god knows.</p>
 <p>Complexity has to live somewhere. If you embrace it, give it the place it deserves, design your system and organization knowing it exists, and focus on adapting, it might just become a strength.</p>
+<p>复杂无法避免。请直面它，给它安置于一个明确的位置，并且让每个人都清楚知道它的存在。直面系统中的复杂才是这个系统的价值所在。</p>
 
       
     </div>
